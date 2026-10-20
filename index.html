@@ -430,7 +430,16 @@ a,button,summary,label[for],select,[role="tab"],[role="button"],input[type="chec
 .d5{right:3%;bottom:34%;--w:52px;--dur:9s;--dl:-4s}
 @keyframes float{0%,100%{transform:translateY(0) rotate(-4deg)}50%{transform:translateY(-12px) rotate(5deg)}}
 @keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
-.to-top::after{content:"↑";display:inline-block;margin-left:6px;animation:bob 1.4s ease-in-out infinite}
+.to-top{display:grid;grid-template-columns:auto auto;grid-template-rows:auto auto;align-items:center;justify-items:center;column-gap:2px;padding:8px 12px 6px;border:2px solid var(--ink);border-radius:18px 22px 16px 24px / 22px 16px 24px 18px;background:var(--paper)}
+.to-top .tt-pencil{grid-column:1;grid-row:1;transform:rotate(-45deg);transition:transform .25s ease}
+.to-top .tt-line{grid-column:2;grid-row:1;opacity:.75}
+.to-top .tt-text{grid-column:1 / span 2;grid-row:2;font-family:var(--hand);font-weight:400;font-size:18px;line-height:1.1}
+.to-top.show .tt-pencil{animation:ttBob 1.6s ease-in-out infinite}
+.to-top.show:hover .tt-pencil{animation:none;transform:rotate(-45deg) translate(3px,-3px)}
+.to-top.show:hover .tt-line path{animation:ttDraw .6s linear infinite}
+@keyframes ttBob{0%,100%{transform:rotate(-45deg) translate(0,0)}50%{transform:rotate(-45deg) translate(2px,-2px)}}
+@keyframes ttDraw{to{stroke-dashoffset:-12}}
+@media (prefers-reduced-motion:reduce){.to-top.show .tt-pencil,.to-top.show:hover .tt-line path{animation:none}}
 
 /* 螢光筆畫線 */
 mark.hl{color:inherit;background:linear-gradient(transparent 58%,rgba(242,177,52,.6) 58%) no-repeat left/0% 100%;transition:background-size .9s ease .55s;padding:0 2px}
@@ -593,7 +602,7 @@ details.q.flash{animation:flashQ 1.5s ease}
 .badge.hot{background:var(--danger);color:#fff}
 
 /* 三圈關鍵字 */
-.circles{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:12px 0 22px}
+.circles{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin:12px 0 22px}
 .circle{border:2px dashed var(--c,var(--brand));border-radius:var(--wob);background:var(--sheet);padding:14px 16px;box-shadow:var(--shadow-sk)}
 .circle h4{margin:0 0 4px;font-size:15px;color:var(--ink)}
 .circle p{margin:0;font-size:14px;color:var(--muted)}
@@ -628,6 +637,8 @@ details.trap .t-sub{display:block;font-size:13px;color:var(--muted)}
 .trap-body p{margin:0;font-size:14px;color:var(--muted)}
 .trap-body p strong{color:var(--ink)}
 .trap-law{font-size:12px;font-weight:800;color:var(--danger)}
+.trap-h{margin:22px 0 0;font-size:16px}
+.badge.ind{background:var(--ink);color:var(--paper)}
 
 /* 作品集健診 */
 .pf-flow{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:10px 0 22px}
@@ -955,12 +966,12 @@ details.mod.bei-mod p{margin:0 18px 12px;color:var(--muted);font-size:15px}
   <div class="wrap">
     <div class="sec-head"><span class="step-chip">05</span><span class="hand-label">JD 契合度與防雷</span></div>
     <h2 id="jd-title">先讀懂職缺，再動筆寫履歷</h2>
-    <p class="sub">職缺描述（JD）就是考卷。把 JD 拆成三個圈，履歷用<mark class="hl"><strong>和 JD 一模一樣的字</strong></mark>對上，HR 與求職系統（ATS<span data-tip="ATS（Applicant Tracking System）是企業用來篩選履歷的系統，會比對履歷與職缺的關鍵字。"></span>）才找得到你。</p>
+    <p class="sub">職缺描述（JD）就是考卷。把 JD 拆成硬技能與軟實力兩類，履歷用<mark class="hl"><strong>和 JD 一模一樣的字</strong></mark>對上，HR 與求職系統（ATS<span data-tip="ATS（Applicant Tracking System）是企業用來篩選履歷的系統，會比對履歷與職缺的關鍵字。"></span>）才找得到你。</p>
     <p class="group-title">你的狀態（與第 1 步同步，提醒會跟著切換）</p>
     <div class="tabs" id="jdStatus" role="group" aria-label="依狀態切換提醒"></div>
     <p class="star-note" id="jdStatusNote" aria-live="polite"></p>
 
-    <h3>JD 關鍵字對齊三大核心圈</h3>
+    <h3>JD 關鍵字對齊兩大重點</h3>
     <div class="circles" id="jdCircles"></div>
 
     <p class="group-title">領域</p>
@@ -976,8 +987,14 @@ details.mod.bei-mod p{margin:0 18px 12px;color:var(--muted);font-size:15px}
     <div class="row" style="margin-top:12px"><button class="btn-sm ghost" id="jdReset" type="button">清除本領域勾選</button></div>
 
     <div class="warn-head"><span class="warn-icon" aria-hidden="true">!</span><h3 style="margin:0">勞基法防雷與避坑指南</h3></div>
+    <p class="note" style="margin:0 0 8px">面試或錄取時聽到下面這些話，先停下來確認。點開卡片看原因與確認方法。</p>
+    <p class="group-title">領域（每個行業都有自己的必坑法律）</p>
+    <p class="note primary-hint" style="margin:0 0 8px" hidden></p>
+    <div class="tabs" role="tablist" id="trapTabs" aria-label="勞基法防雷領域"></div>
+    <h4 class="trap-h" id="trapFieldTitle"></h4>
+    <div class="trap-grid" id="trapFieldGrid"></div>
+    <h4 class="trap-h">各行各業都會遇到</h4>
     <p class="note" id="trapNote" style="margin:0 0 4px"></p>
-    <p class="note" style="margin:0">面試或錄取時聽到下面這些話，先停下來確認。點開卡片看原因與確認方法。</p>
     <div class="trap-grid" id="trapGrid"></div>
     <p class="note">※ 以上為常見情況的整理，法規與基本工資以勞動部最新公告為準。遇到勞資爭議，可撥打勞動部 1955 專線，或向各縣市勞工局申訴。</p>
   </div>
@@ -1134,7 +1151,7 @@ details.mod.bei-mod p{margin:0 18px 12px;color:var(--muted);font-size:15px}
     </div>
     <div class="gold3" style="margin:32px 0 0">
       <h3 style="margin:0">破冰利器：自我介紹黃金三句<span data-tip="面試一開場的前 30 秒，決定面試官接下來想追問什麼。三句話講清楚你是誰、你最強的戰績、你能帶來什麼。同一段話放在履歷最上方，就是你的 Summary。"></span></h3>
-      <p class="note" style="margin:4px 0 0">1 分鐘精簡版的三個步驟，就是這三句。範例會依你的狀態、領域與勾選的硬實力調整，寫好後用上面的計時器唸一遍。</p>
+      <p class="note" style="margin:4px 0 0">1 分鐘精簡版的三個步驟就是這三句。3 分鐘完整版是在第 2、3 句之間，再加上「優勢連結」與「個人亮點」。範例會依你的狀態、領域與勾選的硬實力調整，寫好後用上面的計時器唸一遍。</p>
       <div class="gold3-grid">
         <label class="field"><span><span class="no">1</span>專業定位：核心領域、年資與最顯著的優勢</span>
           <textarea id="g3a" rows="2"></textarea></label>
@@ -1229,27 +1246,7 @@ details.mod.bei-mod p{margin:0 18px 12px;color:var(--muted);font-size:15px}
       <div class="ratio" aria-hidden="true"><span class="r1">S＋T</span><span class="r2">A＋R</span><span class="r3">L</span></div>
       <div class="ratio-legend"><span>20%：精簡交代背景</span><span>60%：你的行動與量化結果</span><span>20%：覆盤學到什麼</span></div>
       <p class="star-note" id="beiStatusTip" aria-live="polite" style="margin-top:12px"></p>
-      <details class="mod bei-mod">
-        <summary>5 Whys 深挖：面試官怎麼一路追問</summary>
-        <p>面試官會連問好幾個「為什麼、怎麼做」，直到挖到你的真實貢獻。準備答案時，先自己往下挖三層。</p>
-        <div class="why5">
-          <div class="l1">表層：「我負責與工程師溝通需求。」</div>
-          <div class="l2">往下挖：為什麼需要溝通？卡在哪裡？你具體做了什麼？</div>
-          <div class="l3">底層：「我透過導入 RACI 矩陣釐清權責，讓專案延遲率由 40% 降至 10%，守住 Q3 營收。」</div>
-        </div>
-      </details>
-      <details class="mod bei-mod">
-        <summary>魔王題 1：說一次你和其他部門意見衝突的經驗</summary>
-        <p>不要說「我各退一步」。展現雙贏合作（Collaborating）：先挖出雙方真正在意的目標，例如業務要速度、工程要品質，再提出兩邊都能接受的方案，最後補一句結果的數字。</p>
-      </details>
-      <details class="mod bei-mod">
-        <summary>魔王題 2：說一次你失敗的經驗</summary>
-        <p>重點在根本原因分析（Root Cause Analysis）。說清楚失敗的原因是哪一個環節、你承擔了哪一部分，以及之後建立了什麼機制，讓同樣的錯誤不再發生。</p>
-      </details>
-      <details class="mod bei-mod">
-        <summary>加分題：你怎麼說服主管接受你的提案？</summary>
-        <p>向上說服用數據，不用情緒。先講主管在意的目標，再拿出小規模測試的數字，最後提出風險與備案，讓主管容易說「好」。</p>
-      </details>
+      <div id="beiMods"></div>
     </div>
     <p class="note primary-hint" style="margin:0 0 8px" hidden></p>
     <div class="tabs" role="tablist" id="mockTabs" aria-label="面試領域"></div>
@@ -1298,7 +1295,7 @@ details.mod.bei-mod p{margin:0 18px 12px;color:var(--muted);font-size:15px}
   <div id="dlgContent"></div>
 </dialog>
 
-<button type="button" class="to-top" id="toTop" aria-label="回到頁面最上方">置頂</button>
+<button type="button" class="to-top" id="toTop" aria-label="回到頁面最上方"><svg class="tt-pencil" viewBox="0 0 32 32" width="30" height="30" aria-hidden="true"><g stroke="#2B2822" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"><path d="M7 19 L24 2 L30 8 L13 25 Z" fill="#1DAD97"/><path d="M24 2 L30 8 L27.6 10.4 L21.6 4.4 Z" fill="#F2B134"/><path d="M4 28 L7 19 L13 25 Z" fill="#FBF6EA"/><path d="M4 28 L4.9 25.3 L6.7 27.1 Z" fill="#2B2822"/><path d="M12 16.5 L20.5 8" stroke="#FFFFFF" stroke-opacity=".55"/></g></svg><svg class="tt-line" viewBox="0 0 14 30" width="14" height="30" aria-hidden="true"><path d="M7 28 C3 22 11 18 7 12 C4 8 9 5 7 2" fill="none" stroke="#2B2822" stroke-width="1.6" stroke-linecap="round" stroke-dasharray="3 3"/></svg><span class="tt-text">置頂</span></button>
 
 <script>
 (function () {
@@ -2379,16 +2376,16 @@ details.mod.bei-mod p{margin:0 18px 12px;color:var(--muted);font-size:15px}
   /* ---------- 05 Intro timer（節奏提示、時間到提醒、練習後檢查） ---------- */
   const introSteps = {
     60: [
-      ["背景概述", "基本資訊、學習背景與核心性格，一句話講清楚你是誰。"],
-      ["優勢連結", "挑一到兩個與職缺高度相關的經歷與成果，證明我是合適的人選。"],
-      ["入職企圖", "說明你認同這間公司的哪一點，以及你想為它做什麼。"]
+      ["專業定位", "核心領域、年資與最顯著的優勢，一句話講清楚你是誰。對應黃金三句第 1 句。"],
+      ["關鍵戰績", "挑一個與職缺最相關、有數字的成果，證明你能解決問題。對應黃金三句第 2 句。"],
+      ["價值主張", "說出你認同這間公司的哪一點，以及能為團隊帶來什麼即戰力。對應黃金三句第 3 句。"]
     ],
     180: [
-      ["背景概述", "涵蓋基本資訊、學習背景與人格特質。"],
-      ["戰功實績", "詳述一到兩個重要專案與績效，並帶出具體數據。"],
-      ["優勢定位", "梳理核心職能，強調與職位需求的匹配程度。"],
-      ["個人亮點", "分享工作之外的興趣或特長，讓形象更立體。"],
-      ["願景展望", "具體說明你對這個職位的期待與未來的貢獻。"]
+      ["專業定位", "基本資訊、學習背景、年資與人格特質。黃金三句第 1 句再多講一點背景。"],
+      ["關鍵戰績", "詳述一到兩個重要專案與績效，帶出具體數據。黃金三句第 2 句，再多加一個專案。"],
+      ["優勢連結", "梳理核心職能，說明你的能力和這個職位的需求怎麼對上。"],
+      ["個人亮點", "分享工作之外和職務有關的興趣或特長，讓形象更立體。"],
+      ["價值主張", "具體說明入職後想完成的事與能帶來的貢獻。黃金三句第 3 句的延伸。"]
     ]
   };
   const introPlan = { 60: [15, 30, 15], 180: [30, 60, 40, 20, 30] };
@@ -2403,9 +2400,9 @@ details.mod.bei-mod p{margin:0 18px 12px;color:var(--muted);font-size:15px}
     180: [
       ["我在 3 分鐘內講完了五個步驟", "先抓出每一段的建議秒數，並刪掉最不重要的細節。"],
       ["開頭一句話就講清楚我是誰", "開頭用「我是○○，專長○○」帶過，不要念履歷。"],
-      ["戰功實績有具體數據", "挑一到兩個專案，補上數字，並說明你的角色。"],
+      ["關鍵戰績有具體數據", "挑一到兩個專案，補上數字，並說明你的角色。"],
       ["有講到個人亮點，讓形象更立體", "挑一個與工作有關的興趣或特長，用一個小例子說明。"],
-      ["願景展望有說出入職後的具體貢獻", "寫出入職後前三個月想完成的事，並連結公司需求。"],
+      ["價值主張有說出入職後的具體貢獻", "寫出入職後前三個月想完成的事，並連結公司需求。"],
       ["語速平穩，沒有一直「嗯、呃」", "放慢速度，把「嗯、呃」換成停頓，可以錄音後回聽。"]
     ]
   };
@@ -4888,48 +4885,36 @@ details.mod.bei-mod p{margin:0 18px 12px;color:var(--muted);font-size:15px}
   /* ---------- 05 JD 契合度比對 ---------- */
   const jdKB = {
     "平面設計": { hard: [["Photoshop／Illustrator", "寫出軟體全名，例如 Adobe Illustrator", ["photoshop", "illustrator"]], ["Figma 介面原型", "應徵 UI 或網頁時常見", ["figma", "xd", "ui"]], ["品牌識別 CIS／VI", "Logo、色彩、字體規範", ["cis", "vi", "品牌"]], ["印前完稿與印刷規格", "出血、CMYK、打樣", ["印刷", "印前", "完稿", "cmyk"]], ["社群與電商視覺", "Banner、商品頁、社群圖", ["社群", "電商", "banner"]]],
-      soft: [["跨部門需求溝通", "與行銷、業務對齊需求", ["溝通", "協調", "跨部門"]], ["多案時程管理", "同時處理多個檔期", ["多工", "時程", "多案", "時間管理"]], ["接受回饋與修改", "", ["回饋", "修改"]]],
-      metric: [["點擊率 CTR／轉換率", "", ["ctr", "點擊", "轉換"]], ["產出量與交件時程", "例如單月 80+ 組素材", ["產出", "時程", "交件", "效率"]], ["品牌一致性", "規範化、模板化", ["一致", "規範", "模板"]]] },
+      soft: [["跨部門需求溝通", "與行銷、業務對齊需求", ["溝通", "協調", "跨部門"]], ["多案時程管理", "同時處理多個檔期", ["多工", "時程", "多案", "時間管理"]], ["接受回饋與修改", "", ["回饋", "修改"]]] },
     "影音設計": { hard: [["Premiere Pro 剪輯", "", ["premiere", "剪輯"]], ["After Effects 動態設計", "", ["after effects", "動態"]], ["DaVinci Resolve 調色", "", ["davinci", "調色"]], ["短影音企劃與腳本", "Reels、Shorts、TikTok", ["短影音", "腳本", "reels", "shorts", "tiktok"]], ["拍攝與收音", "", ["拍攝", "收音", "攝影"]]],
-      soft: [["客戶需求溝通", "", ["溝通", "需求"]], ["抗壓與趕檔", "", ["抗壓", "時程", "檔期"]], ["團隊協作", "", ["團隊", "協作"]]],
-      metric: [["觀看數／完播率", "", ["觀看", "完播", "流量"]], ["單支製作工時", "", ["工時", "效率", "時程"]], ["粉絲成長與互動率", "", ["粉絲", "互動", "成長"]]] },
+      soft: [["客戶需求溝通", "", ["溝通", "需求"]], ["抗壓與趕檔", "", ["抗壓", "時程", "檔期"]], ["團隊協作", "", ["團隊", "協作"]]] },
     "室內設計": { hard: [["AutoCAD 施工圖", "", ["autocad", "cad", "施工圖"]], ["SketchUp／3ds Max 3D 圖", "", ["sketchup", "3ds max", "3d"]], ["工程預算與估價", "", ["預算", "估價", "報價"]], ["材料與工法", "", ["材料", "建材", "工法"]], ["室內裝修法規與證照", "消防、無障礙、乙級技術士", ["法規", "技術士", "證照"]]],
-      soft: [["業主溝通與提案", "", ["溝通", "提案", "業主", "客戶"]], ["工班與廠商協調", "", ["協調", "工班", "廠商", "監工"]], ["現場問題解決", "", ["問題", "現場", "解決"]]],
-      metric: [["案量與坪數規模", "", ["坪", "案"]], ["預算控制", "", ["預算", "成本"]], ["工期與準時完工", "", ["工期", "進度", "時程"]]] },
+      soft: [["業主溝通與提案", "", ["溝通", "提案", "業主", "客戶"]], ["工班與廠商協調", "", ["協調", "工班", "廠商", "監工"]], ["現場問題解決", "", ["問題", "現場", "解決"]]] },
     "工業設計": { hard: [["SolidWorks／Creo 3D 建模", "", ["solidworks", "creo", "3d"]], ["工程圖與公差", "", ["工程圖", "公差"]], ["DFM 可製造性設計", "拔模角、壁厚、射出", ["量產", "模具", "射出", "dfm"]], ["CMF 色彩材質", "", ["cmf", "材質", "表面處理"]], ["3D 列印原型", "", ["原型", "3d 列印", "prototype"]]],
-      soft: [["與工程、模具跨部門協作", "", ["跨部門", "協作", "溝通"]], ["問題分析與排錯", "", ["問題", "分析"]], ["遵守開發流程", "", ["流程", "規範"]]],
-      metric: [["成本降低", "", ["成本", "降本"]], ["零件數與組裝工時", "", ["組裝", "零件", "工時"]], ["良率與客訴率", "", ["良率", "客訴", "品質"]]] },
+      soft: [["與工程、模具跨部門協作", "", ["跨部門", "協作", "溝通"]], ["問題分析與排錯", "", ["問題", "分析"]], ["遵守開發流程", "", ["流程", "規範"]]] },
     "動漫設計": { hard: [["Clip Studio Paint 電繪", "", ["clip studio", "csp", "電繪"]], ["Photoshop 2D 美術", "", ["photoshop"]], ["Live2D", "", ["live2d"]], ["角色設定與三視圖", "", ["角色", "設定"]], ["分鏡與構圖", "", ["分鏡", "構圖", "漫畫"]]],
-      soft: [["接受審稿回饋", "", ["回饋", "修改", "審稿"]], ["稿期管理", "", ["時程", "稿期", "交期"]], ["自主學習", "", ["學習", "自學"]]],
-      metric: [["準時交稿率", "", ["準時", "交稿"]], ["修改次數", "", ["修改"]], ["IP 曝光與互動", "", ["曝光", "互動", "粉絲", "下載"]]] },
+      soft: [["接受審稿回饋", "", ["回饋", "修改", "審稿"]], ["稿期管理", "", ["時程", "稿期", "交期"]], ["自主學習", "", ["學習", "自學"]]] },
     "遊戲美術": { hard: [["Maya／3ds Max 建模", "", ["maya", "3ds max", "建模"]], ["ZBrush 雕刻", "", ["zbrush", "雕刻"]], ["Substance Painter 貼圖", "", ["substance", "貼圖", "材質"]], ["Unity／Unreal 引擎導入", "", ["unity", "unreal", "引擎"]], ["低模與 UV 規範", "面數、LOD", ["低模", "uv", "面數", "lod"]]],
-      soft: [["與企劃、程式協作", "", ["協作", "溝通", "團隊"]], ["遵守命名與資源規範", "", ["規範", "流程"]], ["接受美術回饋", "", ["回饋", "修改"]]],
-      metric: [["面數與效能預算", "", ["面數", "效能", "最佳化"]], ["資源交付週期", "", ["交付", "時程", "進度"]], ["返工率", "", ["返工", "修改"]]] },
+      soft: [["與企劃、程式協作", "", ["協作", "溝通", "團隊"]], ["遵守命名與資源規範", "", ["規範", "流程"]], ["接受美術回饋", "", ["回饋", "修改"]]] },
     "程式設計": { hard: [["Python", "", ["python"]], ["pandas 資料分析", "", ["pandas", "資料分析", "numpy"]], ["Django／Flask Web 後端", "", ["django", "flask", "後端"]], ["SQL 資料庫", "", ["sql", "資料庫"]], ["機器學習／深度學習", "", ["機器學習", "深度學習", "tensorflow", "pytorch", "scikit"]], ["Git 版本控制", "", ["git"]]],
-      soft: [["問題排錯", "", ["除錯", "debug", "問題"]], ["向非技術人員說明", "", ["溝通", "說明", "跨部門"]], ["自主學習新技術", "", ["學習", "自學"]]],
-      metric: [["自動化節省工時", "", ["自動化", "效率", "工時"]], ["模型準確率", "", ["準確", "精確", "召回"]], ["處理資料量", "", ["資料量", "筆", "大數據"]]] },
+      soft: [["問題排錯", "", ["除錯", "debug", "問題"]], ["向非技術人員說明", "", ["溝通", "說明", "跨部門"]], ["自主學習新技術", "", ["學習", "自學"]]] },
     "Java 軟體": { hard: [["Java", "", ["java"]], ["Spring Boot", "", ["spring"]], ["RESTful API", "", ["api", "restful"]], ["SQL／JDBC", "", ["sql", "jdbc", "資料庫"]], ["Git 與 Code Review", "", ["git", "code review"]], ["單元測試", "", ["測試", "junit"]]],
-      soft: [["團隊協作與 Code Review", "", ["團隊", "協作"]], ["問題排錯", "", ["除錯", "debug", "問題"]], ["文件撰寫", "", ["文件", "規格"]]],
-      metric: [["QPS／回應時間", "", ["效能", "qps", "回應", "延遲"]], ["Bug 數與穩定度", "", ["bug", "穩定", "品質"]], ["上線與交付頻率", "", ["上線", "交付", "迭代"]]] },
+      soft: [["團隊協作與 Code Review", "", ["團隊", "協作"]], ["問題排錯", "", ["除錯", "debug", "問題"]], ["文件撰寫", "", ["文件", "規格"]]] },
     "資訊安全": { hard: [["ISO 27001 資安治理", "", ["27001", "iso", "治理"]], ["弱點掃描與滲透測試", "", ["弱點", "滲透", "掃描"]], ["防火牆與網路設備", "", ["防火牆", "網路", "firewall"]], ["SOC 監控與事件應變", "", ["soc", "事件", "應變", "siem"]], ["風險評估", "", ["風險"]]],
-      soft: [["用白話說明風險", "", ["溝通", "說明", "報告"]], ["流程與規範意識", "", ["流程", "規範", "稽核"]], ["抗壓與冷靜處理", "", ["抗壓", "輪班", "緊急"]]],
-      metric: [["弱點修補時間", "", ["修補", "mttr"]], ["稽核缺失數", "", ["稽核", "缺失"]], ["資安事件數", "", ["事件", "事故"]]] },
+      soft: [["用白話說明風險", "", ["溝通", "說明", "報告"]], ["流程與規範意識", "", ["流程", "規範", "稽核"]], ["抗壓與冷靜處理", "", ["抗壓", "輪班", "緊急"]]] },
     "雲端系統": { hard: [["Linux 系統管理", "", ["linux"]], ["AWS 等雲端服務", "", ["aws", "azure", "gcp", "雲端"]], ["Ansible 自動化", "", ["ansible", "自動化", "terraform"]], ["容器（Docker／OpenShift）", "", ["docker", "kubernetes", "k8s", "容器", "openshift"]], ["Shell／Python 腳本", "", ["shell", "python", "腳本"]], ["CI/CD", "", ["ci/cd", "cicd", "jenkins", "gitlab"]]],
-      soft: [["告警時冷靜處理", "", ["抗壓", "值班", "on-call"]], ["交接與文件", "", ["文件", "交接"]], ["團隊協作", "", ["團隊", "協作"]]],
-      metric: [["可用率 SLA", "", ["sla", "可用", "穩定"]], ["部署時間", "", ["部署", "上線"]], ["雲端成本", "", ["成本"]]] },
+      soft: [["告警時冷靜處理", "", ["抗壓", "值班", "on-call"]], ["交接與文件", "", ["文件", "交接"]], ["團隊協作", "", ["團隊", "協作"]]] },
     "iPAS 證照班": { hard: [["生成式 AI 導入評估", "", ["生成式", "人工智慧", "ai 應用"]], ["資安治理", "", ["資安"]], ["碳盤查與減碳", "", ["碳", "淨零", "esg"]], ["Excel／SQL 資料分析", "", ["excel", "sql", "資料分析"]], ["iPAS 證照", "寫出完整名稱與級別", ["ipas", "證照"]]],
-      soft: [["跨部門推動", "", ["跨部門", "推動", "協調"]], ["簡報說明", "", ["簡報", "報告"]], ["數據與成本意識", "", ["數據", "成本"]]],
-      metric: [["成本效益", "", ["成本", "效益", "roi"]], ["節省工時", "", ["效率", "工時"]], ["減碳量", "", ["減碳", "排放"]]] }
+      soft: [["跨部門推動", "", ["跨部門", "推動", "協調"]], ["簡報說明", "", ["簡報", "報告"]], ["數據與成本意識", "", ["數據", "成本"]]] }
   };
   const jdCircles = [
     ["hard", "必備硬技能（Hard Skills）", "#1DAD97", "框架、工具、證照。用和業界完全一致的命名，例如 Figma、K8s。"],
-    ["soft", "軟實力情境（Soft Skills）", "#F2B134", "跨部門溝通、危機處理。要用專案情境證明，拒絕空泛形容詞。"],
-    ["metric", "業務指標（Business Metrics）", "#8B7CF6", "成本、時間、品質等商業成效。三圈交集，就是高命中率履歷。"]
+    ["soft", "軟實力情境（Soft Skills）", "#F2B134", "跨部門溝通、抗壓、危機處理。要用專題、作品或過去工作的情境證明，拒絕空泛形容詞。兩類都對上，就是高命中率履歷。"]
   ];
   const jdStatusNotes = {
     fresh: "新鮮人：每個 JD 關鍵字都要對應一個專題、課堂作品或實習。真的不會的不要硬寫，可以寫「學習中」並附上練習作品。",
     switch: "轉職者：HR 不是你原產業的專家。把前職的行業黑話翻成 JD 的字，例如「追蹤產線工單」改寫成「供應鏈進度管理」。",
-    active: "已有經驗：最容易漏掉的是「業務指標」那一圈。每段經歷至少對上一個 JD 在意的指標。"
+    active: "已有經驗：除了工具名稱，軟實力也要對上 JD 的字，並用一段過去的專案情境證明。"
   };
   const jdState = load("rhc-jd", {});
   if (!jdState.checks || typeof jdState.checks !== "object") jdState.checks = {};
@@ -4968,12 +4953,11 @@ details.mod.bei-mod p{margin:0 18px 12px;color:var(--muted);font-size:15px}
     let v;
     if (!done) v = "先勾選履歷上「已經用一模一樣的寫法」出現的關鍵字。";
     else if (pct < 40) v = "命中率偏低。HR 與 ATS 可能在 10 秒內就略過，先把 JD 的硬技能用原字寫進技能欄與工作經歷。";
-    else if (pct < 70) v = "有基本命中。再補上軟實力的情境證明與業務指標，避免只有工具清單。";
+    else if (pct < 70) v = "有基本命中。再補上軟實力的情境證明，避免只有工具清單。";
     else v = "契合度高。投遞前再確認每個關鍵字，面試時都說得出一個 STAR 例子。";
-    const softOn = kb.soft.some((_, i) => st["soft" + i]), metricOn = kb.metric.some((_, i) => st["metric" + i]);
+    const softOn = kb.soft.some((_, i) => st["soft" + i]);
     const gaps = [];
     if (done && !softOn) gaps.push("軟實力圈還是空的：用一個跨部門或危機處理的事例證明，不要只寫「溝通能力佳」。");
-    if (done && !metricOn) gaps.push("業務指標圈還是空的：在工作經歷補上成本、時間或品質的數字。");
     $("#jdScore").innerHTML = '<p class="big">' + pct + "%</p><p><strong>" + esc(fLabel(jdField)) + "</strong>：已對齊 " + done + " / " + total + " 個關鍵字。" + esc(v) + "</p>" +
       (jd ? "<p>這份 JD 提到 " + inJd + " 個常見關鍵字，你已對齊 " + inJdDone + " 個。" + (missing.length ? "優先補上：" + esc(missing.join("、")) + "。" : "") + "</p>" : "") +
       gaps.map(g => "<p>" + esc(g) + "</p>").join("");
@@ -5041,14 +5025,66 @@ details.mod.bei-mod p{margin:0 18px 12px;color:var(--muted);font-size:15px}
     switch: "轉職者最常遇到：綁約違約金、收保證金、責任制、變形工時。標「你最該先看」的請優先確認。",
     active: "已有經驗者最常遇到：責任制、競業條款、加班費基數、懲戒解僱。標「你最該先看」的請優先確認。"
   };
+  /* 各領域特有的必坑法律 */
+  const indTraps = {
+    contract: { say: "「你是接案配合，簽承攬合約，不用保勞健保。」", sub: "名為承攬，實為僱傭", law: "勞動基準法第 2 條（從屬性判斷）、勞工保險條例",
+      why: "要看實際狀況：固定上下班、聽主管指揮、用公司設備、不能自己找人代做，就是僱傭關係，雇主要加保並適用勞基法。合約寫「承攬」不代表就是承攬。", check: "問清楚是否要打卡、誰派工作、能不能同時接別家案子，並保留排班與指派紀錄。" },
+    copyright: { say: "「離職後作品不能放作品集，所有著作權都是公司的。」", sub: "職務著作的權利要看約定", law: "著作權法第 11 條、第 12 條",
+      why: "受雇時職務上完成的作品，沒有特別約定時，著作人是你、著作財產權歸公司，所以公開放作品集要取得公司同意。接案（出資聘人）的作品，沒有約定時著作權歸你。", check: "簽約時請公司寫明作品集展示的範圍，例如上市後、去除客戶名稱可以展示。" },
+    pitch: { say: "「先做一套完整提案，沒錄取不付費。」", sub: "面試作業不是免費商稿", law: "著作權法、民法",
+      why: "合理的面試測驗通常是小題目。要求完整、可直接商用的提案又不付費，甚至被拿去使用，就涉及著作權與報酬爭議。", check: "只做縮小範圍的測驗，作品加浮水印，寄出前寫清楚僅供面試評估使用。" },
+    longday: { say: "「拍攝日一天 16 小時，日薪包到底。」", sub: "日薪也有工時上限", law: "勞動基準法第 24 條、第 32 條",
+      why: "日薪制一樣是正常工時 8 小時，超過要給加班費。一天正常工時加延長工時，合計不能超過 12 小時。", check: "確認通告表的上工與收工時間，保留自己的工時紀錄。" },
+    deduct: { say: "「器材壞了要你賠，直接從薪水扣。」", sub: "不能任意扣薪", law: "勞動基準法第 22 條、第 26 條",
+      why: "工資要全額直接發給你，雇主不能預扣工資當作違約金或賠償。真的要求賠償，要先證明你有過失，並雙方協議。", check: "要求公司提出損壞的說明與金額，不要簽空白的同意扣款書。" },
+    site: { say: "「跑工地是你自己的事，出事自己負責。」", sub: "工地有職災保障", law: "職業安全衛生法、勞工職業災害保險及保護法、勞動基準法第 59 條",
+      why: "工地屬於高風險工作，雇主要提供安全帽等防護與安全衛生教育，並投保職災保險。工作中受傷，雇主要負職災補償責任。", check: "到職時確認有沒有職災保險、安全教育訓練與工地防護裝備。" },
+    bonus: { say: "「設計獎金要等尾款收到才發，離職就全部取消。」", sub: "已賺到的工資不能說扣就扣", law: "勞動基準法第 2 條、第 22 條",
+      why: "固定依業績或案量計算、屬於勞務對價的獎金，性質就是工資。是否發放、什麼時候發，要看契約怎麼寫，不能事後片面取消。", check: "要求把獎金計算方式、發放時間、離職時怎麼結算寫進合約。" },
+    patent: { say: "「在職期間的設計和專利都歸公司，下班自己做的也算。」", sub: "職務上與非職務上要分開", law: "專利法第 7 條、第 8 條",
+      why: "職務上完成的發明或設計，專利權歸公司。和職務無關的創作，權利原則上歸你；如果用了公司的資源，公司可以合理付費後使用。", check: "看合約的智慧財產權條款，是否把「下班時間、與職務無關」的創作也一併歸給公司。" },
+    shift: { say: "「下班到隔天上班只隔 8 小時，輪班很正常。」", sub: "換班至少休息 11 小時", law: "勞動基準法第 34 條",
+      why: "輪班制換班時，原則上要有連續 11 小時以上的休息時間。只有特殊情況並經工會或勞資會議同意，才能縮短，而且不能少於 8 小時。", check: "看班表的換班間隔，並問清楚輪班與夜班的津貼。" },
+    piece: { say: "「稿費按張計算，修改到客戶滿意為止。」", sub: "按件計酬也有保障", law: "勞動基準法第 21 條、民法承攬",
+      why: "如果是受雇，按件計酬換算後仍不能低於基本工資，也要加保。如果是接案，修改次數與追加費用要寫在合約裡，不然很容易無限修改。", check: "合約寫清楚每張稿費、包含幾次修改、超過怎麼加價。" },
+    crunch: { say: "「上線前衝刺，大家都在公司過夜。」", sub: "加班有每月上限", law: "勞動基準法第 32 條",
+      why: "延長工時每月不能超過 46 小時；經工會或勞資會議同意，每月最多 54 小時、每 3 個月不超過 138 小時。超過就是違法，加班費也一定要給。", check: "記錄自己的加班時數，問清楚加班費或補休怎麼算。" },
+    oncall: { say: "「On-call 只是待命，不算工時。」", sub: "受拘束的待命就是工作時間", law: "勞動基準法第 24 條、第 30 條",
+      why: "待命時要隨時接電話、上線處理，行動受到限制，就屬於工作時間，要計算工資或加班費。實際處理事件的時間更要算。", check: "問清楚 On-call 的頻率、待命津貼、實際處理時怎麼計算加班費。" },
+    dispatch: { say: "「你是派駐客戶端，聽客戶指揮，薪水由外包公司發。」", sub: "派遣也有雇主責任", law: "勞動基準法第 17-1 條、第 22-1 條",
+      why: "派遣公司是你的雇主，要幫你加保、給付工資。要派單位不能在派遣前面試、指定人選；派遣公司欠薪時，要派單位也要負連帶給付責任。", check: "確認合約上的雇主是哪一家公司，勞健保由誰投保。" },
+    pentest: { say: "「先幫我們掃一下對方網站，出事你自己負責。」", sub: "未經授權的測試就是犯罪", law: "刑法第 358 條、第 359 條",
+      why: "沒有取得系統所有者的書面授權，就進行掃描或入侵測試，可能構成妨害電腦使用罪。即使是主管要求，責任也可能落在操作的人身上。", check: "每次測試都要有書面授權，寫明範圍、時間與聯絡窗口。" },
+    allowance: { say: "「證照津貼是福利，不算薪水。」", sub: "固定加給就是工資", law: "勞動基準法第 2 條",
+      why: "每月固定發給的證照加給或技術津貼，屬於經常性給與，就是工資，要算進加班費、資遣費與勞退提繳。", check: "看薪資單上的證照津貼，有沒有算進勞退提繳與加班費基數。" },
+    training: { say: "「公司幫你出考照費，三年內離職要全額賠償。」", sub: "綁約要看培訓與比例", law: "勞動基準法第 15-1 條",
+      why: "最低服務年限要以公司提供專業培訓、負擔費用為前提，期間與違約金要合理。只出考照報名費卻要求綁三年、全額賠償，可能不合理。", check: "問清楚公司實際負擔多少費用，違約金是否依剩餘年限比例遞減。" }
+  };
+  const trapsByField = {
+    "平面設計": ["contract", "copyright", "pitch"], "影音設計": ["longday", "contract", "deduct"], "室內設計": ["site", "bonus", "contract"],
+    "工業設計": ["patent", "shift", "copyright"], "動漫設計": ["piece", "copyright", "pitch"], "遊戲美術": ["crunch", "copyright", "contract"],
+    "程式設計": ["dispatch", "oncall", "copyright"], "Java 軟體": ["dispatch", "crunch", "copyright"], "資訊安全": ["pentest", "shift", "oncall"],
+    "雲端系統": ["oncall", "shift", "dispatch"], "iPAS 證照班": ["allowance", "training", "contract"]
+  };
+  let trapField = primaryOr("平面設計");
+  const trapCard = (t, hot, tag) =>
+    '<details class="trap' + (hot ? " hot" : "") + '"><summary><span class="flag" aria-hidden="true">⚠</span><span><span class="t-say">' + esc(t.say) + "</span>" +
+    '<span class="t-sub">' + esc(t.sub) + (tag ? '<span class="badge ind">' + esc(tag) + "</span>" : "") + (hot ? '<span class="badge hot">你最該先看</span>' : "") + "</span></span></summary>" +
+    '<div class="trap-body"><p><strong>為什麼是陷阱：</strong>' + esc(t.why) + "</p><p><strong>怎麼確認：</strong>" + esc(t.check) + '</p><span class="trap-law">依據：' + esc(t.law) + "</span></div></details>";
   function renderTraps() {
+    $("#trapTabs").innerHTML = fieldTabsHtml(trapField);
+    $("#trapFieldTitle").textContent = fLabel(trapField) + "特別容易踩到的法律坑";
+    $("#trapFieldGrid").innerHTML = (trapsByField[trapField] || []).map(k => trapCard(indTraps[k], false, fLabel(trapField) + "常見")).join("");
     $("#trapNote").textContent = trapNotes[upSt];
     const sorted = traps.map((t, i) => ({ t, i, hot: t.hot.indexOf(upSt) >= 0 })).sort((a, b) => (b.hot - a.hot) || (a.i - b.i));
-    $("#trapGrid").innerHTML = sorted.map(({ t, hot }) =>
-      '<details class="trap' + (hot ? " hot" : "") + '"><summary><span class="flag" aria-hidden="true">⚠</span><span><span class="t-say">' + esc(t.say) + "</span>" +
-      '<span class="t-sub">' + esc(t.sub) + (hot ? '<span class="badge hot">你最該先看</span>' : "") + "</span></span></summary>" +
-      '<div class="trap-body"><p><strong>為什麼是陷阱：</strong>' + esc(t.why) + "</p><p><strong>怎麼確認：</strong>" + esc(t.check) + '</p><span class="trap-law">依據：' + esc(t.law) + "</span></div></details>").join("");
+    $("#trapGrid").innerHTML = sorted.map(({ t, hot }) => trapCard(t, hot, "")).join("");
   }
+  $("#trapTabs").addEventListener("click", e => {
+    const t = e.target.closest("[role=tab]");
+    if (!t) return;
+    trapField = t.dataset.field;
+    renderTraps();
+  });
 
   /* ---------- 08 作品集健診 ---------- */
   const pfDims = { goal: ["商業目標", "#5FD3BE"], proc: ["解決過程", "#F2B134"], data: ["成果數據", "#9CC3FF"], show: ["呈現與規格", "#C9B8FF"], role: ["角色與落地", "#F6B4B5"] };
@@ -5403,8 +5439,33 @@ details.mod.bei-mod p{margin:0 18px 12px;color:var(--muted);font-size:15px}
       last
     ];
   }
+  const beiMods = {
+    fresh: {
+      why: ["我在畢業專題負責美術設計。", "為什麼這樣設計？有沒有人測試過？你怎麼知道改得比較好？", "我主導 3 輪使用者測試，訪談 12 位同學後重新調整介面，滿意度由 3.2 提升到 4.5，專題拿下系展第一名。"],
+      q: [["魔王題 1：說一次你和組員意見不合的經驗", "新鮮人可以用專題、社團或打工的例子。不要說「我讓步了」，說你怎麼找出彼此真正在意的事（例如成績、時間），再提出兩邊都能接受的分工，最後補一句成果。"],
+        ["魔王題 2：說一次你沒有做好的作業或專題", "選一個真的有學到東西的失誤，例如時程估錯導致趕工。說清楚原因出在哪個環節、你負責哪一部分，以及之後改用甘特圖或每週進度檢查的做法。"],
+        ["加分題：你怎麼在很短時間學會一項新工具？", "面試官在看學習力。說出你的學習步驟（找官方教學、做小作品、請人回饋），以及多久做出了什麼成果。"]] },
+    switch: {
+      why: ["我以前在門市負責處理客訴。", "客訴都是什麼類型？你怎麼處理？這和新工作有什麼關係？", "我把最常見的 20 種客訴整理成處理流程，處理時間由 15 分鐘縮短到 6 分鐘。這種整理需求、找出規則的能力，正是我轉入新領域後最常用到的。"],
+      q: [["魔王題 1：為什麼要放棄原本的資歷？", "面試官在評估你會不會做不久。說出轉職的具體原因、你已經評估過的代價（例如薪資重新起步），以及這段時間完成的課程與作品。"],
+        ["魔王題 2：說一次你自學時卡關的經驗", "選一個真實卡關的例子，說你怎麼拆解問題、去哪裡找資源、多久解決，最後做出什麼作品。這是在證明你能自己往前走。"],
+        ["加分題：前職的經驗，怎麼用在這份工作上？", "挑一到兩項可轉移能力，例如溝通協調、專案拆解、數據彙整，每一項都配一個前職的真實事例，再說會怎麼用在新職位。"]] },
+    active: {
+      why: ["我負責與工程師溝通需求。", "為什麼需要溝通？卡在哪裡？你具體做了什麼？", "我透過導入 RACI 矩陣釐清權責，讓專案延遲率由 40% 降至 10%，守住 Q3 營收。"],
+      q: [["魔王題 1：說一次你和其他部門意見衝突的經驗", "不要說「我各退一步」。展現雙贏合作（Collaborating）：先挖出雙方真正在意的目標，例如業務要速度、工程要品質，再提出兩邊都能接受的方案，最後補一句結果的數字。"],
+        ["魔王題 2：說一次你失敗的經驗", "重點在根本原因分析（Root Cause Analysis）。說清楚失敗的原因是哪一個環節、你承擔了哪一部分，以及之後建立了什麼機制，讓同樣的錯誤不再發生。"],
+        ["加分題：你怎麼說服主管接受你的提案？", "向上說服用數據，不用情緒。先講主管在意的目標，再拿出小規模測試的數字，最後提出風險與備案，讓主管容易說「好」。"]] }
+  };
+  function renderBeiMods() {
+    const m = beiMods[mockStatus] || beiMods.active;
+    $("#beiMods").innerHTML =
+      '<details class="mod bei-mod"><summary>5 Whys 深挖：面試官怎麼一路追問</summary><p>面試官會連問好幾個「為什麼、怎麼做」，直到挖到你的真實貢獻。準備答案時，先自己往下挖三層。</p>' +
+      '<div class="why5"><div class="l1">表層：「' + esc(m.why[0]) + '」</div><div class="l2">往下挖：' + esc(m.why[1]) + '</div><div class="l3">底層：「' + esc(m.why[2]) + "」</div></div></details>" +
+      m.q.map(([t, a]) => '<details class="mod bei-mod"><summary>' + esc(t) + "</summary><p>" + esc(a) + "</p></details>").join("");
+  }
   function renderMockUp() {
     $("#beiStatusTip").textContent = beiTips[mockStatus];
+    renderBeiMods();
     $("#revNote").textContent = "不要問福利。問出能展現當責心態與商業思維的問題。以下依「" + starStatusLabels[mockStatus] + "」與「" + (mockFieldLabel[mockField] || fLabel(mockField)) + "」調整。";
     $("#revList").innerHTML = revQs().map(([q, w]) => '<li><div><p class="rq" style="margin:0">' + esc(q) + '</p><p class="rw">' + w + "</p></div></li>").join("");
   }
@@ -5428,7 +5489,7 @@ details.mod.bei-mod p{margin:0 18px 12px;color:var(--muted);font-size:15px}
   });
   document.addEventListener("rhc-field", () => {
     const f = skillState.primary;
-    if (f && fieldOptions.includes(f)) { jdField = f; pfField = f; }
+    if (f && fieldOptions.includes(f)) { jdField = f; pfField = f; trapField = f; }
     renderUpAll();
   });
   $$("[data-tip]").forEach(el => { el.outerHTML = tipHtml(el.dataset.tip); });
