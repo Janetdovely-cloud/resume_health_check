@@ -990,25 +990,6 @@ details.mod.bei-mod p{margin:0 18px 12px;color:var(--muted);font-size:15px}
     <div class="wpanels">
 
       <div role="tabpanel" data-wpanel="bio">
-        <div class="gold3">
-          <h3 style="margin:0">專業自我介紹：黃金三句<span data-tip="放在履歷最上方的 Summary。HR 平均只花幾秒掃一份履歷，這三句決定他要不要往下看。"></span></h3>
-          <p class="note" style="margin:4px 0 0">第一句你是誰、會什麼，第二句最強的一個戰績，第三句你能為對方帶來什麼。範例會依你的狀態、領域與勾選的硬實力調整。</p>
-          <div class="gold3-grid">
-            <label class="field"><span><span class="no">1</span>定位：年資或背景＋專長</span>
-              <textarea id="g3a" rows="2"></textarea></label>
-            <label class="field"><span><span class="no">2</span>戰績：一個有數字的成果</span>
-              <textarea id="g3b" rows="2"></textarea></label>
-            <label class="field"><span><span class="no">3</span>價值：你能替對方做什麼</span>
-              <textarea id="g3c" rows="2"></textarea></label>
-          </div>
-          <div class="row" style="margin-top:12px">
-            <button type="button" class="btn-sm ghost" id="g3Fill">空白處帶入範例</button>
-            <button type="button" class="btn-sm" id="g3Copy">複製三句</button>
-            <span id="g3Msg" role="status" class="note" style="margin:0"></span>
-          </div>
-          <div class="gold3-preview" id="g3Preview" aria-live="polite"></div>
-        </div>
-
         <h3>四個寫作原則</h3>
         <div class="grid2" style="margin:12px 0 28px">
           <div class="panel v"><h3>邏輯條理</h3><p>內容結構清晰、有條不紊，展現良好的邏輯思考能力。</p></div>
@@ -1118,7 +1099,7 @@ details.mod.bei-mod p{margin:0 18px 12px;color:var(--muted);font-size:15px}
   <div class="wrap">
     <div class="sec-head"><span class="step-chip">07</span><span class="hand-label">自我介紹</span></div>
     <h2 id="intro-title">兩分鐘內講清楚你是誰</h2>
-    <p class="sub">自我介紹有兩種長度。選一種，照順序準備，再用計時器練習時間。</p>
+    <p class="sub">自我介紹有兩種長度。選一種，照順序準備，再用計時器練習時間。下方的<mark class="hl">黃金三句</mark>可以直接寫出你的開場白。</p>
     <div class="tabs" role="group" aria-label="自我介紹長度">
       <button type="button" data-mode="60" aria-pressed="true">1 分鐘精簡版</button>
       <button type="button" data-mode="180" aria-pressed="false">3 分鐘完整版</button>
@@ -1138,6 +1119,24 @@ details.mod.bei-mod p{margin:0 18px 12px;color:var(--muted);font-size:15px}
         <label class="q-check" style="margin-top:8px"><input type="checkbox" id="timerSound"><span>開啟提示音（剩 10 秒與時間到）</span></label>
         <div class="timer-after" id="timerAfter" hidden></div>
       </div>
+    </div>
+    <div class="gold3" style="margin:32px 0 0">
+      <h3 style="margin:0">破冰利器：自我介紹黃金三句<span data-tip="面試一開場的前 30 秒，決定面試官接下來想追問什麼。三句話講清楚你是誰、你最強的戰績、你能帶來什麼。同一段話放在履歷最上方，就是你的 Summary。"></span></h3>
+      <p class="note" style="margin:4px 0 0">1 分鐘精簡版的三個步驟，就是這三句。範例會依你的狀態、領域與勾選的硬實力調整，寫好後用上面的計時器唸一遍。</p>
+      <div class="gold3-grid">
+        <label class="field"><span><span class="no">1</span>專業定位：核心領域、年資與最顯著的優勢</span>
+          <textarea id="g3a" rows="2"></textarea></label>
+        <label class="field"><span><span class="no">2</span>關鍵戰績：一項最能證明解決問題能力的數字</span>
+          <textarea id="g3b" rows="2"></textarea></label>
+        <label class="field"><span><span class="no">3</span>價值主張：認同對方什麼，能為團隊帶來什麼即戰力</span>
+          <textarea id="g3c" rows="2"></textarea></label>
+      </div>
+      <div class="row" style="margin-top:12px">
+        <button type="button" class="btn-sm ghost" id="g3Fill">空白處帶入範例</button>
+        <button type="button" class="btn-sm" id="g3Copy">複製三句</button>
+        <span id="g3Msg" role="status" class="note" style="margin:0"></span>
+      </div>
+      <div class="gold3-preview" id="g3Preview" aria-live="polite"></div>
     </div>
   </div>
 </section>
@@ -1180,6 +1179,11 @@ details.mod.bei-mod p{margin:0 18px 12px;color:var(--muted);font-size:15px}
 
     <div class="ats-wrap" id="atsWrap">
       <h3>ATS 友善度檢測<span data-tip="很多企業先用系統篩履歷。排版太花俏，系統讀不到字，人資根本看不到你的內容。"></span></h3>
+      <p class="note" style="margin:4px 0 0">很多履歷撐不過 10 秒，因為根本沒被「人」看到。見到面試官前要先過三關：機器審查、HR 行為面試、專業主管拷問。</p>
+      <div class="bei-cmp">
+        <div class="no">✗ 機器解析失敗的元兇：複雜表格、雙欄排版、創意圖塊、技能熟練度進度條（ATS 讀不懂圖形）</div>
+        <div class="yes">✓ 乾淨標準的機讀格式：由上而下單欄排版、統一標準技術名詞、標準字體與項目符號</div>
+      </div>
       <p class="note" id="atsNote" style="margin:4px 0 12px"></p>
       <div class="progress-row" aria-live="polite">
         <div class="bar" aria-hidden="true"><span id="atsBar"></span></div>
@@ -4935,11 +4939,21 @@ details.mod.bei-mod p{margin:0 18px 12px;color:var(--muted);font-size:15px}
     { say: "「報到先繳保證金、訓練費，證件正本放公司保管。」", sub: "收費與扣證件都違法", law: "就業服務法第 5 條第 2 項", hot: ["fresh", "switch"],
       why: "雇主不得收取保證金，也不得扣留身分證、工作憑證等證明文件或財物。", check: "只提供影本。對方堅持收費或扣證件，直接離開。" },
     { say: "「我們是責任制，沒有加班費。」", sub: "一般職位不適用責任制", law: "勞動基準法第 24 條、第 84-1 條", hot: ["switch", "active"],
-      why: "只有經勞動部核定的特定工作者，並書面約定報地方主管機關核備，才適用第 84-1 條。一般職位延長工時，前 2 小時要加給 1/3 以上，再 2 小時加給 2/3 以上。", check: "面試時問：加班怎麼申請？加班費或補休怎麼計算？" },
+      why: "只有經勞動部核定的特定工作者，並書面約定報地方主管機關核備，才適用第 84-1 條。一般職位延長工時，前 2 小時至少 1.34 倍，再 2 小時至少 1.67 倍。", check: "面試時問：加班怎麼申請？加班費或補休怎麼計算？" },
     { say: "「綁約兩年，提早離職要賠三個月薪水。」", sub: "最低服務年限有前提", law: "勞動基準法第 15-1 條", hot: ["switch", "active"],
       why: "要約定最低服務年限，前提是雇主提供專業培訓並負擔費用，或給予合理補償，期間與違約金也要合理。", check: "簽約前問清楚：公司提供哪些培訓？費用多少？違約金怎麼算？" },
     { say: "「離職後兩年內不能到同業工作。」", sub: "競業禁止要有補償", law: "勞動基準法第 9-1 條", hot: ["active"],
-      why: "離職後競業禁止要有合理補償，期間最長 2 年，也要有保護營業秘密等正當理由。沒有補償的約定無效。", check: "看契約有沒有寫補償金額、期間與限制範圍。" },
+      why: "競業禁止要同時符合：雇主有需要保護的利益、你接觸得到機密、期間與地區在合理範圍（最長 2 年），並給合理補償（每月不低於離職前平均工資的 50%）。全體員工無條件簽署、又不給補償，約定無效。", check: "看契約有沒有寫補償金額、期間、地區與職務範圍。" },
+    { say: "「試用期不適合就直接走人，不用資遣費。」", sub: "試用期也要依法資遣", law: "勞動基準法第 11、16、17 條", hot: ["fresh", "switch"],
+      why: "試用期只是雇主保留終止契約的權利。因為不適任而終止契約，仍要依法預告並發給資遣費。", check: "被告知不適任時，請公司說明理由與資遣費計算，並保留通知紀錄。" },
+    { say: "「特休要主管排，年底沒休完就歸零。」", sub: "特休由你排，沒休完要折現", law: "勞動基準法第 38 條", hot: ["switch", "active"],
+      why: "特休的排定權在勞工。年度終結或離職時還沒休完的天數，雇主要折算工資發給你。", check: "面試時問：特休怎麼申請？沒休完的天數怎麼處理？" },
+    { say: "「全勤、伙食、職務加給不算薪水，加班費用底薪算就好。」", sub: "名目不同也是工資", law: "勞動基準法第 2 條、第 24 條", hot: ["active"],
+      why: "只要是你提供勞務的對價，或是固定發給的經常性給與，不論叫全勤、伙食還是職務加給，都是工資，要納入加班費的計算基數。", check: "看薪資單的每一個項目，確認加班費是用全部經常性薪資計算。" },
+    { say: "「我們排四週變形工時，連上十天很正常。」", sub: "變形工時有雙門檻", law: "勞動基準法第 30-1 條、第 36 條", hot: ["switch", "active"],
+      why: "變形工時要同時符合兩個門檻：行業經勞動部指定適用，並經工會或勞資會議同意。沒有同意就這樣排班，就是違法超時。只有少數經指定的行業，才能在一定範圍內調整「七休一」。", check: "問清楚公司屬於哪個行業、有沒有勞資會議紀錄，並保留自己的班表。" },
+    { say: "「你犯錯了，明天不用來，也沒有資遣費。」", sub: "懲戒解僱有嚴格條件", law: "勞動基準法第 12 條", hot: ["active"],
+      why: "不經預告、不給資遣費的解僱，必須是情節重大，而且處分要相當、是最後手段。雇主還要在知道事情後 30 天內發動，超過就無效。", check: "要求書面通知與具體理由，可向勞工局申請勞資爭議調解。" },
     { say: "「先來試做三天，沒問題再談薪水。」", sub: "試做也是工作", law: "勞動基準法第 2 條、第 22 條", hot: ["fresh"],
       why: "試做也是提供勞務，雇主要依約給付工資並加保。名為「無薪實習」但實際在工作，同樣受勞基法保障。", check: "試做前確認時薪、工時與是否加保，保留排班與對話紀錄。" },
     { say: "「薪資面議，來面試再說。」", sub: "4 萬以下要公開薪資範圍", law: "就業服務法第 5 條第 2 項第 6 款", hot: ["fresh", "switch"],
@@ -4948,9 +4962,9 @@ details.mod.bei-mod p{margin:0 18px 12px;color:var(--muted);font-size:15px}
       why: "正派公司只需要帳號影本做薪轉。交出提款卡、密碼或網銀帳號，可能變成詐騙集團的人頭帳戶，自己也要負法律責任。", check: "只提供存摺封面影本。要求代辦信用卡、貸款或先買產品，也都是詐騙警訊，可撥 165 查證。" }
   ];
   const trapNotes = {
-    fresh: "新鮮人最常遇到：試用期不保勞健保、底薪低於基本工資、無薪試做。標「你最該先看」的請優先確認。",
-    switch: "轉職者最常遇到：綁約違約金、收保證金、責任制。標「你最該先看」的請優先確認。",
-    active: "已有經驗者最常遇到：責任制、競業條款、最低服務年限。標「你最該先看」的請優先確認。"
+    fresh: "新鮮人最常遇到：試用期不保勞健保、試用期不給資遣費、底薪低於基本工資、無薪試做。標「你最該先看」的請優先確認。",
+    switch: "轉職者最常遇到：綁約違約金、收保證金、責任制、變形工時。標「你最該先看」的請優先確認。",
+    active: "已有經驗者最常遇到：責任制、競業條款、加班費基數、懲戒解僱。標「你最該先看」的請優先確認。"
   };
   function renderTraps() {
     $("#trapNote").textContent = trapNotes[upSt];
@@ -5198,9 +5212,9 @@ details.mod.bei-mod p{margin:0 18px 12px;color:var(--muted);font-size:15px}
     const info = selInfo(f);
     const hs = (info.active && info.selOpts.length ? info.selOpts : (fieldHard[f] || [])).slice(0, 2);
     const hard = hs.join("、") || "○○", first = hs[0] || "○○", label = fLabel(f);
-    if (upSt === "fresh") return ["○○大學○○系應屆畢業，專攻" + label + "，熟悉" + hard + "。", "畢業專題中主導○○，讓○○由○提升到○（寫出數字）。", "希望以" + first + "與快速學習的能力，成為貴團隊在○○上的即戰力。"];
-    if (upSt === "switch") return ["具 ○ 年○○（前職）經驗，正轉型為" + label + "，已完成○○課程與 ○ 件作品。", "前職以○○把○○縮短 ○%，證明我能用數據解決流程痛點。", "能把前職的○○經驗結合" + first + "，協助貴團隊加快○○。"];
-    return ["○ 年" + label + "經驗，專精" + hard + "。", "曾主導○○專案，帶來○○（例如成本降低 18%、交付時程縮短 30%）。", "期望在貴公司以○○能力，為○○帶來即戰力。"];
+    if (upSt === "fresh") return ["我是○○大學○○系應屆畢業生，專精於" + label + "，熟悉" + hard + "。", "在畢業專題中，我主導○○，將○○提升了○%，達到○○（寫出數字）。", "我非常認同貴公司在○○的佈局，相信我的" + first + "能力與快速學習的態度，能直接協助團隊解決目前的○○。"];
+    if (upSt === "switch") return ["我擁有 ○ 年○○（前職）經驗，正轉型為" + label + "，已完成○○課程與 ○ 件作品，專精於" + hard + "。", "在上一份工作中，我主導○○，將○○縮短了 ○%，證明我能用數據解決流程痛點。", "我非常認同貴公司在○○的佈局，相信我前職的○○經驗結合" + first + "，能直接解決團隊目前的○○。"];
+    return ["我是一名擁有 ○ 年" + label + "經驗的○○（職稱），專精於" + hard + "。", "在上一份工作中，我主導○○，將○○提升了 ○%，達到○○（例如成本降低 18%、交付時程縮短 30%）。", "我非常認同貴公司在○○的佈局，相信我的○○經驗能直接解決團隊目前的○○。"];
   }
   function renderG3() {
     const ex = g3Examples();
@@ -5210,11 +5224,11 @@ details.mod.bei-mod p{margin:0 18px 12px;color:var(--muted);font-size:15px}
     const n = text.replace(/\s/g, "").length;
     const tips = [];
     if (v[1] && !/\d/.test(v[1])) tips.push("第 2 句還沒有數字，從六大數據維度挑一個最能代表你的成果。");
-    if (v[2] && !/貴|團隊|公司/.test(v[2])) tips.push("第 3 句要說你能為對方帶來什麼，提到「貴公司」或「團隊」。");
-    if (n > 150) tips.push("超過 150 字，Summary 建議精簡在 3 句、150 字內。");
+    if (v[2] && !/貴|團隊|公司/.test(v[2])) tips.push("第 3 句是價值主張：說出你認同對方什麼、能為團隊解決什麼，提到「貴公司」或「團隊」。");
+    if (n > 150) tips.push("超過 150 字。開場三句建議唸 30 秒左右，約 150 字內。");
     $("#g3Preview").innerHTML = text
       ? "<p>" + esc(text) + '</p><p class="note" style="margin:0">共 ' + n + " 字。" + esc(tips.join(" ")) + "</p>"
-      : '<p class="note" style="margin:0">依序寫完三句，這裡會組合成履歷最上方的 Summary，也能當面試的開場白。</p>';
+      : '<p class="note" style="margin:0">依序寫完三句，這裡會組合成你的面試開場白。同一段話也可以放在履歷最上方當 Summary。</p>';
   }
   Object.keys(g3Els).forEach(k => g3Els[k].addEventListener("input", () => {
     g3State[k] = g3Els[k].value;
