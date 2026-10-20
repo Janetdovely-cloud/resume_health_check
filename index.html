@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>履歷健診｜STAR 原則互動版 v2</title>
+<title>履歷健診｜STAR 原則互動版 v3</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
@@ -430,7 +430,16 @@ a,button,summary,label[for],select,[role="tab"],[role="button"],input[type="chec
 .d5{right:3%;bottom:34%;--w:52px;--dur:9s;--dl:-4s}
 @keyframes float{0%,100%{transform:translateY(0) rotate(-4deg)}50%{transform:translateY(-12px) rotate(5deg)}}
 @keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
-.to-top::after{content:"↑";display:inline-block;margin-left:6px;animation:bob 1.4s ease-in-out infinite}
+.to-top{display:grid;grid-template-columns:auto auto;grid-template-rows:auto auto;align-items:center;justify-items:center;column-gap:2px;padding:8px 12px 6px;border:2px solid var(--ink);border-radius:18px 22px 16px 24px / 22px 16px 24px 18px;background:var(--paper)}
+.to-top .tt-pencil{grid-column:1;grid-row:1;transform:rotate(-45deg);transition:transform .25s ease}
+.to-top .tt-line{grid-column:2;grid-row:1;opacity:.75}
+.to-top .tt-text{grid-column:1 / span 2;grid-row:2;font-family:var(--hand);font-weight:400;font-size:18px;line-height:1.1}
+.to-top.show .tt-pencil{animation:ttBob 1.6s ease-in-out infinite}
+.to-top.show:hover .tt-pencil{animation:none;transform:rotate(-45deg) translate(3px,-3px)}
+.to-top.show:hover .tt-line path{animation:ttDraw .6s linear infinite}
+@keyframes ttBob{0%,100%{transform:rotate(-45deg) translate(0,0)}50%{transform:rotate(-45deg) translate(2px,-2px)}}
+@keyframes ttDraw{to{stroke-dashoffset:-12}}
+@media (prefers-reduced-motion:reduce){.to-top.show .tt-pencil,.to-top.show:hover .tt-line path{animation:none}}
 
 /* 螢光筆畫線 */
 mark.hl{color:inherit;background:linear-gradient(transparent 58%,rgba(242,177,52,.6) 58%) no-repeat left/0% 100%;transition:background-size .9s ease .55s;padding:0 2px}
@@ -580,6 +589,185 @@ details.q.flash{animation:flashQ 1.5s ease}
 .rec-no{display:inline-grid;place-items:center;width:26px;height:26px;border-radius:50%;background:var(--ink);color:var(--paper);font-weight:800;font-size:13px}
 .rec-first{font-size:12px;font-weight:800;padding:1px 10px;border-radius:999px;background:var(--gold);color:#1a1400}
 #starSkillPick,#jobSkillPick{margin:-8px 0 14px}
+
+/* ===== v7：JD 比對、作品集健診、ATS、量化工具、BEI 與逆向面試 ===== */
+.tip{display:inline-grid;place-items:center;width:20px;height:20px;margin-left:6px;padding:0;border-radius:50%;border:1.5px solid var(--muted);background:var(--sheet);color:var(--muted);font:inherit;font-size:12px;font-weight:900;line-height:1;vertical-align:middle;cursor:pointer}
+.tip[aria-expanded="true"]{background:var(--ink);border-color:var(--ink);color:var(--paper)}
+.tip-pop{display:block;margin:6px 0 0;padding:8px 12px;border-left:4px solid var(--violet);background:color-mix(in srgb,var(--violet) 10%,transparent);border-radius:0 10px 10px 0;font-size:14px;font-weight:400;color:var(--ink);line-height:1.7}
+.tip-pop[hidden]{display:none}
+.mini-label{display:inline-block;font-size:12px;font-weight:800;padding:1px 10px;border-radius:999px;border:1.5px solid var(--ink);background:var(--sheet);color:var(--ink)}
+.badge{display:inline-block;font-size:12px;font-weight:800;padding:1px 9px;border-radius:999px;margin-left:6px;vertical-align:middle;white-space:nowrap}
+.badge.jd{background:var(--gold);color:#1a1400}
+.badge.have{background:var(--brand);color:#06201C}
+.badge.hot{background:var(--danger);color:#fff}
+
+/* 三圈關鍵字 */
+.circles{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin:12px 0 22px}
+.circle{border:2px dashed var(--c,var(--brand));border-radius:var(--wob);background:var(--sheet);padding:14px 16px;box-shadow:var(--shadow-sk)}
+.circle h4{margin:0 0 4px;font-size:15px;color:var(--ink)}
+.circle p{margin:0;font-size:14px;color:var(--muted)}
+.kw-group{margin-top:14px}
+.kw-group h4{display:flex;align-items:center;gap:8px;font-size:15px;margin:0 0 8px}
+.kw-group h4 i{display:inline-block;width:12px;height:12px;border-radius:50%;background:var(--c)}
+.kw-list{list-style:none;padding:0;margin:0;display:grid;gap:8px;grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}
+.kw-list label{display:flex;gap:10px;align-items:flex-start;padding:10px 12px;border:1.5px dashed var(--muted);border-radius:12px;background:var(--sheet);cursor:pointer}
+.kw-list label:hover{border-color:var(--brand)}
+.kw-list input{width:20px;height:20px;margin-top:3px;accent-color:var(--brand);flex-shrink:0}
+.kw-list small{display:block;color:var(--muted);font-size:12px;font-weight:400}
+.kw-list input:checked~span b{color:var(--link)}
+.jd-paste textarea{min-height:110px}
+.score-box{margin-top:16px;padding:14px 18px;border:2px dashed var(--brand);border-radius:var(--wob);background:var(--sheet)}
+.score-box p{margin:6px 0 0;color:var(--muted)}
+.score-box .big{font-family:var(--mono);font-size:30px;font-weight:700;color:var(--ink);margin:0}
+
+/* 勞基法防雷 */
+.warn-head{display:flex;align-items:center;gap:12px;margin:40px 0 6px}
+.warn-icon{display:inline-grid;place-items:center;width:38px;height:38px;border-radius:50%;background:var(--danger);color:#fff;font-weight:900;font-size:20px;flex-shrink:0}
+.trap-grid{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));margin-top:14px}
+details.trap{background:var(--sheet);border:2px dashed var(--danger);border-radius:var(--wob);box-shadow:var(--shadow-sk)}
+details.trap.hot{background:color-mix(in srgb,var(--danger) 6%,var(--sheet))}
+details.trap summary{list-style:none;cursor:pointer;padding:14px 16px;display:grid;grid-template-columns:auto 1fr auto;gap:10px;align-items:start}
+details.trap summary::-webkit-details-marker{display:none}
+details.trap summary::after{content:"+";font-size:20px;line-height:1.2;color:var(--danger);font-weight:900}
+details.trap[open] summary::after{content:"–"}
+details.trap .flag{font-size:18px;line-height:1.4}
+details.trap .t-say{display:block;font-weight:800;color:var(--ink);line-height:1.55}
+details.trap .t-sub{display:block;font-size:13px;color:var(--muted)}
+.trap-body{padding:0 16px 14px 44px;display:grid;gap:8px}
+.trap-body p{margin:0;font-size:14px;color:var(--muted)}
+.trap-body p strong{color:var(--ink)}
+.trap-law{font-size:12px;font-weight:800;color:var(--danger)}
+.trap-h{margin:22px 0 0;font-size:16px}
+.badge.ind{background:var(--ink);color:var(--paper)}
+
+/* 作品集健診 */
+.pf-flow{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:10px 0 22px}
+.pf-flow span{font-weight:800;padding:6px 14px;border:1.5px solid var(--ink);border-radius:999px;background:var(--sheet);box-shadow:2px 2px 0 var(--ink)}
+.pf-flow b{color:var(--muted);font-weight:400}
+.dim-tag{display:inline-block;font-size:12px;font-weight:800;padding:0 9px;border-radius:999px;margin-right:6px;color:#111;background:var(--c,var(--rule))}
+.pf-trap{margin-top:16px}
+
+/* Before / After 對照卡 */
+.ba{display:grid;grid-template-columns:1fr auto 1.3fr;gap:12px;align-items:stretch;margin:12px 0 8px}
+.ba-card{border-radius:var(--wob);padding:16px 18px;box-shadow:var(--shadow-sk)}
+.ba-card.before{background:repeating-linear-gradient(-45deg,color-mix(in srgb,var(--muted) 10%,var(--sheet)) 0 8px,var(--sheet) 8px 16px);border:2px dashed var(--muted)}
+.ba-card.after{background:var(--sheet);border:2px solid var(--success)}
+.ba-card .tag{display:inline-block;font-size:12px;font-weight:800;padding:1px 10px;border-radius:999px;color:#fff;margin-bottom:8px}
+.ba-card.before .tag{background:var(--muted)}
+.ba-card.after .tag{background:var(--success)}
+.ba-card p{margin:0;color:var(--ink)}
+.ba-card.before p{color:var(--muted);text-decoration:line-through;text-decoration-color:color-mix(in srgb,var(--danger) 60%,transparent)}
+.ba-arrow{display:grid;place-items:center;font-size:26px;font-weight:900;color:var(--link)}
+.ba-why{margin:0 0 6px;font-size:14px;color:var(--muted)}
+.xyz{border-radius:4px;padding:0 3px;box-decoration-break:clone;-webkit-box-decoration-break:clone}
+.xyz.x{background:color-mix(in srgb,var(--brand) 28%,transparent)}
+.xyz.y{background:color-mix(in srgb,#3B82F6 26%,transparent)}
+.xyz.z{background:color-mix(in srgb,var(--gold) 40%,transparent)}
+.xyz-legend{display:flex;flex-wrap:wrap;gap:8px;margin:6px 0 4px;font-size:13px;color:var(--muted)}
+.xyz-legend .xyz{color:var(--ink);font-weight:700}
+.car{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:10px}
+.car div{border:1.5px dashed var(--muted);border-radius:12px;padding:10px 12px;background:var(--sheet)}
+.car b{display:block;font-size:13px;color:var(--link)}
+.car p{margin:2px 0 0;font-size:14px;color:var(--ink)}
+
+/* 六大維度 */
+.dims{display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));margin-top:12px}
+.dim{display:grid;gap:4px;align-content:start;padding:12px 14px;border:1.5px dashed var(--muted);border-radius:12px;background:var(--sheet);cursor:pointer}
+.dim:hover{border-color:var(--brand)}
+.dim.on{border:2px solid var(--brand);background:color-mix(in srgb,var(--brand) 8%,var(--sheet))}
+.dim .d-top{display:flex;gap:8px;align-items:center;font-weight:800}
+.dim input{width:18px;height:18px;accent-color:var(--brand)}
+.dim .d-ex{font-size:14px;color:var(--ink)}
+.dim .d-q{font-size:13px;color:var(--muted)}
+
+/* 動詞庫 */
+details.verbs{margin-top:22px;border:2px dashed var(--gold);border-radius:var(--wob);background:var(--sheet);box-shadow:var(--shadow-sk)}
+details.verbs>summary{list-style:none;cursor:pointer;padding:14px 18px;font-weight:800;display:flex;justify-content:space-between;gap:12px;align-items:center}
+details.verbs>summary::-webkit-details-marker{display:none}
+details.verbs>summary::after{content:"展開 +";font-size:14px;color:var(--link)}
+details.verbs[open]>summary::after{content:"收合 –"}
+.verbs-body{padding:0 18px 16px;display:grid;gap:12px}
+.verb-row h4{font-size:14px;color:var(--link);margin:0 0 6px}
+.verb-chips{display:flex;flex-wrap:wrap;gap:8px}
+.verb-chip{font:inherit;font-size:14px;font-weight:700;color:var(--ink);background:var(--paper);border:1.5px solid var(--ink);border-radius:999px;padding:4px 12px;box-shadow:2px 2px 0 var(--ink);cursor:pointer;min-height:34px}
+.verb-chip small{font-weight:400;color:var(--muted);margin-left:4px}
+.verb-chip:hover{transform:translate(-1px,-1px)}
+.verb-chip.copied{background:var(--brand)}
+.verb-weak{display:flex;flex-wrap:wrap;gap:8px}
+.verb-weak s{font-size:14px;padding:2px 10px;border-radius:999px;border:1px dashed var(--danger);color:var(--danger)}
+.verb-msg{min-height:1.5em;font-size:13px;color:var(--link);margin:0}
+
+/* 黃金三句 */
+.gold3{margin:4px 0 30px;padding:18px 20px;border:2px dashed var(--brand);border-radius:var(--wob);background:var(--sheet);box-shadow:var(--shadow-sk)}
+.gold3 .field textarea{min-height:64px}
+.soft-add{margin:12px 0 4px;max-width:520px}
+.soft-add-row{display:flex;gap:8px;margin-top:6px}
+.soft-add-row input{flex:1;min-width:0;font:inherit;font-size:16px;color:var(--ink);background:var(--paper);border:1px solid var(--rule);border-radius:8px;padding:8px 12px}
+.chip-btn.custom::after{content:" ✕";font-size:12px;color:var(--muted)}
+.polish-row{margin:0 0 10px}
+.gold3-grid{display:grid;gap:12px;margin-top:12px}
+.gold3 .no{display:inline-grid;place-items:center;width:24px;height:24px;border-radius:50%;background:var(--ink);color:var(--paper);font-size:13px;margin-right:6px}
+.gold3-preview{margin-top:12px;padding:12px 14px;border-left:5px solid var(--gold);background:color-mix(in srgb,var(--gold) 12%,transparent);border-radius:0 12px 12px 0}
+.gold3-preview p{margin:0 0 8px;color:var(--ink)}
+
+/* 迷思小卡 */
+.myth-grid{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));margin-top:12px}
+
+/* ATS */
+.ats-wrap{margin-top:40px}
+.ats-wrap .check-list label{border-color:var(--violet)}
+.ats-why{display:block;font-size:13px;color:var(--muted);text-decoration:none!important}
+
+/* BEI 策略卡 */
+.bei{margin:0 0 22px;padding:18px 20px;border:2px dashed var(--violet);border-radius:var(--wob);background:var(--sheet);box-shadow:var(--shadow-sk)}
+.bei h3{margin:0}
+.bei-cmp{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:12px 0}
+.bei-cmp div{padding:10px 12px;border-radius:12px;font-size:15px}
+.bei-cmp .no{border:1.5px dashed var(--danger);color:var(--muted)}
+.bei-cmp .yes{border:2px solid var(--success);color:var(--ink);font-weight:700}
+.ratio{display:flex;height:34px;border-radius:999px;overflow:hidden;border:1.5px solid var(--ink);margin:8px 0 4px;font-size:13px;font-weight:800}
+.ratio span{display:grid;place-items:center;color:#111;white-space:nowrap;overflow:hidden}
+.ratio .r1{flex:20;background:color-mix(in srgb,var(--muted) 30%,var(--sheet))}
+.ratio .r2{flex:60;background:var(--gold)}
+.ratio .r3{flex:20;background:color-mix(in srgb,var(--violet) 45%,var(--sheet))}
+.ratio-legend{display:grid;grid-template-columns:20fr 60fr 20fr;gap:6px;font-size:12px;color:var(--muted)}
+details.mod.bei-mod{background:var(--paper)}
+details.mod.bei-mod p{margin:0 18px 12px;color:var(--muted);font-size:15px}
+.why5{display:grid;gap:6px;margin:0 18px 14px}
+.why5 div{padding:8px 12px;border-radius:10px;font-size:14px}
+.why5 .l1{border:1.5px dashed var(--danger);color:var(--muted)}
+.why5 .l2{border:1.5px dashed var(--gold);color:var(--ink)}
+.why5 .l3{border:2px solid var(--success);color:var(--ink);font-weight:700}
+.q-up{display:grid;gap:8px;margin-top:4px;padding-top:10px;border-top:1px dashed var(--rule)}
+.q-up .rev{padding:8px 12px;border-left:4px solid var(--violet);background:color-mix(in srgb,var(--violet) 9%,transparent);border-radius:0 10px 10px 0;color:var(--ink);font-size:14px}
+.q-star{display:grid;gap:4px;margin:0;padding:0;list-style:none}
+.q-star li{display:grid;grid-template-columns:auto 1fr;gap:8px;font-size:14px;color:var(--ink)}
+.q-star li b{font-family:var(--mono);min-width:64px;color:var(--link)}
+.q-star li small{display:block;color:var(--muted);font-size:12px}
+.q-follow{margin:0;padding-left:18px;font-size:14px;color:var(--muted)}
+
+/* 逆向面試 */
+.rev-wrap{margin-top:36px;padding:20px 22px;border:2px dashed var(--brand);border-radius:var(--wob);background:var(--sheet);box-shadow:var(--shadow-sk)}
+.rev-wrap h3{margin:0}
+.rev-list{list-style:none;counter-reset:rv;padding:0;margin:14px 0 0;display:grid;gap:10px}
+.rev-list li{counter-increment:rv;display:grid;grid-template-columns:auto 1fr;gap:12px;padding:12px 14px;border:1.5px dashed var(--muted);border-radius:12px;background:var(--paper)}
+.rev-list li::before{content:counter(rv);display:grid;place-items:center;width:28px;height:28px;border-radius:50%;background:var(--ink);color:var(--paper);font-weight:800;font-size:14px}
+.rev-list .rq{font-weight:800;color:var(--ink)}
+.rev-list .rw{margin:4px 0 0;font-size:14px;color:var(--muted)}
+.rev-list .rw strong{color:var(--link)}
+.rev-dont{margin-top:14px}
+
+@media (max-width:960px){
+  .circles{grid-template-columns:1fr}
+  .ba{grid-template-columns:1fr}
+  .ba-arrow{transform:rotate(90deg);min-height:24px}
+  .car{grid-template-columns:1fr}
+}
+@media (max-width:600px){
+  .bei-cmp{grid-template-columns:1fr}
+  .ratio{font-size:11px}
+  .trap-body{padding-left:16px}
+}
 </style>
 </head>
 <body>
@@ -591,8 +779,10 @@ details.q.flash{animation:flashQ 1.5s ease}
     <a class="link" href="#skills">核心競爭力</a>
     <a class="link" href="#photo">履歷照片</a>
     <a class="link" href="#star">STAR 練習</a>
+    <a class="link" href="#jd">JD 契合度</a>
     <a class="link" href="#write">自傳與工作經歷</a>
     <a class="link" href="#intro">自我介紹</a>
+    <a class="link" href="#portfolio">作品集健診</a>
     <a class="link" href="#check">寫完前檢查</a>
     <a class="link" href="#mock">模擬面試</a>
     <a class="link" href="#courses">延伸課程</a>
@@ -616,7 +806,7 @@ details.q.flash{animation:flashQ 1.5s ease}
         <svg class="squig" viewBox="0 0 300 14" preserveAspectRatio="none" aria-hidden="true"><path pathLength="1" d="M3 9 C 40 2, 70 14, 110 7 S 180 2, 220 8 S 280 5, 297 6"/></svg>
       </div>
       <div>
-        <p class="lead">用 STAR 原則把經歷寫成看得見的成果。從狀態判斷、核心競爭力、照片、STAR 練習、自傳與工作經歷撰寫，到面試前檢查與模擬面試，一步一步完成健診。</p>
+        <p class="lead">用 STAR 原則把經歷寫成看得見的成果。從狀態判斷、核心競爭力、照片、STAR 練習、JD 契合度比對、自傳與工作經歷、作品集，到 ATS 檢查與模擬面試，一步一步完成健診。</p>
         <div class="btns">
           <a class="btn primary" href="#status">開始健診</a>
           <a class="btn ghost" href="#mock"><span class="tri" aria-hidden="true"></span>開始模擬面試</a>
@@ -626,7 +816,7 @@ details.q.flash{animation:flashQ 1.5s ease}
 
     <div class="workspace">
       <div class="progress-card" aria-labelledby="progTitle">
-        <div class="pc-head"><span class="pc-title" id="progTitle">健診進度</span><span class="pc-count"><span id="progCount">0</span> / 8</span></div>
+        <div class="pc-head"><span class="pc-title" id="progTitle">健診進度</span><span class="pc-count"><span id="progCount">0</span> / 10</span></div>
         <div class="pc-bar" aria-hidden="true"><span id="progBar"></span></div>
         <ol class="prog-list" id="progList"></ol>
         <div class="pc-foot">
@@ -642,7 +832,7 @@ details.q.flash{animation:flashQ 1.5s ease}
       <aside class="spec">
         <h2>這份健診包含</h2>
         <dl>
-          <dt>診斷模組</dt><dd><span data-count="8">8</span> 個</dd>
+          <dt>診斷模組</dt><dd><span data-count="10">10</span> 個</dd>
           <dt>STAR 範例</dt><dd><span data-count="7">7</span> 組</dd>
           <dt>模擬面試題</dt><dd><span data-count="50">50</span> 題</dd>
           <dt>寫完前檢查</dt><dd><span data-count="10">10</span> 項</dd>
@@ -683,6 +873,11 @@ details.q.flash{animation:flashQ 1.5s ease}
     <div class="chips" id="hardChips" role="group" aria-label="硬實力"></div>
     <p class="group-title">軟實力（依你選的領域顯示，每個產業重視的不一樣）</p>
     <div class="chips" id="softChips" role="group" aria-label="軟實力"></div>
+    <div class="soft-add" id="softAdd" hidden>
+      <label class="note" for="softCustomInput" style="margin:0"><strong>上面沒有你的軟實力？自己加一項</strong>（例如：危機處理、跨文化溝通，每項 20 字以內）</label>
+      <div class="soft-add-row"><input type="text" id="softCustomInput" maxlength="20" placeholder="輸入你的軟實力"><button type="button" class="btn-sm" id="softCustomAdd">加入</button></div>
+      <p class="note" id="softCustomMsg" role="status" style="margin:4px 0 0"></p>
+    </div>
     <div id="softNote" aria-live="polite"></div>
     <div class="balance">
       <div>
@@ -756,6 +951,7 @@ details.q.flash{animation:flashQ 1.5s ease}
     <div class="preview">
       <p class="kicker">組合成履歷上的一段話</p>
       <p id="starPreview"></p>
+      <label class="q-check polish-row"><input type="checkbox" class="polish-toggle" checked><span>自動潤飾：補上連接詞、統一全形標點、中英數字之間加空格、刪掉贅字（取消勾選可看原文直接串接）</span></label>
       <div class="row">
         <button class="btn-sm" id="copyStar" type="button">複製這段文字</button>
         <span id="copyMsg" role="status"></span>
@@ -765,10 +961,49 @@ details.q.flash{animation:flashQ 1.5s ease}
   </div>
 </section>
 
-<!-- 05 自傳與工作經歷 -->
+<!-- 05 JD 契合度比對與防雷指南 -->
+<section class="sec" id="jd" aria-labelledby="jd-title">
+  <div class="wrap">
+    <div class="sec-head"><span class="step-chip">05</span><span class="hand-label">JD 契合度與防雷</span></div>
+    <h2 id="jd-title">先讀懂職缺，再動筆寫履歷</h2>
+    <p class="sub">職缺描述（JD）就是考卷。把 JD 拆成硬技能與軟實力兩類，履歷用<mark class="hl"><strong>和 JD 一模一樣的字</strong></mark>對上，HR 與求職系統（ATS<span data-tip="ATS（Applicant Tracking System）是企業用來篩選履歷的系統，會比對履歷與職缺的關鍵字。"></span>）才找得到你。</p>
+    <p class="group-title">你的狀態（與第 1 步同步，提醒會跟著切換）</p>
+    <div class="tabs" id="jdStatus" role="group" aria-label="依狀態切換提醒"></div>
+    <p class="star-note" id="jdStatusNote" aria-live="polite"></p>
+
+    <h3>JD 關鍵字對齊兩大重點</h3>
+    <div class="circles" id="jdCircles"></div>
+
+    <p class="group-title">領域</p>
+    <p class="note primary-hint" style="margin:0 0 8px" hidden></p>
+    <div class="tabs" role="tablist" id="jdTabs" aria-label="JD 關鍵字領域"></div>
+
+    <label class="field jd-paste">貼上職缺描述（選填）<small>貼上後，JD 有提到的關鍵字會標示出來。內容只保存在這台裝置。</small>
+      <textarea id="jdText" rows="4" placeholder="把 104、Cake 或公司官網的職缺內容貼在這裡"></textarea></label>
+
+    <p class="note" style="margin:14px 0 0">勾選履歷上<strong>已經用相同寫法</strong>出現的關鍵字。標示「你已勾選」代表你在第 2 步勾過這項硬實力，記得寫進履歷。</p>
+    <div id="jdGroups"></div>
+    <div class="score-box" id="jdScore" aria-live="polite"></div>
+    <div class="row" style="margin-top:12px"><button class="btn-sm ghost" id="jdReset" type="button">清除本領域勾選</button></div>
+
+    <div class="warn-head"><span class="warn-icon" aria-hidden="true">!</span><h3 style="margin:0">勞基法防雷與避坑指南</h3></div>
+    <p class="note" style="margin:0 0 8px">面試或錄取時聽到下面這些話，先停下來確認。點開卡片看原因與確認方法。</p>
+    <p class="group-title">領域（每個行業都有自己的必坑法律）</p>
+    <p class="note primary-hint" style="margin:0 0 8px" hidden></p>
+    <div class="tabs" role="tablist" id="trapTabs" aria-label="勞基法防雷領域"></div>
+    <h4 class="trap-h" id="trapFieldTitle"></h4>
+    <div class="trap-grid" id="trapFieldGrid"></div>
+    <h4 class="trap-h">各行各業都會遇到</h4>
+    <p class="note" id="trapNote" style="margin:0 0 4px"></p>
+    <div class="trap-grid" id="trapGrid"></div>
+    <p class="note">※ 以上為常見情況的整理，法規與基本工資以勞動部最新公告為準。遇到勞資爭議，可撥打勞動部 1955 專線，或向各縣市勞工局申訴。</p>
+  </div>
+</section>
+
+<!-- 06 自傳與工作經歷 -->
 <section class="sec" id="write" aria-labelledby="write-title">
   <div class="wrap">
-    <div class="sec-head"><span class="step-chip">05</span><span class="hand-label">自傳與工作經歷</span></div>
+    <div class="sec-head"><span class="step-chip">06</span><span class="hand-label">自傳與工作經歷</span></div>
     <h2 id="write-title">把經歷寫成面試官想追問的樣子</h2>
     <p class="sub">自傳說明你是誰、為什麼適合；工作經歷證明你做過什麼、成果多少。兩者都要<mark class="hl">誠實、有條理、有事證</mark>。</p>
     <p class="group-title">你的狀態（與第 1 步同步，內容會跟著切換）</p>
@@ -833,10 +1068,31 @@ details.q.flash{animation:flashQ 1.5s ease}
           <div class="soft-bridge" id="softBridge" aria-live="polite"></div>
         </div>
 
+        <div id="workUp" style="margin-top:32px">
+          <h3>XYZ 公式：把流水帳翻成戰績<span data-tip="Google 前人資主管提出的寫法：以 Z 的方式達成 X，成效是 Y。CAR（情境、行動、結果）則是說故事的骨架。"></span></h3>
+          <div class="xyz-legend"><span class="xyz x">X 成果</span><span class="xyz y">Y 量化指標</span><span class="xyz z">Z 具體舉措</span><span>「以 Z 的方式，達成 X，成效為 Y」</span></div>
+          <div id="baBox" aria-live="polite"></div>
+
+          <h3 style="margin-top:28px">六大數據維度：找不到數字時這樣問自己</h3>
+          <p class="note" id="dimNote" style="margin:4px 0 0"></p>
+          <div class="dims" id="dimGrid"></div>
+          <p class="mock-count" id="dimCount" aria-live="polite" style="margin:12px 0 0"></p>
+
+          <div class="verb-slot" style="margin-top:22px"></div>
+        </div>
+
         <div class="grid3" style="margin-top:32px">
           <div class="panel v"><h3 id="jobTip1Title">沒有相關工作經驗？</h3><p id="jobTip1Body">把過去的服務業、業務等工作，翻譯成目標職缺需要的能力，例如需求理解、客訴處理、跨部門溝通；再用作品補上硬實力。</p></div>
           <div class="panel i"><h3>格式小提醒</h3><p>學歷填到高中即可，高中以下不用填（除非沒有高中學歷）。整份履歷維持 1 至 2 頁，只列與職缺相關的經歷。</p></div>
           <div class="panel t"><h3>不要造假</h3><p>履歷不實可能被即刻終止勞動契約，也可能涉及刑事與民事責任。實際責任依個案而定，最安全的做法就是誠實。</p></div>
+        </div>
+
+        <h3 style="margin-top:32px">四個常見迷思</h3>
+        <div class="myth-grid">
+          <div class="panel v"><h3>行業黑話</h3><p>HR 不懂你原產業的術語。「追工單、跟催欠料」改寫成「供應鏈進度管理」，讓跨產業的人也看得懂。</p></div>
+          <div class="panel i"><h3>盲目堆證書</h3><p>證照不是越多越好。每張證照都要搭配一個實際應用的案例，否則只是一行字。</p></div>
+          <div class="panel a"><h3>冒牌者症候群</h3><p>覺得「這沒什麼」的事，常常就是你的戰績。只要是你親手梳理、親自完成的，主詞就寫「我」。</p></div>
+          <div class="panel t"><h3>空窗期</h3><p>不用隱瞞，用一句話說明原因，再補上這段時間的學習、課程或作品，把空窗變成準備期。</p></div>
         </div>
       </div>
 
@@ -856,21 +1112,23 @@ details.q.flash{animation:flashQ 1.5s ease}
         <ul class="checks" id="labChecks" aria-live="polite"></ul>
         <div class="row">
           <button type="button" class="btn-sm" id="labCopy">複製全文</button>
+          <label class="q-check" style="margin:0"><input type="checkbox" class="polish-toggle" checked><span>複製時自動潤飾</span></label>
           <span id="labMsg" role="status" class="note" style="margin:0"></span>
         </div>
         <p class="note">※ 這是依原則做的提示，不能取代人工校對。請再唸一遍，並請同學或老師幫你看。</p>
+        <div class="verb-slot" style="margin-top:16px"></div>
       </div>
 
     </div>
   </div>
 </section>
 
-<!-- 06 自我介紹 -->
+<!-- 07 自我介紹 -->
 <section class="sec" id="intro" aria-labelledby="intro-title">
   <div class="wrap">
-    <div class="sec-head"><span class="step-chip">06</span><span class="hand-label">自我介紹</span></div>
+    <div class="sec-head"><span class="step-chip">07</span><span class="hand-label">自我介紹</span></div>
     <h2 id="intro-title">兩分鐘內講清楚你是誰</h2>
-    <p class="sub">自我介紹有兩種長度。選一種，照順序準備，再用計時器練習時間。</p>
+    <p class="sub">自我介紹有兩種長度。選一種，照順序準備，再用計時器練習時間。下方的<mark class="hl">黃金三句</mark>可以直接寫出你的開場白。</p>
     <div class="tabs" role="group" aria-label="自我介紹長度">
       <button type="button" data-mode="60" aria-pressed="true">1 分鐘精簡版</button>
       <button type="button" data-mode="180" aria-pressed="false">3 分鐘完整版</button>
@@ -891,33 +1149,105 @@ details.q.flash{animation:flashQ 1.5s ease}
         <div class="timer-after" id="timerAfter" hidden></div>
       </div>
     </div>
+    <div class="gold3" style="margin:32px 0 0">
+      <h3 style="margin:0">破冰利器：自我介紹黃金三句<span data-tip="面試一開場的前 30 秒，決定面試官接下來想追問什麼。三句話講清楚你是誰、你最強的戰績、你能帶來什麼。同一段話放在履歷最上方，就是你的 Summary。"></span></h3>
+      <p class="note" style="margin:4px 0 0">1 分鐘精簡版的三個步驟就是這三句。3 分鐘完整版是在第 2、3 句之間，再加上「優勢連結」與「個人亮點」。範例會依你的狀態、領域與勾選的硬實力調整，寫好後用上面的計時器唸一遍。</p>
+      <div class="gold3-grid">
+        <label class="field"><span><span class="no">1</span>專業定位：核心領域、年資與最顯著的優勢</span>
+          <textarea id="g3a" rows="2"></textarea></label>
+        <label class="field"><span><span class="no">2</span>關鍵戰績：一項最能證明解決問題能力的數字</span>
+          <textarea id="g3b" rows="2"></textarea></label>
+        <label class="field"><span><span class="no">3</span>價值主張：認同對方什麼，能為團隊帶來什麼即戰力</span>
+          <textarea id="g3c" rows="2"></textarea></label>
+      </div>
+      <div class="row" style="margin-top:12px">
+        <button type="button" class="btn-sm ghost" id="g3Fill">空白處帶入範例</button>
+        <button type="button" class="btn-sm" id="g3Copy">複製三句</button>
+        <span id="g3Msg" role="status" class="note" style="margin:0"></span>
+      </div>
+      <label class="q-check polish-row" style="margin:12px 0 0"><input type="checkbox" class="polish-toggle" checked><span>自動潤飾三句（統一標點、補句號、中英數字加空格）</span></label>
+      <div class="gold3-preview" id="g3Preview" aria-live="polite"></div>
+    </div>
   </div>
 </section>
 
-<!-- 06 寫完前檢查 -->
+<!-- 08 作品集健診 -->
+<section class="sec" id="portfolio" aria-labelledby="portfolio-title">
+  <div class="wrap">
+    <div class="sec-head"><span class="step-chip">08</span><span class="hand-label">作品集健診</span></div>
+    <h2 id="portfolio-title">作品集要說的是商業故事，不只是美圖</h2>
+    <p class="sub">面試官看作品集，是在找你<mark class="hl">怎麼思考、怎麼解決問題</mark>。每件作品都照這條敘事線整理：</p>
+    <div class="pf-flow" aria-label="作品集敘事線"><span>痛點洞察</span><b aria-hidden="true">→</b><span>驗證迭代</span><b aria-hidden="true">→</b><span>商業行動建議</span></div>
+    <p class="group-title">你的狀態（與第 1 步同步，提醒會跟著切換）</p>
+    <div class="tabs" id="pfStatus" role="group" aria-label="依狀態切換提醒"></div>
+    <p class="star-note" id="pfStatusNote" aria-live="polite"></p>
+    <p class="group-title">領域</p>
+    <p class="note primary-hint" style="margin:0 0 8px" hidden></p>
+    <div class="tabs" role="tablist" id="pfTabs" aria-label="作品集領域"></div>
+    <div class="progress-row" aria-live="polite">
+      <div class="bar" aria-hidden="true"><span id="pfBar"></span></div>
+      <span class="num" id="pfNum">0 / 5</span>
+    </div>
+    <ul class="check-list" id="pfList"></ul>
+    <div class="callout warn pf-trap" id="pfTrap" style="margin-top:16px"></div>
+    <p class="note">※ 公司作品請先確認保密規定，客戶名稱與數據可以去識別化，或用比例呈現。</p>
+  </div>
+</section>
+
+<!-- 09 寫完前檢查 -->
 <section class="sec" id="check" aria-labelledby="check-title">
   <div class="wrap">
-    <div class="sec-head"><span class="step-chip">07</span><span class="hand-label">寫完前檢查</span></div>
+    <div class="sec-head"><span class="step-chip">09</span><span class="hand-label">寫完前檢查</span></div>
     <h2 id="check-title">用面試官的角度，最後看一次</h2>
-    <p class="sub">寫完履歷與自傳後，逐項檢查。勾選進度會保存在這台裝置上。</p>
+    <p class="sub">寫完履歷與自傳後，逐項檢查內容，再做一次 ATS 友善度檢測，確認系統讀得到你。勾選進度會保存在這台裝置上。</p>
     <div class="progress-row" aria-live="polite">
       <div class="bar" aria-hidden="true"><span id="checkBar"></span></div>
       <span class="num" id="checkNum">0 / 0</span>
     </div>
     <ul class="check-list" id="checkList"></ul>
     <button class="btn-sm ghost" id="checkReset" type="button">清除所有勾選</button>
+
+    <div class="ats-wrap" id="atsWrap">
+      <h3>ATS 友善度檢測<span data-tip="很多企業先用系統篩履歷。排版太花俏，系統讀不到字，人資根本看不到你的內容。"></span></h3>
+      <p class="note" style="margin:4px 0 0">很多履歷撐不過 10 秒，因為根本沒被「人」看到。見到面試官前要先過三關：機器審查、HR 行為面試、專業主管拷問。</p>
+      <div class="bei-cmp">
+        <div class="no">✗ 機器解析失敗的元兇：複雜表格、雙欄排版、創意圖塊、技能熟練度進度條（ATS 讀不懂圖形）</div>
+        <div class="yes">✓ 乾淨標準的機讀格式：由上而下單欄排版、統一標準技術名詞、標準字體與項目符號</div>
+      </div>
+      <p class="note" id="atsNote" style="margin:4px 0 12px"></p>
+      <div class="progress-row" aria-live="polite">
+        <div class="bar" aria-hidden="true"><span id="atsBar"></span></div>
+        <span class="num" id="atsNum">0 / 10</span>
+      </div>
+      <ul class="check-list" id="atsList"></ul>
+      <p class="note" id="atsVerdict" aria-live="polite"></p>
+      <button class="btn-sm ghost" id="atsReset" type="button">清除 ATS 勾選</button>
+    </div>
   </div>
 </section>
 
-<!-- 07 模擬面試 -->
+<!-- 10 模擬面試 -->
 <section class="sec" id="mock" aria-labelledby="mock-title">
   <div class="wrap">
-    <div class="sec-head"><span class="step-chip">08</span><span class="hand-label">模擬面試</span></div>
+    <div class="sec-head"><span class="step-chip">10</span><span class="hand-label">模擬面試</span></div>
     <h2 id="mock-title">面試官最常問的 10 個問題</h2>
     <p class="sub">選擇你的領域，每個領域整理了 10 個常見問題。<mark class="hl">先自己回答，再看參考答案</mark>。參考答案是示範，請換成你自己的經歷，用自己的話說出來。</p>
     <p class="group-title">你的狀態（與第 1 步同步，參考答案會跟著切換）</p>
     <div class="tabs" id="mockStatus" role="group" aria-label="依狀態切換參考答案"></div>
     <p class="star-note" id="mockStatusNote" aria-live="polite"></p>
+
+    <div class="bei">
+      <h3>BEI 行為面試：面試官要的是「過去的真實行為」<span data-tip="BEI（Behavioral Event Interview）行為事例面試法。過去的行為最能預測未來的表現，所以面試官會一直追問細節。"></span></h3>
+      <div class="bei-cmp">
+        <div class="no">✗「如果遇到衝突，我會先溝通。」（假設，無法驗證）</div>
+        <div class="yes">✓「去年專案延遲時，我做了這三件事……」（事例，可以追問）</div>
+      </div>
+      <p class="note" style="margin:0">回答比例抓這樣：</p>
+      <div class="ratio" aria-hidden="true"><span class="r1">S＋T</span><span class="r2">A＋R</span><span class="r3">L</span></div>
+      <div class="ratio-legend"><span>20%：精簡交代背景</span><span>60%：你的行動與量化結果</span><span>20%：覆盤學到什麼</span></div>
+      <p class="star-note" id="beiStatusTip" aria-live="polite" style="margin-top:12px"></p>
+      <div id="beiMods"></div>
+    </div>
     <p class="note primary-hint" style="margin:0 0 8px" hidden></p>
     <div class="tabs" role="tablist" id="mockTabs" aria-label="面試領域"></div>
     <div class="mock-tools">
@@ -927,6 +1257,17 @@ details.q.flash{animation:flashQ 1.5s ease}
     </div>
     <p class="note" id="mockFilterNote" style="margin:0 0 12px"></p>
     <div class="mock-list" id="mockList"></div>
+
+    <div class="rev-wrap" id="reverseQs">
+      <h3>逆向面試：最後輪到你提問<span data-tip="面試最後的「你有什麼問題想問我們？」也是評分的一部分。好問題能展現你的投入程度與商業思維。"></span></h3>
+      <p class="note" id="revNote" style="margin:4px 0 0"></p>
+      <ol class="rev-list" id="revList"></ol>
+      <div class="callout warn rev-dont"><p><b>避免這樣問</b>第一輪就問薪水、休假與加班。「公司是做什麼的？」這類官網查得到的問題，也會讓面試官覺得你沒有準備。</p></div>
+      <div class="row" style="margin-top:12px">
+        <button type="button" class="btn-sm" id="revCopy">複製 5 個反問題</button>
+        <span id="revMsg" role="status" class="note" style="margin:0"></span>
+      </div>
+    </div>
     <p class="note">※ 面試問題會因公司與職缺而不同，以上是常見的問法與回答方向。不要背誦參考答案，面試官會追問細節，請以真實經驗作答。</p>
   </div>
 </section>
@@ -954,7 +1295,7 @@ details.q.flash{animation:flashQ 1.5s ease}
   <div id="dlgContent"></div>
 </dialog>
 
-<button type="button" class="to-top" id="toTop" aria-label="回到頁面最上方">置頂</button>
+<button type="button" class="to-top" id="toTop" aria-label="回到頁面最上方"><svg class="tt-pencil" viewBox="0 0 32 32" width="30" height="30" aria-hidden="true"><g stroke="#2B2822" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"><path d="M7 19 L24 2 L30 8 L13 25 Z" fill="#1DAD97"/><path d="M24 2 L30 8 L27.6 10.4 L21.6 4.4 Z" fill="#F2B134"/><path d="M4 28 L7 19 L13 25 Z" fill="#FBF6EA"/><path d="M4 28 L4.9 25.3 L6.7 27.1 Z" fill="#2B2822"/><path d="M12 16.5 L20.5 8" stroke="#FFFFFF" stroke-opacity=".55"/></g></svg><svg class="tt-line" viewBox="0 0 14 30" width="14" height="30" aria-hidden="true"><path d="M7 28 C3 22 11 18 7 12 C4 8 9 5 7 2" fill="none" stroke="#2B2822" stroke-width="1.6" stroke-linecap="round" stroke-dasharray="3 3"/></svg><span class="tt-text">置頂</span></button>
 
 <script>
 (function () {
@@ -1004,7 +1345,7 @@ details.q.flash{animation:flashQ 1.5s ease}
   /* ---------- 健診進度（僅在完成項目時微調動畫） ---------- */
   const progKeys = [
     ["status", "你的狀態", "#status"], ["skills", "核心競爭力", "#skills"], ["photo", "履歷照片", "#photo"],
-    ["star", "STAR 練習", "#star"], ["write", "自傳與工作經歷", "#write"], ["intro", "自我介紹", "#intro"], ["check", "寫完前檢查", "#check"], ["mock", "模擬面試", "#mock"]
+    ["star", "STAR 練習", "#star"], ["jd", "JD 契合度", "#jd"], ["write", "自傳與工作經歷", "#write"], ["intro", "自我介紹", "#intro"], ["portfolio", "作品集健診", "#portfolio"], ["check", "寫完前檢查", "#check"], ["mock", "模擬面試", "#mock"]
   ];
   const progress = load("rhc-progress", { status: false, skills: false, photo: false, star: false, intro: false, check: false });
   function renderProgress() {
@@ -1040,7 +1381,7 @@ details.q.flash{animation:flashQ 1.5s ease}
   prReset.addEventListener("click", () => resetUi(true));
   prCancel.addEventListener("click", () => { resetUi(false); prReset.focus(); });
   prConfirm.addEventListener("click", () => {
-    ["rhc-status", "rhc-skills", "rhc-star", "rhc-star2", "rhc-check", "rhc-progress", "rhc-mock", "rhc-write", "rhc-gap", "rhc-intro"].forEach(k => {
+    ["rhc-status", "rhc-skills", "rhc-star", "rhc-star2", "rhc-check", "rhc-progress", "rhc-mock", "rhc-write", "rhc-gap", "rhc-intro", "rhc-jd", "rhc-portfolio", "rhc-ats", "rhc-summary", "rhc-dims", "rhc-polish"].forEach(k => {
       try { localStorage.removeItem(k); } catch (e) { /* storage unavailable */ }
     });
     try { location.reload(); } catch (e) { /* fall through to fallback */ }
@@ -1068,7 +1409,7 @@ details.q.flash{animation:flashQ 1.5s ease}
       sub: "有工作經驗，但要進入不同的領域",
       tips: [
         "把過去工作翻譯成目標領域的能力，例如服務業的客訴處理可以寫成「需求理解與溝通」。",
-        "硬實力要補起來，先用一個作品證明你正在往新領域走。",
+        "硬實力要補起來：準備 2 到 3 件作品組成作品集，至少一件解決前職的真實問題，再搭配課程或證照，證明你已經具備新領域的能力。",
         "自傳要講清楚「為什麼轉」與「能帶來什麼」，不要只談過去。"
       ]
     },
@@ -1433,6 +1774,7 @@ details.q.flash{animation:flashQ 1.5s ease}
   if (typeof skillState.apply !== "boolean") skillState.apply = true;
   if (typeof skillState.jobType !== "string") skillState.jobType = null;
   if (typeof skillState.exSkill !== "string") skillState.exSkill = null;
+  if (!Array.isArray(skillState.softCustom)) skillState.softCustom = [];
 
   function hardList() {
     const list = [];
@@ -1461,16 +1803,22 @@ details.q.flash{animation:flashQ 1.5s ease}
     $("#hardChips").innerHTML = skillState.fields.length
       ? list.map(n => chipBtn("hard", n, skillState.hard.includes(n))).join("")
       : '<p class="note">先選擇你的領域，這裡會列出對應的硬實力。</p>';
-    const sl = softList();
-    $("#softChips").innerHTML = sl.map(n => chipBtn("soft", n, skillState.soft.includes(n))).join("");
-    $("#softNote").innerHTML = softNoteHtml();
+    const hasField = skillState.fields.length > 0;
+    const sl = hasField ? softList() : [];
+    const custom = hasField ? skillState.softCustom : [];
+    $("#softChips").innerHTML = hasField
+      ? sl.map(n => chipBtn("soft", n, skillState.soft.includes(n))).join("") +
+        custom.map(n => '<button type="button" class="chip-btn custom" data-group="softc" data-name="' + esc(n) + '" aria-pressed="true" aria-label="' + esc(n) + '（自行新增，點一下移除）">' + esc(n) + "</button>").join("")
+      : '<p class="note">先選擇你的領域，這裡會列出該產業最被重視的軟實力。</p>';
+    $("#softAdd").hidden = !hasField;
+    $("#softNote").innerHTML = hasField ? softNoteHtml() : "";
 
     const h = skillState.hard.filter(x => list.includes(x)).length;
-    const s = skillState.soft.filter(x => sl.includes(x)).length;
+    const s = skillState.soft.filter(x => sl.includes(x)).length + custom.length;
     $("#hardCount").textContent = h;
     $("#softCount").textContent = s;
     $("#hardBar").style.width = list.length ? Math.round(h / list.length * 100) + "%" : "0%";
-    $("#softBar").style.width = Math.round(s / sl.length * 100) + "%";
+    $("#softBar").style.width = (sl.length + custom.length) ? Math.round(s / (sl.length + custom.length) * 100) + "%" : "0%";
 
     let msg;
     if (!skillState.fields.length) msg = "先選擇你的領域。一個人可以同時屬於多個領域，例如平面設計加上影音設計。";
@@ -1480,20 +1828,20 @@ details.q.flash{animation:flashQ 1.5s ease}
     else if (s === 0) msg = "硬實力有一定基礎，但軟實力還是空的。它決定你能不能留下來、走得遠，試著找一次具體的合作經驗。";
     else if (s <= 2) msg = "硬實力有基礎了，軟實力再多想一兩項，每一項都準備一個具體事例。";
     else msg = "平衡不錯。每一項勾選的能力，都要準備一個 STAR 例子，面試時能說出來。";
-    const all = [...skillState.hard.filter(x => list.includes(x)), ...skillState.soft.filter(x => sl.includes(x))];
+    const all = [...skillState.hard.filter(x => list.includes(x)), ...skillState.soft.filter(x => sl.includes(x)), ...custom];
     const fieldLine = skillState.fields.length ? "<p><strong>你的領域：</strong>" + skillState.fields.map(esc).join("、") + "</p>" : "";
     const tail = all.length ? '<p style="margin-top:8px"><strong>面試官可能會追問：</strong>' + all.map(esc).join("、") + "</p>" : "";
     const pf = skillState.primary;
     const missing = (pf && fieldHard[pf]) ? fieldHard[pf].filter(x => !skillState.hard.includes(x)) : [];
     const gapLine = (h > 0 && missing.length) ? '<p style="margin-top:8px"><strong>尚未具備的硬實力：</strong>' + missing.map(esc).join("、") + "。延伸課程的「硬實力檢測」已依你勾選的內容預選，可以看建議加強的模組。</p>" : "";
     const softTip = '<p style="margin-top:8px">每一項軟實力都要準備一個真實事例。前職與新領域沒有關聯、寫不出硬實力時，可以到「自傳與工作經歷 → 工作經歷怎麼寫」看軟實力的寫法。</p>';
-    $("#skillVerdict").innerHTML = fieldLine + "<p>" + esc(msg) + "</p>" + tail + gapLine + (skillState.soft.length ? softTip : "");
+    $("#skillVerdict").innerHTML = fieldLine + "<p>" + esc(msg) + "</p>" + tail + gapLine + (s ? softTip : "");
   }
   document.getElementById("skills").addEventListener("click", e => {
     const b = e.target.closest("button[data-group]");
     if (!b) return;
     const g = b.dataset.group, name = b.dataset.name;
-    const arr = g === "field" ? skillState.fields : (g === "hard" ? skillState.hard : skillState.soft);
+    const arr = g === "field" ? skillState.fields : (g === "hard" ? skillState.hard : (g === "softc" ? skillState.softCustom : skillState.soft));
     const i = arr.indexOf(name);
     if (i >= 0) {
       arr.splice(i, 1);
@@ -1506,8 +1854,24 @@ details.q.flash{animation:flashQ 1.5s ease}
     renderSkills();
     if (g === "field") applyPrimaryField(); else refreshAll();
     markCourses();
-    setFlag("skills", skillState.fields.length > 0 && skillState.hard.length + skillState.soft.length > 0);
+    setFlag("skills", skillState.fields.length > 0 && skillState.hard.length + skillState.soft.length + skillState.softCustom.length > 0);
   });
+  function addCustomSoft() {
+    const inp = $("#softCustomInput"), msg = $("#softCustomMsg");
+    const v = inp.value.replace(/\s+/g, " ").trim().slice(0, 20);
+    if (!v) { msg.textContent = "請先輸入一項軟實力。"; return; }
+    if (skillState.softCustom.includes(v) || softList().includes(v)) { msg.textContent = "「" + v + "」已經在清單裡了。"; return; }
+    if (skillState.softCustom.length >= 5) { msg.textContent = "自行新增最多 5 項，先挑你最有把握的。"; return; }
+    skillState.softCustom.push(v);
+    save("rhc-skills", skillState);
+    inp.value = "";
+    msg.textContent = "已加入「" + v + "」。記得準備一個真實事例，面試官可能會追問。";
+    renderSkills();
+    refreshAll();
+    setFlag("skills", skillState.fields.length > 0);
+  }
+  $("#softCustomAdd").addEventListener("click", addCustomSoft);
+  $("#softCustomInput").addEventListener("keydown", e => { if (e.key === "Enter") { e.preventDefault(); addCustomSoft(); } });
   renderSkills();
 
   /* ---------- 03 Photo quiz ---------- */
@@ -1901,12 +2265,50 @@ details.q.flash{animation:flashQ 1.5s ease}
     }
     updateStar(false);
   }
+  /* ---------- 文字潤飾：只用網頁內的規則，不連網、不用 AI ---------- */
+  function polishOn() { return load("rhc-polish", true) !== false; }
+  function tidyText(t) {
+    let x = String(t || "").replace(/[ \t\u3000]+/g, " ").trim();
+    if (!x) return "";
+    x = x.replace(/(?<!\d),|,(?!\d)/g, "，").replace(/;/g, "；").replace(/\?/g, "？").replace(/!/g, "！")
+      .replace(/(?<=[\u4e00-\u9fff」）])\s*:\s*/g, "：").replace(/(?<=[\u4e00-\u9fff」）])\.(?=\s|$|[\u4e00-\u9fff])/g, "。")
+      .replace(/\(([^()]*[\u4e00-\u9fff][^()]*)\)/g, "（$1）");
+    x = x.replace(/其實|基本上|老實說/g, "").replace(/(^|[，。；])\s*然後/g, "$1接著").replace(/非常非常|超級/g, "非常").replace(/幫忙/g, "協助");
+    x = x.replace(/\s*([，。、；：！？（）「」])\s*/g, "$1").replace(/([，。、；：！？])\1+/g, "$1").replace(/[，、；]+。/g, "。").replace(/^[，。、；：]+/, "");
+    x = x.replace(/([\u4e00-\u9fff])([A-Za-z0-9])/g, "$1 $2").replace(/([A-Za-z0-9%+])([\u4e00-\u9fff])/g, "$1 $2");
+    return x.trim();
+  }
+  const endSentence = x => { x = x.replace(/[，、；：,.。\s]+$/, ""); return x ? (/[！？」]$/.test(x) ? x : x + "。") : ""; };
+  const stripLead = (x, re) => { let prev; do { prev = x; x = x.replace(re, ""); } while (x !== prev); return x; };
+  function polishStar(v) {
+    const S = endSentence(tidyText(v.S));
+    let T = stripLead(tidyText(v.T), /^(當時|那時|但是|但|而且|而|可是|不過)[，\s]*/);
+    if (T) T = /^(挑戰|問題|困難|難題|目標|任務)/.test(T) ? T : (/^(需要|必須|要|希望|負責)/.test(T) ? "我的任務是" + T.replace(/^負責/, "") : "當時的挑戰是" + T);
+    let A = stripLead(tidyText(v.A), /^(為此|因此|所以|於是|接著|我們|我)[，\s]*/);
+    if (A) A = "為此，我" + A;
+    let R = stripLead(tidyText(v.R), /^(最後|最終|結果是|結果|後來|成果是|成果|成效是|成效)[，：:\s]*/);
+    if (R) R = "最終，" + R;
+    return [S, endSentence(T), endSentence(A), endSentence(R)].filter(Boolean).join("");
+  }
+  const polishLines = arr => arr.map(x => endSentence(tidyText(x))).filter(Boolean).join("");
+  const polishParagraph = p => p.split(/\n+/).map(l => tidyText(l)).filter(Boolean).map(l => /[。！？」）]$/.test(l) ? l : endSentence(l)).join("\n");
+  function syncPolish() { $$(".polish-toggle").forEach(c => { c.checked = polishOn(); }); }
+  document.addEventListener("change", e => {
+    const c = e.target.closest(".polish-toggle");
+    if (!c) return;
+    save("rhc-polish", c.checked);
+    syncPolish();
+    updateStar(false);
+    document.dispatchEvent(new CustomEvent("rhc-polish"));
+  });
+  syncPolish();
+
   function updateStar(persist) {
     const v = { S: starInputs.S.value, T: starInputs.T.value, A: starInputs.A.value, R: starInputs.R.value };
     if (persist && currentField) { starState[starCurKey()] = v; save("rhc-star2", starState); }
     const filled = Object.values(v).filter(x => x.trim()).length;
     const parts = [v.S, v.T, v.A, v.R].map(x => x.trim().replace(/[。.!！]+$/, "")).filter(Boolean);
-    $("#starPreview").textContent = parts.length ? parts.join("。") + "。" : "（填寫上方四個欄位，這裡會組合成一段履歷文字。）";
+    $("#starPreview").textContent = parts.length ? (polishOn() ? polishStar(v) : parts.join("。") + "。") : "（填寫上方四個欄位，這裡會組合成一段履歷文字。）";
     const hasNumber = /\d|%|％|倍|萬|件|天|週|個月|小時|分鐘|元|人|成/.test(v.R);
     const actionSpecific = v.A.trim().length >= 20;
     const items = [
@@ -1974,16 +2376,16 @@ details.q.flash{animation:flashQ 1.5s ease}
   /* ---------- 05 Intro timer（節奏提示、時間到提醒、練習後檢查） ---------- */
   const introSteps = {
     60: [
-      ["背景概述", "基本資訊、學習背景與核心性格，一句話講清楚你是誰。"],
-      ["優勢連結", "挑一到兩個與職缺高度相關的經歷與成果，證明我是合適的人選。"],
-      ["入職企圖", "說明你認同這間公司的哪一點，以及你想為它做什麼。"]
+      ["專業定位", "核心領域、年資與最顯著的優勢，一句話講清楚你是誰。對應黃金三句第 1 句。"],
+      ["關鍵戰績", "挑一個與職缺最相關、有數字的成果，證明你能解決問題。對應黃金三句第 2 句。"],
+      ["價值主張", "說出你認同這間公司的哪一點，以及能為團隊帶來什麼即戰力。對應黃金三句第 3 句。"]
     ],
     180: [
-      ["背景概述", "涵蓋基本資訊、學習背景與人格特質。"],
-      ["戰功實績", "詳述一到兩個重要專案與績效，並帶出具體數據。"],
-      ["優勢定位", "梳理核心職能，強調與職位需求的匹配程度。"],
-      ["個人亮點", "分享工作之外的興趣或特長，讓形象更立體。"],
-      ["願景展望", "具體說明你對這個職位的期待與未來的貢獻。"]
+      ["專業定位", "基本資訊、學習背景、年資與人格特質。黃金三句第 1 句再多講一點背景。"],
+      ["關鍵戰績", "詳述一到兩個重要專案與績效，帶出具體數據。黃金三句第 2 句，再多加一個專案。"],
+      ["優勢連結", "梳理核心職能，說明你的能力和這個職位的需求怎麼對上。"],
+      ["個人亮點", "分享工作之外和職務有關的興趣或特長，讓形象更立體。"],
+      ["價值主張", "具體說明入職後想完成的事與能帶來的貢獻。黃金三句第 3 句的延伸。"]
     ]
   };
   const introPlan = { 60: [15, 30, 15], 180: [30, 60, 40, 20, 30] };
@@ -1998,9 +2400,9 @@ details.q.flash{animation:flashQ 1.5s ease}
     180: [
       ["我在 3 分鐘內講完了五個步驟", "先抓出每一段的建議秒數，並刪掉最不重要的細節。"],
       ["開頭一句話就講清楚我是誰", "開頭用「我是○○，專長○○」帶過，不要念履歷。"],
-      ["戰功實績有具體數據", "挑一到兩個專案，補上數字，並說明你的角色。"],
+      ["關鍵戰績有具體數據", "挑一到兩個專案，補上數字，並說明你的角色。"],
       ["有講到個人亮點，讓形象更立體", "挑一個與工作有關的興趣或特長，用一個小例子說明。"],
-      ["願景展望有說出入職後的具體貢獻", "寫出入職後前三個月想完成的事，並連結公司需求。"],
+      ["價值主張有說出入職後的具體貢獻", "寫出入職後前三個月想完成的事，並連結公司需求。"],
       ["語速平穩，沒有一直「嗯、呃」", "放慢速度，把「嗯、呃」換成停頓，可以錄音後回聽。"]
     ]
   };
@@ -2172,7 +2574,7 @@ details.q.flash{animation:flashQ 1.5s ease}
     const done = checkItems.filter((_, i) => checkState[i]).length;
     $("#checkBar").style.width = (done / checkItems.length * 100) + "%";
     $("#checkNum").textContent = done + " / " + checkItems.length;
-    setFlag("check", done > 0);
+    setFlag("check", done > 0 || (atsAny ? atsAny() : false));
   }
   $("#checkList").addEventListener("change", e => {
     checkState[Number(e.target.dataset.i)] = e.target.checked;
@@ -2670,6 +3072,7 @@ details.q.flash{animation:flashQ 1.5s ease}
     $("#jobRelNote").hidden = !norel;
     const cmpEl = $("#jobCmp");
     if (norel) cmpEl.parentNode.insertBefore(softLab, $("#jobRelNote")); else $("#jobStar").parentNode.after(softLab);
+    document.dispatchEvent(new CustomEvent("rhc-job", { detail: jobField }));
   }
   jobTabs.addEventListener("click", e => {
     const t = e.target.closest("[role=tab]");
@@ -2863,16 +3266,18 @@ details.q.flash{animation:flashQ 1.5s ease}
     if (wStatus === "active" && v.b.trim() && /社團|校園|學生會|畢業專題/.test(v.b)) {
       items.push({ ok: false, text: "已有工作經驗時，校園與社團的描述可以縮減，把篇幅留給工作成果。" });
     }
+    if (labUp) labUp(all, v, items);
     $("#labChecks").innerHTML = items.map(it =>
       '<li class="' + (it.ok ? "ok" : "todo") + '"><span class="mark" aria-hidden="true">' + (it.ok ? "✓" : "○") + "</span><span>" + esc(it.text) + "</span></li>").join("");
     updateWriteFlag();
   }
   labParts.forEach(([k]) => labEls[k].addEventListener("input", updateLab));
   $("#labCopy").addEventListener("click", async () => {
-    const text = labParts.map(([k]) => labEls[k].value.trim()).filter(Boolean).join("\n\n");
+    const on = polishOn();
+    const text = labParts.map(([k]) => on ? polishParagraph(labEls[k].value) : labEls[k].value.trim()).filter(Boolean).join("\n\n");
     try {
       await navigator.clipboard.writeText(text);
-      $("#labMsg").textContent = text ? "已複製" : "目前沒有內容可以複製";
+      $("#labMsg").textContent = text ? (on ? "已複製潤飾後的全文" : "已複製") : "目前沒有內容可以複製";
     } catch (e) {
       $("#labMsg").textContent = "無法自動複製，請手動選取文字";
     }
@@ -3558,7 +3963,7 @@ details.q.flash{animation:flashQ 1.5s ease}
           '<div><h4>回答方向</h4><p>' + esc(it[2]) + "</p></div>" +
           '<label class="field">先試著回答（不會被儲存）<textarea rows="3" placeholder="先自己說一遍或寫下來，再對照參考答案"></textarea></label>' +
           '<button type="button" class="btn-sm ghost" data-reveal aria-expanded="false">顯示參考答案</button>' +
-          '<div class="q-ans" hidden><h4>參考答案</h4><p>' + esc(it[3]) + '</p><p class="note">○○ 請換成你的真實經歷與數據，並用自己的話說出來。</p></div>' +
+          '<div class="q-ans" hidden><h4>參考答案</h4><p>' + esc(it[3]) + '</p><p class="note">○○ 請換成你的真實經歷與數據，並用自己的話說出來。</p>' + (mockUp ? mockUp(it[0]) : "") + '</div>' +
           '<label class="q-check"><input type="checkbox" data-done="' + i + '"' + (done ? " checked" : "") + "><span>我已經練習過這題</span></label>" +
         "</div></details>";
     }).join("");
@@ -4430,6 +4835,668 @@ details.q.flash{animation:flashQ 1.5s ease}
     }, { passive: true });
   }
 
+
+  /* ===== v7：JD 契合度、勞基法防雷、作品集健診、ATS、量化工具、BEI 與逆向面試 ===== */
+  var mockUp = null, labUp = null, atsAny = null;
+  let upSt = wStatus;
+  const fLabel = f => fieldLabelMap[f] || f;
+  const designFields = ["平面設計", "影音設計", "室內設計", "工業設計", "動漫設計", "遊戲美術"];
+  const primaryOr = fallback => (skillState.primary && fieldOptions.includes(skillState.primary)) ? skillState.primary : fallback;
+  function statusTabs(el) {
+    el.innerHTML = Object.keys(starStatusLabels).map(k =>
+      '<button type="button" data-status="' + k + '" aria-pressed="false">' + esc(starStatusLabels[k]) + "</button>").join("");
+    el.addEventListener("click", e => {
+      const b = e.target.closest("button[data-status]");
+      if (b) showStatus(b.dataset.status);
+    });
+  }
+  const paintStatusTabs = el => $$("button", el).forEach(b => b.setAttribute("aria-pressed", String(b.dataset.status === upSt)));
+  function fieldTabsHtml(cur) {
+    return fieldOptions.map(n => '<button type="button" role="tab" data-field="' + esc(n) + '" aria-selected="' + (n === cur) + '">' + esc(fLabel(n)) + "</button>").join("");
+  }
+  async function copyText(text, msgEl) {
+    try {
+      await navigator.clipboard.writeText(text);
+      if (msgEl) msgEl.textContent = text ? "已複製" : "目前沒有內容可以複製";
+    } catch (e) {
+      if (msgEl) msgEl.textContent = "無法自動複製，請手動選取文字";
+    }
+    if (msgEl) setTimeout(() => { msgEl.textContent = ""; }, 2000);
+  }
+  /* 提示小圖示：點一下展開說明（觸控與鍵盤都可用） */
+  let tipSeq = 0;
+  const tipHtml = text => {
+    const id = "tipx" + (++tipSeq);
+    return '<button type="button" class="tip" aria-expanded="false" aria-controls="' + id + '" aria-label="看說明">?</button><span class="tip-pop" id="' + id + '" hidden>' + esc(text) + "</span>";
+  };
+  document.addEventListener("click", e => {
+    const t = e.target.closest(".tip");
+    if (!t) return;
+    const pop = document.getElementById(t.getAttribute("aria-controls"));
+    if (!pop) return;
+    const open = t.getAttribute("aria-expanded") !== "true";
+    t.setAttribute("aria-expanded", String(open));
+    pop.hidden = !open;
+  });
+  /* XYZ 標記：{x|成果} {y|指標} {z|舉措} */
+  const xyzHtml = s => esc(s).replace(/\{([xyz])\|([^}]+)\}/g, (_, k, t) => '<span class="xyz ' + k + '">' + t + "</span>");
+  const xyzPlain = s => s.replace(/\{[xyz]\|([^}]+)\}/g, "$1");
+
+  /* ---------- 05 JD 契合度比對 ---------- */
+  const jdKB = {
+    "平面設計": { hard: [["Photoshop／Illustrator", "寫出軟體全名，例如 Adobe Illustrator", ["photoshop", "illustrator"]], ["Figma 介面原型", "應徵 UI 或網頁時常見", ["figma", "xd", "ui"]], ["品牌識別 CIS／VI", "Logo、色彩、字體規範", ["cis", "vi", "品牌"]], ["印前完稿與印刷規格", "出血、CMYK、打樣", ["印刷", "印前", "完稿", "cmyk"]], ["社群與電商視覺", "Banner、商品頁、社群圖", ["社群", "電商", "banner"]]],
+      soft: [["跨部門需求溝通", "與行銷、業務對齊需求", ["溝通", "協調", "跨部門"]], ["多案時程管理", "同時處理多個檔期", ["多工", "時程", "多案", "時間管理"]], ["接受回饋與修改", "", ["回饋", "修改"]]] },
+    "影音設計": { hard: [["Premiere Pro 剪輯", "", ["premiere", "剪輯"]], ["After Effects 動態設計", "", ["after effects", "動態"]], ["DaVinci Resolve 調色", "", ["davinci", "調色"]], ["短影音企劃與腳本", "Reels、Shorts、TikTok", ["短影音", "腳本", "reels", "shorts", "tiktok"]], ["拍攝與收音", "", ["拍攝", "收音", "攝影"]]],
+      soft: [["客戶需求溝通", "", ["溝通", "需求"]], ["抗壓與趕檔", "", ["抗壓", "時程", "檔期"]], ["團隊協作", "", ["團隊", "協作"]]] },
+    "室內設計": { hard: [["AutoCAD 施工圖", "", ["autocad", "cad", "施工圖"]], ["SketchUp／3ds Max 3D 圖", "", ["sketchup", "3ds max", "3d"]], ["工程預算與估價", "", ["預算", "估價", "報價"]], ["材料與工法", "", ["材料", "建材", "工法"]], ["室內裝修法規與證照", "消防、無障礙、乙級技術士", ["法規", "技術士", "證照"]]],
+      soft: [["業主溝通與提案", "", ["溝通", "提案", "業主", "客戶"]], ["工班與廠商協調", "", ["協調", "工班", "廠商", "監工"]], ["現場問題解決", "", ["問題", "現場", "解決"]]] },
+    "工業設計": { hard: [["SolidWorks／Creo 3D 建模", "", ["solidworks", "creo", "3d"]], ["工程圖與公差", "", ["工程圖", "公差"]], ["DFM 可製造性設計", "拔模角、壁厚、射出", ["量產", "模具", "射出", "dfm"]], ["CMF 色彩材質", "", ["cmf", "材質", "表面處理"]], ["3D 列印原型", "", ["原型", "3d 列印", "prototype"]]],
+      soft: [["與工程、模具跨部門協作", "", ["跨部門", "協作", "溝通"]], ["問題分析與排錯", "", ["問題", "分析"]], ["遵守開發流程", "", ["流程", "規範"]]] },
+    "動漫設計": { hard: [["Clip Studio Paint 電繪", "", ["clip studio", "csp", "電繪"]], ["Photoshop 2D 美術", "", ["photoshop"]], ["Live2D", "", ["live2d"]], ["角色設定與三視圖", "", ["角色", "設定"]], ["分鏡與構圖", "", ["分鏡", "構圖", "漫畫"]]],
+      soft: [["接受審稿回饋", "", ["回饋", "修改", "審稿"]], ["稿期管理", "", ["時程", "稿期", "交期"]], ["自主學習", "", ["學習", "自學"]]] },
+    "遊戲美術": { hard: [["Maya／3ds Max 建模", "", ["maya", "3ds max", "建模"]], ["ZBrush 雕刻", "", ["zbrush", "雕刻"]], ["Substance Painter 貼圖", "", ["substance", "貼圖", "材質"]], ["Unity／Unreal 引擎導入", "", ["unity", "unreal", "引擎"]], ["低模與 UV 規範", "面數、LOD", ["低模", "uv", "面數", "lod"]]],
+      soft: [["與企劃、程式協作", "", ["協作", "溝通", "團隊"]], ["遵守命名與資源規範", "", ["規範", "流程"]], ["接受美術回饋", "", ["回饋", "修改"]]] },
+    "程式設計": { hard: [["Python", "", ["python"]], ["pandas 資料分析", "", ["pandas", "資料分析", "numpy"]], ["Django／Flask Web 後端", "", ["django", "flask", "後端"]], ["SQL 資料庫", "", ["sql", "資料庫"]], ["機器學習／深度學習", "", ["機器學習", "深度學習", "tensorflow", "pytorch", "scikit"]], ["Git 版本控制", "", ["git"]]],
+      soft: [["問題排錯", "", ["除錯", "debug", "問題"]], ["向非技術人員說明", "", ["溝通", "說明", "跨部門"]], ["自主學習新技術", "", ["學習", "自學"]]] },
+    "Java 軟體": { hard: [["Java", "", ["java"]], ["Spring Boot", "", ["spring"]], ["RESTful API", "", ["api", "restful"]], ["SQL／JDBC", "", ["sql", "jdbc", "資料庫"]], ["Git 與 Code Review", "", ["git", "code review"]], ["單元測試", "", ["測試", "junit"]]],
+      soft: [["團隊協作與 Code Review", "", ["團隊", "協作"]], ["問題排錯", "", ["除錯", "debug", "問題"]], ["文件撰寫", "", ["文件", "規格"]]] },
+    "資訊安全": { hard: [["ISO 27001 資安治理", "", ["27001", "iso", "治理"]], ["弱點掃描與滲透測試", "", ["弱點", "滲透", "掃描"]], ["防火牆與網路設備", "", ["防火牆", "網路", "firewall"]], ["SOC 監控與事件應變", "", ["soc", "事件", "應變", "siem"]], ["風險評估", "", ["風險"]]],
+      soft: [["用白話說明風險", "", ["溝通", "說明", "報告"]], ["流程與規範意識", "", ["流程", "規範", "稽核"]], ["抗壓與冷靜處理", "", ["抗壓", "輪班", "緊急"]]] },
+    "雲端系統": { hard: [["Linux 系統管理", "", ["linux"]], ["AWS 等雲端服務", "", ["aws", "azure", "gcp", "雲端"]], ["Ansible 自動化", "", ["ansible", "自動化", "terraform"]], ["容器（Docker／OpenShift）", "", ["docker", "kubernetes", "k8s", "容器", "openshift"]], ["Shell／Python 腳本", "", ["shell", "python", "腳本"]], ["CI/CD", "", ["ci/cd", "cicd", "jenkins", "gitlab"]]],
+      soft: [["告警時冷靜處理", "", ["抗壓", "值班", "on-call"]], ["交接與文件", "", ["文件", "交接"]], ["團隊協作", "", ["團隊", "協作"]]] },
+    "iPAS 證照班": { hard: [["生成式 AI 導入評估", "", ["生成式", "人工智慧", "ai 應用"]], ["資安治理", "", ["資安"]], ["碳盤查與減碳", "", ["碳", "淨零", "esg"]], ["Excel／SQL 資料分析", "", ["excel", "sql", "資料分析"]], ["iPAS 證照", "寫出完整名稱與級別", ["ipas", "證照"]]],
+      soft: [["跨部門推動", "", ["跨部門", "推動", "協調"]], ["簡報說明", "", ["簡報", "報告"]], ["數據與成本意識", "", ["數據", "成本"]]] }
+  };
+  const jdCircles = [
+    ["hard", "必備硬技能（Hard Skills）", "#1DAD97", "框架、工具、證照。用和業界完全一致的命名，例如 Figma、K8s。"],
+    ["soft", "軟實力情境（Soft Skills）", "#F2B134", "跨部門溝通、抗壓、危機處理。要用專題、作品或過去工作的情境證明，拒絕空泛形容詞。兩類都對上，就是高命中率履歷。"]
+  ];
+  const jdStatusNotes = {
+    fresh: "新鮮人：每個 JD 關鍵字都要對應一個專題、課堂作品或實習。真的不會的不要硬寫，可以寫「學習中」並附上練習作品。",
+    switch: "轉職者：HR 不是你原產業的專家。把前職的行業黑話翻成 JD 的字，例如「追蹤產線工單」改寫成「供應鏈進度管理」。",
+    active: "已有經驗：除了工具名稱，軟實力也要對上 JD 的字，並用一段過去的專案情境證明。"
+  };
+  const jdState = load("rhc-jd", {});
+  if (!jdState.checks || typeof jdState.checks !== "object") jdState.checks = {};
+  if (typeof jdState.text !== "string") jdState.text = "";
+  let jdField = primaryOr("平面設計");
+  const jdTabs = $("#jdTabs"), jdGroups = $("#jdGroups"), jdText = $("#jdText");
+  statusTabs($("#jdStatus"));
+  jdText.value = jdState.text;
+  function jdHit(terms, text) {
+    const t = text.toLowerCase();
+    return terms.some(x => t.indexOf(x.toLowerCase()) >= 0);
+  }
+  function renderJd() {
+    paintStatusTabs($("#jdStatus"));
+    $("#jdStatusNote").textContent = jdStatusNotes[upSt];
+    jdTabs.innerHTML = fieldTabsHtml(jdField);
+    const kb = jdKB[jdField], st = jdState.checks[jdField] || {};
+    const myHard = skillState.hard.join(" ");
+    const jd = jdText.value.trim();
+    let total = 0, done = 0, inJd = 0, inJdDone = 0;
+    const missing = [];
+    jdGroups.innerHTML = jdCircles.map(([g, title, color]) => {
+      const rows = kb[g].map((kw, i) => {
+        const key = g + i, on = !!st[key];
+        const hitJd = jd && jdHit(kw[2], jd);
+        const have = g === "hard" && jdHit(kw[2], myHard);
+        total++; if (on) done++;
+        if (hitJd) { inJd++; if (on) inJdDone++; else missing.push(kw[0]); }
+        return '<li><label><input type="checkbox" data-jd="' + key + '"' + (on ? " checked" : "") + "><span><b>" + esc(kw[0]) + "</b>" +
+          (hitJd ? '<span class="badge jd">JD 有提到</span>' : "") + (have ? '<span class="badge have">你已勾選</span>' : "") +
+          (kw[1] ? "<small>" + esc(kw[1]) + "</small>" : "") + "</span></label></li>";
+      }).join("");
+      return '<div class="kw-group" style="--c:' + color + '"><h4><i aria-hidden="true"></i>' + esc(title) + '</h4><ul class="kw-list">' + rows + "</ul></div>";
+    }).join("");
+    const pct = total ? Math.round(done / total * 100) : 0;
+    let v;
+    if (!done) v = "先勾選履歷上「已經用一模一樣的寫法」出現的關鍵字。";
+    else if (pct < 40) v = "命中率偏低。HR 與 ATS 可能在 10 秒內就略過，先把 JD 的硬技能用原字寫進技能欄與工作經歷。";
+    else if (pct < 70) v = "有基本命中。再補上軟實力的情境證明，避免只有工具清單。";
+    else v = "契合度高。投遞前再確認每個關鍵字，面試時都說得出一個 STAR 例子。";
+    const softOn = kb.soft.some((_, i) => st["soft" + i]);
+    const gaps = [];
+    if (done && !softOn) gaps.push("軟實力圈還是空的：用一個跨部門或危機處理的事例證明，不要只寫「溝通能力佳」。");
+    $("#jdScore").innerHTML = '<p class="big">' + pct + "%</p><p><strong>" + esc(fLabel(jdField)) + "</strong>：已對齊 " + done + " / " + total + " 個關鍵字。" + esc(v) + "</p>" +
+      (jd ? "<p>這份 JD 提到 " + inJd + " 個常見關鍵字，你已對齊 " + inJdDone + " 個。" + (missing.length ? "優先補上：" + esc(missing.join("、")) + "。" : "") + "</p>" : "") +
+      gaps.map(g => "<p>" + esc(g) + "</p>").join("");
+    setFlag("jd", Object.values(jdState.checks).some(o => Object.values(o).some(Boolean)));
+  }
+  jdTabs.addEventListener("click", e => {
+    const t = e.target.closest("[role=tab]");
+    if (!t) return;
+    jdField = t.dataset.field;
+    renderJd();
+  });
+  jdGroups.addEventListener("change", e => {
+    const c = e.target.closest("input[data-jd]");
+    if (!c) return;
+    (jdState.checks[jdField] = jdState.checks[jdField] || {})[c.dataset.jd] = c.checked;
+    save("rhc-jd", jdState);
+    renderJd();
+  });
+  let jdTimer = null;
+  jdText.addEventListener("input", () => {
+    clearTimeout(jdTimer);
+    jdTimer = setTimeout(() => { jdState.text = jdText.value; save("rhc-jd", jdState); renderJd(); }, 300);
+  });
+  $("#jdReset").addEventListener("click", () => {
+    delete jdState.checks[jdField];
+    save("rhc-jd", jdState);
+    renderJd();
+  });
+  $("#jdCircles").innerHTML = jdCircles.map(([, title, color, desc]) =>
+    '<div class="circle" style="--c:' + color + '"><h4>' + esc(title) + "</h4><p>" + esc(desc) + "</p></div>").join("");
+
+  /* 勞基法防雷與避坑指南 */
+  const traps = [
+    { say: "「試用期三個月，先不保勞健保。」", sub: "試用期也是正式僱用", law: "勞工保險條例、全民健康保險法", hot: ["fresh", "switch"],
+      why: "勞健保要從到職當日就加保，試用期也一樣。沒有加保，發生職災或生病時你就沒有保障。", check: "到職後一週內，用勞保局 e 化服務或 APP 查自己的投保紀錄。" },
+    { say: "「底薪 2 萬多，加獎金一定超過 3 萬。」", sub: "底薪不能低於基本工資", law: "勞動基準法第 21 條", hot: ["fresh"],
+      why: "底薪本身不能低於基本工資（2026 年月薪 29,500 元、時薪 196 元，以勞動部公告為準）。獎金會變動，不能拿來湊。", check: "請公司把經常性薪資寫在錄取通知或勞動契約上。" },
+    { say: "「報到先繳保證金、訓練費，證件正本放公司保管。」", sub: "收費與扣證件都違法", law: "就業服務法第 5 條第 2 項", hot: ["fresh", "switch"],
+      why: "雇主不得收取保證金，也不得扣留身分證、工作憑證等證明文件或財物。", check: "只提供影本。對方堅持收費或扣證件，直接離開。" },
+    { say: "「我們是責任制，沒有加班費。」", sub: "一般職位不適用責任制", law: "勞動基準法第 24 條、第 84-1 條", hot: ["switch", "active"],
+      why: "只有經勞動部核定的特定工作者，並書面約定報地方主管機關核備，才適用第 84-1 條。一般職位延長工時，前 2 小時至少 1.34 倍，再 2 小時至少 1.67 倍。", check: "面試時問：加班怎麼申請？加班費或補休怎麼計算？" },
+    { say: "「綁約兩年，提早離職要賠三個月薪水。」", sub: "最低服務年限有前提", law: "勞動基準法第 15-1 條", hot: ["switch", "active"],
+      why: "要約定最低服務年限，前提是雇主提供專業培訓並負擔費用，或給予合理補償，期間與違約金也要合理。", check: "簽約前問清楚：公司提供哪些培訓？費用多少？違約金怎麼算？" },
+    { say: "「離職後兩年內不能到同業工作。」", sub: "競業禁止要有補償", law: "勞動基準法第 9-1 條", hot: ["active"],
+      why: "競業禁止要同時符合：雇主有需要保護的利益、你接觸得到機密、期間與地區在合理範圍（最長 2 年），並給合理補償（每月不低於離職前平均工資的 50%）。全體員工無條件簽署、又不給補償，約定無效。", check: "看契約有沒有寫補償金額、期間、地區與職務範圍。" },
+    { say: "「試用期不適合就直接走人，不用資遣費。」", sub: "試用期也要依法資遣", law: "勞動基準法第 11、16、17 條", hot: ["fresh", "switch"],
+      why: "試用期只是雇主保留終止契約的權利。因為不適任而終止契約，仍要依法預告並發給資遣費。", check: "被告知不適任時，請公司說明理由與資遣費計算，並保留通知紀錄。" },
+    { say: "「特休要主管排，年底沒休完就歸零。」", sub: "特休由你排，沒休完要折現", law: "勞動基準法第 38 條", hot: ["switch", "active"],
+      why: "特休的排定權在勞工。年度終結或離職時還沒休完的天數，雇主要折算工資發給你。", check: "面試時問：特休怎麼申請？沒休完的天數怎麼處理？" },
+    { say: "「全勤、伙食、職務加給不算薪水，加班費用底薪算就好。」", sub: "名目不同也是工資", law: "勞動基準法第 2 條、第 24 條", hot: ["active"],
+      why: "只要是你提供勞務的對價，或是固定發給的經常性給與，不論叫全勤、伙食還是職務加給，都是工資，要納入加班費的計算基數。", check: "看薪資單的每一個項目，確認加班費是用全部經常性薪資計算。" },
+    { say: "「我們排四週變形工時，連上十天很正常。」", sub: "變形工時有雙門檻", law: "勞動基準法第 30-1 條、第 36 條", hot: ["switch", "active"],
+      why: "變形工時要同時符合兩個門檻：行業經勞動部指定適用，並經工會或勞資會議同意。沒有同意就這樣排班，就是違法超時。只有少數經指定的行業，才能在一定範圍內調整「七休一」。", check: "問清楚公司屬於哪個行業、有沒有勞資會議紀錄，並保留自己的班表。" },
+    { say: "「你犯錯了，明天不用來，也沒有資遣費。」", sub: "懲戒解僱有嚴格條件", law: "勞動基準法第 12 條", hot: ["active"],
+      why: "不經預告、不給資遣費的解僱，必須是情節重大，而且處分要相當、是最後手段。雇主還要在知道事情後 30 天內發動，超過就無效。", check: "要求書面通知與具體理由，可向勞工局申請勞資爭議調解。" },
+    { say: "「先來試做三天，沒問題再談薪水。」", sub: "試做也是工作", law: "勞動基準法第 2 條、第 22 條", hot: ["fresh"],
+      why: "試做也是提供勞務，雇主要依約給付工資並加保。名為「無薪實習」但實際在工作，同樣受勞基法保障。", check: "試做前確認時薪、工時與是否加保，保留排班與對話紀錄。" },
+    { say: "「薪資面議，來面試再說。」", sub: "4 萬以下要公開薪資範圍", law: "就業服務法第 5 條第 2 項第 6 款", hot: ["fresh", "switch"],
+      why: "經常性薪資未達 4 萬元的職缺，雇主要公開揭示或告知薪資範圍。一律寫「面議」，常是想壓低薪資或隱瞞條件。", check: "面試前先問薪資範圍，並查同職缺的行情。" },
+    { say: "「錄取了，請交存摺、提款卡和密碼，方便轉帳。」", sub: "人頭帳戶詐騙", law: "洗錢防制法、刑法", hot: ["fresh", "switch", "active"],
+      why: "正派公司只需要帳號影本做薪轉。交出提款卡、密碼或網銀帳號，可能變成詐騙集團的人頭帳戶，自己也要負法律責任。", check: "只提供存摺封面影本。要求代辦信用卡、貸款或先買產品，也都是詐騙警訊，可撥 165 查證。" }
+  ];
+  const trapNotes = {
+    fresh: "新鮮人最常遇到：試用期不保勞健保、試用期不給資遣費、底薪低於基本工資、無薪試做。標「你最該先看」的請優先確認。",
+    switch: "轉職者最常遇到：綁約違約金、收保證金、責任制、變形工時。標「你最該先看」的請優先確認。",
+    active: "已有經驗者最常遇到：責任制、競業條款、加班費基數、懲戒解僱。標「你最該先看」的請優先確認。"
+  };
+  /* 各領域特有的必坑法律 */
+  const indTraps = {
+    contract: { say: "「你是接案配合，簽承攬合約，不用保勞健保。」", sub: "名為承攬，實為僱傭", law: "勞動基準法第 2 條（從屬性判斷）、勞工保險條例",
+      why: "要看實際狀況：固定上下班、聽主管指揮、用公司設備、不能自己找人代做，就是僱傭關係，雇主要加保並適用勞基法。合約寫「承攬」不代表就是承攬。", check: "問清楚是否要打卡、誰派工作、能不能同時接別家案子，並保留排班與指派紀錄。" },
+    copyright: { say: "「離職後作品不能放作品集，所有著作權都是公司的。」", sub: "職務著作的權利要看約定", law: "著作權法第 11 條、第 12 條",
+      why: "受雇時職務上完成的作品，沒有特別約定時，著作人是你、著作財產權歸公司，所以公開放作品集要取得公司同意。接案（出資聘人）的作品，沒有約定時著作權歸你。", check: "簽約時請公司寫明作品集展示的範圍，例如上市後、去除客戶名稱可以展示。" },
+    pitch: { say: "「先做一套完整提案，沒錄取不付費。」", sub: "面試作業不是免費商稿", law: "著作權法、民法",
+      why: "合理的面試測驗通常是小題目。要求完整、可直接商用的提案又不付費，甚至被拿去使用，就涉及著作權與報酬爭議。", check: "只做縮小範圍的測驗，作品加浮水印，寄出前寫清楚僅供面試評估使用。" },
+    longday: { say: "「拍攝日一天 16 小時，日薪包到底。」", sub: "日薪也有工時上限", law: "勞動基準法第 24 條、第 32 條",
+      why: "日薪制一樣是正常工時 8 小時，超過要給加班費。一天正常工時加延長工時，合計不能超過 12 小時。", check: "確認通告表的上工與收工時間，保留自己的工時紀錄。" },
+    deduct: { say: "「器材壞了要你賠，直接從薪水扣。」", sub: "不能任意扣薪", law: "勞動基準法第 22 條、第 26 條",
+      why: "工資要全額直接發給你，雇主不能預扣工資當作違約金或賠償。真的要求賠償，要先證明你有過失，並雙方協議。", check: "要求公司提出損壞的說明與金額，不要簽空白的同意扣款書。" },
+    site: { say: "「跑工地是你自己的事，出事自己負責。」", sub: "工地有職災保障", law: "職業安全衛生法、勞工職業災害保險及保護法、勞動基準法第 59 條",
+      why: "工地屬於高風險工作，雇主要提供安全帽等防護與安全衛生教育，並投保職災保險。工作中受傷，雇主要負職災補償責任。", check: "到職時確認有沒有職災保險、安全教育訓練與工地防護裝備。" },
+    bonus: { say: "「設計獎金要等尾款收到才發，離職就全部取消。」", sub: "已賺到的工資不能說扣就扣", law: "勞動基準法第 2 條、第 22 條",
+      why: "固定依業績或案量計算、屬於勞務對價的獎金，性質就是工資。是否發放、什麼時候發，要看契約怎麼寫，不能事後片面取消。", check: "要求把獎金計算方式、發放時間、離職時怎麼結算寫進合約。" },
+    patent: { say: "「在職期間的設計和專利都歸公司，下班自己做的也算。」", sub: "職務上與非職務上要分開", law: "專利法第 7 條、第 8 條",
+      why: "職務上完成的發明或設計，專利權歸公司。和職務無關的創作，權利原則上歸你；如果用了公司的資源，公司可以合理付費後使用。", check: "看合約的智慧財產權條款，是否把「下班時間、與職務無關」的創作也一併歸給公司。" },
+    shift: { say: "「下班到隔天上班只隔 8 小時，輪班很正常。」", sub: "換班至少休息 11 小時", law: "勞動基準法第 34 條",
+      why: "輪班制換班時，原則上要有連續 11 小時以上的休息時間。只有特殊情況並經工會或勞資會議同意，才能縮短，而且不能少於 8 小時。", check: "看班表的換班間隔，並問清楚輪班與夜班的津貼。" },
+    piece: { say: "「稿費按張計算，修改到客戶滿意為止。」", sub: "按件計酬也有保障", law: "勞動基準法第 21 條、民法承攬",
+      why: "如果是受雇，按件計酬換算後仍不能低於基本工資，也要加保。如果是接案，修改次數與追加費用要寫在合約裡，不然很容易無限修改。", check: "合約寫清楚每張稿費、包含幾次修改、超過怎麼加價。" },
+    crunch: { say: "「上線前衝刺，大家都在公司過夜。」", sub: "加班有每月上限", law: "勞動基準法第 32 條",
+      why: "延長工時每月不能超過 46 小時；經工會或勞資會議同意，每月最多 54 小時、每 3 個月不超過 138 小時。超過就是違法，加班費也一定要給。", check: "記錄自己的加班時數，問清楚加班費或補休怎麼算。" },
+    oncall: { say: "「On-call 只是待命，不算工時。」", sub: "受拘束的待命就是工作時間", law: "勞動基準法第 24 條、第 30 條",
+      why: "待命時要隨時接電話、上線處理，行動受到限制，就屬於工作時間，要計算工資或加班費。實際處理事件的時間更要算。", check: "問清楚 On-call 的頻率、待命津貼、實際處理時怎麼計算加班費。" },
+    dispatch: { say: "「你是派駐客戶端，聽客戶指揮，薪水由外包公司發。」", sub: "派遣也有雇主責任", law: "勞動基準法第 17-1 條、第 22-1 條",
+      why: "派遣公司是你的雇主，要幫你加保、給付工資。要派單位不能在派遣前面試、指定人選；派遣公司欠薪時，要派單位也要負連帶給付責任。", check: "確認合約上的雇主是哪一家公司，勞健保由誰投保。" },
+    pentest: { say: "「先幫我們掃一下對方網站，出事你自己負責。」", sub: "未經授權的測試就是犯罪", law: "刑法第 358 條、第 359 條",
+      why: "沒有取得系統所有者的書面授權，就進行掃描或入侵測試，可能構成妨害電腦使用罪。即使是主管要求，責任也可能落在操作的人身上。", check: "每次測試都要有書面授權，寫明範圍、時間與聯絡窗口。" },
+    allowance: { say: "「證照津貼是福利，不算薪水。」", sub: "固定加給就是工資", law: "勞動基準法第 2 條",
+      why: "每月固定發給的證照加給或技術津貼，屬於經常性給與，就是工資，要算進加班費、資遣費與勞退提繳。", check: "看薪資單上的證照津貼，有沒有算進勞退提繳與加班費基數。" },
+    training: { say: "「公司幫你出考照費，三年內離職要全額賠償。」", sub: "綁約要看培訓與比例", law: "勞動基準法第 15-1 條",
+      why: "最低服務年限要以公司提供專業培訓、負擔費用為前提，期間與違約金要合理。只出考照報名費卻要求綁三年、全額賠償，可能不合理。", check: "問清楚公司實際負擔多少費用，違約金是否依剩餘年限比例遞減。" }
+  };
+  const trapsByField = {
+    "平面設計": ["contract", "copyright", "pitch"], "影音設計": ["longday", "contract", "deduct"], "室內設計": ["site", "bonus", "contract"],
+    "工業設計": ["patent", "shift", "copyright"], "動漫設計": ["piece", "copyright", "pitch"], "遊戲美術": ["crunch", "copyright", "contract"],
+    "程式設計": ["dispatch", "oncall", "copyright"], "Java 軟體": ["dispatch", "crunch", "copyright"], "資訊安全": ["pentest", "shift", "oncall"],
+    "雲端系統": ["oncall", "shift", "dispatch"], "iPAS 證照班": ["allowance", "training", "contract"]
+  };
+  let trapField = primaryOr("平面設計");
+  const trapCard = (t, hot, tag) =>
+    '<details class="trap' + (hot ? " hot" : "") + '"><summary><span class="flag" aria-hidden="true">⚠</span><span><span class="t-say">' + esc(t.say) + "</span>" +
+    '<span class="t-sub">' + esc(t.sub) + (tag ? '<span class="badge ind">' + esc(tag) + "</span>" : "") + (hot ? '<span class="badge hot">你最該先看</span>' : "") + "</span></span></summary>" +
+    '<div class="trap-body"><p><strong>為什麼是陷阱：</strong>' + esc(t.why) + "</p><p><strong>怎麼確認：</strong>" + esc(t.check) + '</p><span class="trap-law">依據：' + esc(t.law) + "</span></div></details>";
+  function renderTraps() {
+    $("#trapTabs").innerHTML = fieldTabsHtml(trapField);
+    $("#trapFieldTitle").textContent = fLabel(trapField) + "特別容易踩到的法律坑";
+    $("#trapFieldGrid").innerHTML = (trapsByField[trapField] || []).map(k => trapCard(indTraps[k], false, fLabel(trapField) + "常見")).join("");
+    $("#trapNote").textContent = trapNotes[upSt];
+    const sorted = traps.map((t, i) => ({ t, i, hot: t.hot.indexOf(upSt) >= 0 })).sort((a, b) => (b.hot - a.hot) || (a.i - b.i));
+    $("#trapGrid").innerHTML = sorted.map(({ t, hot }) => trapCard(t, hot, "")).join("");
+  }
+  $("#trapTabs").addEventListener("click", e => {
+    const t = e.target.closest("[role=tab]");
+    if (!t) return;
+    trapField = t.dataset.field;
+    renderTraps();
+  });
+
+  /* ---------- 08 作品集健診 ---------- */
+  const pfDims = { goal: ["商業目標", "#5FD3BE"], proc: ["解決過程", "#F2B134"], data: ["成果數據", "#9CC3FF"], show: ["呈現與規格", "#C9B8FF"], role: ["角色與落地", "#F6B4B5"] };
+  const pfKB = {
+    "平面設計": { items: [["goal", "每件作品第一句寫出要解決的商業問題，例如提升活動報名、統一品牌識別"], ["proc", "放草圖與 2 到 3 個提案方向，並說明為什麼選定這一版"], ["data", "標出 CTR、報名數、交件時程或客戶回饋等數據"], ["show", "品牌作品附上延伸應用（社群、印刷、包裝）與規範頁"], ["role", "團隊作品註明你負責的部分與使用的工具"]],
+      trap: "只有漂亮的完稿圖，看不出為什麼這樣設計、成效如何。" },
+    "影音設計": { items: [["goal", "每支影片寫出目標受眾與平台，例如 Reels 前 3 秒留人"], ["proc", "附上分鏡或腳本，以及圖層拆解（Breakdown）"], ["data", "寫出觀看數、完播率或製作工時縮短等數據"], ["show", "準備 60 秒 Showreel，放在作品集最前面"], ["role", "註明你負責剪輯、調色、動態還是全部"]],
+      trap: "只丟一串長影片連結，面試官沒時間看完，也看不出你負責哪一段。" },
+    "室內設計": { items: [["goal", "寫出業主需求、坪數與預算規模"], ["proc", "放平面配置的方案比較與動線說明"], ["data", "寫出收納面積、預算控制比例或工期等數據"], ["show", "施工圖與完工實景照片對照呈現"], ["role", "展示在預算限制下的選材替代方案，證明你能落地"]],
+      trap: "只有 3D 效果圖，沒有施工圖與實景照片，看不出你能不能把設計蓋出來。" },
+    "工業設計": { items: [["goal", "寫出使用者痛點與商業目標，例如降本、減少客訴"], ["proc", "呈現草圖 → 人因 → 3D → 結構與模具的完整歷程"], ["data", "寫出零件數、組裝時間、成本或測試評分"], ["show", "附上原型測試照片與迭代紀錄"], ["role", "標註拔模角、壁厚、CMF 等量產考量"]],
+      trap: "只有 KeyShot 夢幻渲染圖，缺乏量產落地的考量。" },
+    "動漫設計": { items: [["goal", "說明角色或作品的用途與受眾，例如 IP、貼圖、品牌吉祥物"], ["proc", "放角色設定集：三視圖、表情、配色，以及草稿到完稿"], ["data", "寫出採用情況、下載數或社群互動數"], ["show", "Live2D 或動態作品附上短片示範"], ["role", "標註尺寸、解析度與分層方式，證明你懂交稿規格"]],
+      trap: "只有單張插畫，看不出你能維持角色一致性、穩定量產稿件。" },
+    "遊戲美術": { items: [["goal", "說明資源用在什麼遊戲類型、平台與美術風格"], ["proc", "呈現高模 → 低模 → 貼圖 → 進引擎的流程"], ["data", "標註面數、貼圖尺寸與交付時間"], ["show", "放引擎內截圖或轉檯影片，不只有雕刻軟體截圖"], ["role", "命名、拆 UV、LOD 符合團隊規範"]],
+      trap: "只放 ZBrush 高模，沒有能直接進引擎的低模與貼圖。" },
+    "程式設計": { items: [["goal", "README 第一段寫出專案解決的問題與使用者"], ["proc", "附上資料流程或系統架構圖，說明技術選擇的理由"], ["data", "寫出節省工時、準確率或處理筆數等成效"], ["show", "GitHub 程式碼整潔、有註解，可提供 Live Demo 或 Notebook"], ["role", "有測試、錯誤處理與套件版本說明"]],
+      trap: "只有課堂範例或跟著教學做的程式，看不出你自己解決了什麼問題。" },
+    "Java 軟體": { items: [["goal", "說明系統的業務情境與你負責的模組"], ["proc", "附上系統架構圖、API 設計與資料庫 Schema"], ["data", "寫出 QPS、回應時間或 Bug 數下降等指標"], ["show", "Clean Code、清楚的 Git commit 紀錄與 Live Demo 站台"], ["role", "有單元測試與 CI/CD 流程"]],
+      trap: "只寫會哪些框架，沒有可執行的專案與效能指標。" },
+    "資訊安全": { items: [["goal", "說明演練或專案的範圍，以及要保護的資產"], ["proc", "用流程圖說明偵測、分析、處置的步驟"], ["data", "寫出弱點數、修補時間或稽核缺失下降等數據"], ["show", "附上去識別化的報告範本或 Lab 實作紀錄（Write-up）"], ["role", "註明在授權範圍內進行，不公開任何機敏資料"]],
+      trap: "放未經授權的攻擊截圖，或含客戶與公司機敏資訊的報告，會直接失去信任。" },
+    "雲端系統": { items: [["goal", "說明架構要解決的問題：可用性、成本或部署速度"], ["proc", "附上架構圖、自動化腳本與部署流程"], ["data", "寫出可用率 SLA、部署時間或雲端成本變化"], ["show", "GitHub 上有腳本與 README，環境可以重現"], ["role", "說明監控告警與災難復原的設計"]],
+      trap: "只列考過的證照，沒有自己架設與排除問題的紀錄。" },
+    "iPAS 證照班": { items: [["goal", "每個專題寫出要解決的企業問題：導入 AI、資安治理或減碳"], ["proc", "說明評估方法與步驟，例如導入評估表、盤查邊界"], ["data", "寫出成本效益、節省工時或減碳量"], ["show", "做成一頁式提案，主管 3 分鐘就看得懂"], ["role", "每張證照都搭配一個實際應用的案例"]],
+      trap: "只堆證書，沒有把證照知識用在任何一個實際案例。" }
+  };
+  const pfStatusNotes = {
+    fresh: "新鮮人：課堂與專題作品也能照這個標準整理。沒有營收數據，就寫使用人數、評分、名次或老師回饋。",
+    switch: "轉職者：至少放一件解決前職真實痛點的作品，最能證明你轉職後能帶來價值。",
+    active: "已有經驗：公司作品先確認保密範圍，數據可用比例或區間呈現，並把客戶資訊去識別化。"
+  };
+  const pfState = load("rhc-portfolio", {});
+  let pfField = primaryOr("平面設計");
+  const pfTabs = $("#pfTabs");
+  statusTabs($("#pfStatus"));
+  function renderPf() {
+    paintStatusTabs($("#pfStatus"));
+    $("#pfStatusNote").textContent = pfStatusNotes[upSt];
+    pfTabs.innerHTML = fieldTabsHtml(pfField);
+    const kb = pfKB[pfField], st = pfState[pfField] || {};
+    $("#pfList").innerHTML = kb.items.map(([d, t], i) =>
+      '<li><label><input type="checkbox" data-pf="' + i + '"' + (st[i] ? " checked" : "") + '><span><span class="dim-tag" style="--c:' + pfDims[d][1] + '">' + esc(pfDims[d][0]) + "</span>" + esc(t) + "</span></label></li>").join("");
+    paintPf();
+    $("#pfTrap").innerHTML = "<p><b>" + esc(fLabel(pfField)) + "的地雷</b>" + esc(kb.trap) + "</p>";
+  }
+  function paintPf() {
+    const st = pfState[pfField] || {}, n = pfKB[pfField].items.length;
+    const done = pfKB[pfField].items.filter((_, i) => st[i]).length;
+    $("#pfBar").style.width = (done / n * 100) + "%";
+    $("#pfNum").textContent = done + " / " + n;
+    setFlag("portfolio", Object.values(pfState).some(o => Object.values(o).some(Boolean)));
+  }
+  pfTabs.addEventListener("click", e => {
+    const t = e.target.closest("[role=tab]");
+    if (!t) return;
+    pfField = t.dataset.field;
+    renderPf();
+  });
+  $("#pfList").addEventListener("change", e => {
+    const c = e.target.closest("input[data-pf]");
+    if (!c) return;
+    (pfState[pfField] = pfState[pfField] || {})[c.dataset.pf] = c.checked;
+    save("rhc-portfolio", pfState);
+    paintPf();
+  });
+
+  /* ---------- 09 ATS 友善度檢測 ---------- */
+  const atsItems = [
+    ["單欄排版，不用雙欄或多欄", "ATS 常由左到右逐行讀取，雙欄會把左右兩欄的句子混在一起。"],
+    ["重要資訊不放在表格、文字方塊、頁首或頁尾", "很多系統會略過這些區塊，放在頁首的聯絡方式可能直接消失。"],
+    ["段落標題用標準名稱：工作經歷、學歷、技能、證照", "自創標題（例如「我的冒險旅程」）系統認不出是哪一類資料。"],
+    ["存成可選取文字的 PDF 或 Word（.docx）", "掃描檔、圖片檔，或把設計軟體整頁輸出成圖片的 PDF，系統一個字都讀不到。"],
+    ["技能用文字描述，不用星等、進度條或圖示", "系統讀不懂「四顆星」。改寫成「Photoshop｜可獨立完成電商主視覺」。"],
+    ["JD 的關鍵字原樣出現，縮寫與全名都寫", "例如同時寫「UI/UX」與「使用者介面設計」，兩種搜尋都能命中。"],
+    ["日期格式一致，例如 2023/07 – 2025/03", "格式混亂時，系統可能算錯你的年資。"],
+    ["使用常見字型，項目符號用標準圓點", "特殊符號與藝術字可能變成亂碼。"],
+    ["檔名清楚：姓名_應徵職位_履歷.pdf", "HR 下載後一眼就找得到，也避免「最終版2(1).pdf」。"],
+    ["投遞前全選複製到記事本，順序正確、沒有亂碼", "最簡單的 ATS 模擬測試：記事本讀得懂，系統大多也讀得懂。"]
+  ];
+  const atsState = load("rhc-ats", {});
+  $("#atsList").innerHTML = atsItems.map(([t, w], i) =>
+    '<li><label><input type="checkbox" data-ats="' + i + '"' + (atsState[i] ? " checked" : "") + "><span>" + esc(t) + '<span class="ats-why">' + esc(w) + "</span></span></label></li>").join("");
+  function paintAts() {
+    const done = atsItems.filter((_, i) => atsState[i]).length;
+    $("#atsBar").style.width = (done / atsItems.length * 100) + "%";
+    $("#atsNum").textContent = done + " / " + atsItems.length;
+    $("#atsVerdict").textContent = done === atsItems.length ? "ATS 友善度滿分。記得每次針對不同職缺調整關鍵字。"
+      : (done >= 7 ? "大致安全。剩下的項目通常是排版細節，投遞前再用記事本測一次。" : "還有 " + (atsItems.length - done) + " 項未確認。只要一項致命地雷（例如圖片 PDF），內容寫得再好也可能被系統擋掉。");
+    const f = skillState.primary;
+    $("#atsNote").textContent = (f && designFields.includes(f))
+      ? "你的領域是" + fLabel(f) + "：作品集可以有設計感，但投遞用的履歷建議另存一份單欄文字版，作品用連結附上。"
+      : "技能欄用 JD 的原字（例如 Python、AWS、ISO 27001），不要只放 Logo 圖示。也可以回到第 5 步檢查關鍵字命中率。";
+    setFlag("check", done > 0 || checkItems.some((_, i) => checkState[i]));
+  }
+  atsAny = () => atsItems.some((_, i) => atsState[i]);
+  $("#atsList").addEventListener("change", e => {
+    const c = e.target.closest("input[data-ats]");
+    if (!c) return;
+    atsState[Number(c.dataset.ats)] = c.checked;
+    save("rhc-ats", atsState);
+    paintAts();
+  });
+  $("#atsReset").addEventListener("click", () => {
+    Object.keys(atsState).forEach(k => delete atsState[k]);
+    save("rhc-ats", atsState);
+    $$("input[type=checkbox]", $("#atsList")).forEach(c => { c.checked = false; });
+    paintAts();
+  });
+
+  /* ---------- 06 自傳與工作經歷：XYZ／CAR、六大維度、動詞庫、黃金三句 ---------- */
+  const baKB = {
+    "平面設計": { b: "負責修圖、去背、製作官網活動 Banner，配合行銷主管需求產圖。", a: "{z|主導促銷主視覺並建立模組化 Design Template}，{y|單月獨立交付 80+ 組素材}，{x|帶動廣告 CTR 由 1.4% 提升至 2.6%}，產圖效率提升 40%。",
+      car: ["旺季素材需求暴增，產圖全靠人工，交件常延遲。", "建立模組化版型與素材庫，排版前先和行銷確認文案。", "單月交付 80+ 組素材，CTR 由 1.4% 升至 2.6%。"] },
+    "影音設計": { b: "使用 AE 製作宣傳影片，配合客戶修改畫面。", a: "{z|精煉 60 秒 Showreel 與圖層拆解（Breakdown），在緊迫時程下優化 3D 算圖參數}，{y|單支算圖時間由 10 小時縮短為 4 小時}，{x|精準落實客戶的抽象需求，如期交出高質感視聽卡點作品}。",
+      car: ["客戶需求抽象、時程緊迫，3D 算圖常拖垮交期。", "拆解需求先做分鏡確認，優化算圖參數並建立 Breakdown 流程。", "算圖時間由 10 小時縮短為 4 小時，如期交件並獲續約。"] },
+    "室內設計": { b: "負責繪製室內 3D 效果圖與跟催工班進度。", a: "{z|主導 200 坪商辦與 50–100 坪豪宅專案，在極端預算限制下提出選材替代方案}，{y|總工程預算控制在原定 95% 以內}，{x|以施工圖與完工實景對照，一次通過業主驗收}。",
+      car: ["業主預算有限，又希望保留指定的質感。", "比較三組替代建材，用施工圖與實景照片和業主溝通。", "預算控制在 95% 以內，施工期間零變更。"] },
+    "工業設計": { b: "繪製產品 3D 外觀，與工程師討論機構。", a: "{z|主導從手繪發想到 3D 結構與模具（射出／壓鑄）的工程協同，導入 PCR 再生塑料}，{y|零件由 12 件整併為 7 件、單件成本降低 8%}，{x|作品獲 iF／Red Dot 國際設計大獎，兼顧降本與永續}。",
+      car: ["產品零件多、組裝慢，客訴集中在握感。", "與模具廠協同重構結構，導入 PCR 再生料並做 3 輪原型測試。", "零件由 12 件減為 7 件，握感客訴下降 35%。"] },
+    "動漫設計": { b: "負責繪製角色與插畫，配合企劃修改。", a: "{z|主導 6 名原創角色設定集（三視圖、表情與配色規範）}，{y|外包美術修改次數下降 40%}，{x|角色貼圖上架 3 個月下載逾 1.2 萬次}。",
+      car: ["多位畫師繪製同一角色，造型常不一致而反覆退稿。", "建立角色設定集與配色規範，統一交稿格式。", "修改次數下降 40%，貼圖 3 個月下載逾 1.2 萬次。"] },
+    "遊戲美術": { b: "負責製作遊戲 3D 模型。", a: "{z|依引擎規範建立 40+ 款低模角色，並制定命名與 UV 檢查流程}，{y|面數控制在 8,000 以內，貼圖返工率由 30% 降至 10%}，{x|配合版本如期上線}。",
+      car: ["資源常因面數超標與命名錯誤被退回，拖慢版本。", "制定低模、UV 與命名檢查表，進引擎前先自檢。", "返工率由 30% 降至 10%，版本如期上線。"] },
+    "程式設計": { b: "負責整理各部門數據，協助處理詢問。", a: "{z|以 Python 統籌 5 個部門的營運數據流，用自動化報表重構週報流程}，{y|每週節省各團隊 6 小時}，{x|並發掘 2 項流程痛點、推動改善}。",
+      car: ["5 個部門各自用 Excel 回報，週報要花一整天彙整。", "用 Python（pandas）串接資料，自動產出週報與異常提醒。", "每週節省 6 小時，並找出 2 項流程痛點。"] },
+    "Java 軟體": { b: "負責開發與維護訂單 API，協助軟體手動測試。", a: "{z|重構訂單 API，解決快取與連線池問題}，{y|QPS 由 800 提升至 3,500，P99 延遲降至 45ms}，{x|撐住大促流量，期間零當機}。",
+      car: ["大促期間訂單 API 回應變慢，客訴與掉單增加。", "重構 API，調整快取與連線池，並補上壓力測試。", "QPS 由 800 提升至 3,500，P99 延遲降至 45ms。"] },
+    "資訊安全": { b: "負責公司資安相關業務，協助處理弱點。", a: "{z|導入每月弱點掃描與修補追蹤流程}，{y|高風險弱點平均修補時間由 30 天縮短為 7 天}，{x|ISO 27001 稽核缺失由 8 項降為 1 項}。",
+      car: ["弱點報告堆積、修補沒人追蹤，稽核缺失多。", "建立掃描、分級、指派與追蹤的固定流程。", "修補時間由 30 天縮短為 7 天，稽核缺失降為 1 項。"] },
+    "雲端系統": { b: "負責系統維護，協助軟體手動測試與部署。", a: "{z|建立 Python／Selenium 自動化測試並整合 CI/CD}，{y|迴歸測試週期由 16 小時降至 45 分鐘}，{x|提前攔截 30+ 個線上重大 Bug}。",
+      car: ["每次上版都要人工測試一整天，錯誤常流到線上。", "撰寫自動化測試並接上 CI/CD，每次提交自動執行。", "測試週期由 16 小時降至 45 分鐘，攔截 30+ 個重大 Bug。"] },
+    "iPAS 證照班": { b: "追蹤產線工單，處理欠料跟催。", a: "{z|建立供應鏈即時缺料預警系統並優化排程}，{y|產線停工時間縮短 35%}，{x|關鍵零組件交期達標率（OTD）提升至 97.5%}。",
+      car: ["晶片短缺，產線常因欠料停工。", "建立即時缺料預警，調整排程優先順序。", "停工縮短 35%，OTD 提升至 97.5%。"] }
+  };
+  const baStatus = {
+    fresh: { t: "新鮮人版：用專題寫出戰績", b: "參與畢業專題，負責設計與簡報。", a: "{z|主導畢業專題的使用者訪談與 3 輪原型迭代}，{y|訪談 12 位目標使用者，測試滿意度由 3.2 提升至 4.5}，{x|專題獲系展第一名}。" },
+    switch: { t: "轉職版：電商客服專員 → 人資招募助理", b: "負責接聽客戶電話、處理退換貨客訴問題，每日記錄回報主管。", a: "{y|每日獨立處理 60+ 通高情緒客訴電話}，{x|維持 96% CSAT}；{z|主動建立內部 SOP 知識庫}，使新人培訓週期由 4 週縮短為 2.5 週。" },
+    active: { t: "在職版：把「溝通」翻成商業結果", b: "負責專案進度追蹤與跨部門溝通。", a: "{z|導入 RACI 矩陣釐清權責，每週追蹤風險}，{y|專案延遲率由 40% 降至 10%}，{x|產品準時上線，守住 Q3 營收}。" }
+  };
+  const dimMeta = [
+    ["財務 Financial", "創收、降本、預算規模", "這件事替公司賺了或省了多少？"],
+    ["時間 Time", "縮短工時、加速週期", "以前要多久？現在要多久？"],
+    ["比例 Percentages", "轉換率提升、錯誤率下降", "前後的比例差多少？"],
+    ["數量 Scale", "案件數、團隊人數、覆蓋數", "你處理了多少件、服務多少人？"],
+    ["品質 Quality", "滿意度、零事故、評分", "別人怎麼評價這個結果？"],
+    ["頻率 Frequency", "推廣普及率、定期產出", "多久做一次？擴散到多少地方？"]
+  ];
+  const dimEx = {
+    "平面設計": ["設計提案帶動檔期營收 ○○ 萬元", "交件時間由 3 天縮短為 1.5 天", "廣告 CTR 由 1.4% 升至 2.6%", "單月交付 80+ 組素材", "客戶提案一次通過率 90%", "每週固定產出 5 篇社群圖"],
+    "影音設計": ["影片帶動課程報名營收 ○○ 萬元", "單支製作由 6 小時縮短為 2.5 小時", "完播率由 25% 提升到 41%", "累計剪輯 120 支短影音", "客戶滿意度 4.8 / 5", "每週穩定上架 3 支"],
+    "室內設計": ["負責總工程預算 800 萬元的案件", "工期提前 10 天完工", "預算控制在原定 95% 以內", "主導 200 坪商辦專案", "施工期間零變更、零客訴", "每週 2 次現場進度回報"],
+    "工業設計": ["單件成本降低 8%", "組裝時間由 8 分鐘縮短為 3 分鐘", "握感客訴下降 35%", "零件由 12 件整併為 7 件", "測試評分由 6 分升至 8.5 分", "每季完成 2 款新品開發"],
+    "動漫設計": ["貼圖上架 3 個月營收 ○○ 元", "角色設定時間縮短 30%", "修改次數下降 40%", "完成 6 名角色設定集", "準時交稿率 100%", "每週更新 1 話連載"],
+    "遊戲美術": ["外包費用節省 ○○ 萬元", "資源交付由 2 週縮短為 1 週", "返工率由 30% 降到 10%", "完成 40+ 款角色資源", "面數控制在 8,000 以內、零效能退件", "每個版本固定交付 5 款資源"],
+    "程式設計": ["自動化每年省下約 ○○ 萬元人力成本", "週報由 5 小時縮短到 10 分鐘", "模型準確率由 82% 提升到 91%", "每日處理 50 萬筆資料", "格式錯誤件數降為 0", "流程推廣到 3 個部門"],
+    "Java 軟體": ["系統上線後每年省下授權費 ○○ 萬元", "查詢由 8 秒降到 0.8 秒", "盤點差異件數下降 70%", "QPS 由 800 提升至 3,500", "上線後 6 個月零重大事故", "每兩週穩定上版一次"],
+    "資訊安全": ["避免潛在罰款與損失 ○○ 萬元", "弱點修補由 30 天縮短為 7 天", "釣魚郵件點擊率由 18% 降至 4%", "管理 300 台端點設備", "稽核缺失由 8 項降為 1 項", "每月執行 1 次弱點掃描"],
+    "雲端系統": ["雲端費用每月節省 25%", "部署由 2 小時縮短到 10 分鐘", "可用率達 99.95%", "維運 120 台主機", "全年零重大停機", "每天自動部署 10 次以上"],
+    "iPAS 證照班": ["導入 AI 每年省下成本 ○○ 萬元", "報告製作時間縮短 50%", "碳排放減少 12%", "完成 3 個部門碳盤查", "專案驗收一次通過", "每月產出 1 份成效報告"]
+  };
+  const dimStatusNotes = {
+    fresh: "新鮮人：專題也有數字。組員人數、使用人數、評分、名次都算。",
+    switch: "轉職者：前職的數字照樣能用，重點是翻成成本、時間、營收等通用商業語言。",
+    active: "已有經驗：用「雙軌量化」，至少一個顯性財務數字，加上一個隱性效率數字。"
+  };
+  const dimState = load("rhc-dims", {});
+  function renderWorkUp(field) {
+    const f = baKB[field] ? field : "平面設計";
+    const k = baKB[f], s = baStatus[upSt];
+    const card = (title, b, a) => '<p class="ba-why"><strong>' + esc(title) + "</strong></p>" +
+      '<div class="ba"><div class="ba-card before"><span class="tag">Before：只寫動作</span><p>' + esc(b) + '</p></div><div class="ba-arrow" aria-hidden="true">→</div>' +
+      '<div class="ba-card after"><span class="tag">After：XYZ 句型</span><p>' + xyzHtml(a) + "</p></div></div>";
+    $("#baBox").innerHTML = card(fLabel(f) + "：流水帳 → 戰績", k.b, k.a) +
+      '<div class="car" aria-label="CAR 故事框架"><div><b>C 情境：痛點與限制</b><p>' + esc(k.car[0]) + "</p></div><div><b>A 行動：你主導的解法</b><p>" + esc(k.car[1]) + "</p></div><div><b>R 結果：量化成效</b><p>" + esc(k.car[2]) + "</p></div></div>" +
+      '<div style="margin-top:18px">' + card(s.t, s.b, s.a) + "</div>";
+    $("#dimNote").textContent = dimStatusNotes[upSt];
+    const ex = dimEx[f];
+    $("#dimGrid").innerHTML = dimMeta.map((d, i) =>
+      '<label class="dim' + (dimState[i] ? " on" : "") + '"><span class="d-top"><input type="checkbox" data-dim="' + i + '"' + (dimState[i] ? " checked" : "") + ">" + esc(d[0]) + "</span>" +
+      '<span class="d-ex">' + esc(ex[i]) + '</span><span class="d-q">問自己：' + esc(d[2]) + "（" + esc(d[1]) + "）</span></label>").join("");
+    paintDims();
+  }
+  function paintDims() {
+    const n = dimMeta.filter((_, i) => dimState[i]).length;
+    $("#dimCount").textContent = "你的經歷已涵蓋 " + n + " / 6 個維度" + (n >= 3 ? "，很好。" : "。勾選你已經寫進履歷的維度，至少涵蓋 3 個不同面向。");
+  }
+  $("#dimGrid").addEventListener("change", e => {
+    const c = e.target.closest("input[data-dim]");
+    if (!c) return;
+    dimState[c.dataset.dim] = c.checked;
+    c.closest(".dim").classList.toggle("on", c.checked);
+    save("rhc-dims", dimState);
+    paintDims();
+  });
+  document.addEventListener("rhc-job", e => renderWorkUp(e.detail));
+
+  /* 強效動詞庫（工作經歷與草稿檢查兩處共用） */
+  const verbGroups = [
+    ["主導與策劃：展現當責", [["主導", "Spearheaded"], ["策劃", "Orchestrated"], ["統籌", "Coordinated"], ["領導", "Led"], ["推動", "Drove"]]],
+    ["改善與優化：展現解決問題", [["重構", "Overhauled"], ["優化", "Optimized"], ["精簡", "Streamlined"], ["改善", "Improved"], ["縮短", "Reduced"]]],
+    ["建立與創造：展現從 0 到 1", [["建立", "Established"], ["設計", "Designed"], ["開發", "Developed"], ["導入", "Implemented"], ["打造", "Built"]]],
+    ["擴張與成長：展現影響力", [["擴充", "Scaled"], ["提升", "Increased"], ["拓展", "Expanded"], ["帶動", "Boosted"], ["推廣", "Promoted"]]],
+    ["分析與決策：展現商業思維", [["分析", "Analyzed"], ["診斷", "Diagnosed"], ["驗證", "Validated"], ["評估", "Evaluated"], ["預測", "Forecasted"]]],
+    ["溝通與說服：展現協作", [["說服", "Persuaded"], ["談判", "Negotiated"], ["整合", "Integrated"], ["培訓", "Trained"], ["指導", "Mentored"]]]
+  ];
+  const verbHtml = '<details class="verbs"><summary>一鍵複製：高當責強效動詞庫</summary><div class="verbs-body">' +
+    '<p class="note" style="margin:0">只要是你親自梳理流程、親手做出來的，主詞就是「你」。點一下動詞即可複製，貼到經歷句子的開頭。</p>' +
+    verbGroups.map(([t, vs]) => '<div class="verb-row"><h4>' + esc(t) + '</h4><div class="verb-chips">' +
+      vs.map(([zh, en]) => '<button type="button" class="verb-chip" data-verb="' + esc(zh) + '">' + esc(zh) + "<small>" + esc(en) + "</small></button>").join("") + "</div></div>").join("") +
+    '<div class="verb-row"><h4>剔除無效弱動詞：像免洗人力</h4><div class="verb-weak"><s>協助 Assisted</s><s>負責 Responsible for</s><s>參與 Participated in</s></div>' +
+    '<p class="note" style="margin:6px 0 0">執行、製作、維護屬於執行型動詞，可以用，但後面一定要接成果數字。</p></div>' +
+    '<p class="verb-msg" role="status"></p></div></details>';
+  $$(".verb-slot").forEach(el => { el.innerHTML = verbHtml; });
+  document.addEventListener("click", async e => {
+    const v = e.target.closest(".verb-chip");
+    if (!v) return;
+    const msg = v.closest(".verbs").querySelector(".verb-msg");
+    try {
+      await navigator.clipboard.writeText(v.dataset.verb);
+      msg.textContent = "已複製「" + v.dataset.verb + "」";
+      v.classList.add("copied");
+      setTimeout(() => v.classList.remove("copied"), 900);
+    } catch (err) {
+      msg.textContent = "無法自動複製，請手動輸入「" + v.dataset.verb + "」";
+    }
+    setTimeout(() => { msg.textContent = ""; }, 2000);
+  });
+
+  /* 專業 Summary：黃金三句 */
+  const g3State = load("rhc-summary", { a: "", b: "", c: "" });
+  const g3Els = { a: $("#g3a"), b: $("#g3b"), c: $("#g3c") };
+  Object.keys(g3Els).forEach(k => { g3Els[k].value = g3State[k] || ""; });
+  function g3Examples() {
+    const f = primaryOr(jobField);
+    const info = selInfo(f);
+    const hs = (info.active && info.selOpts.length ? info.selOpts : (fieldHard[f] || [])).slice(0, 2);
+    const hard = hs.join("、") || "○○", first = hs[0] || "○○", label = fLabel(f);
+    if (upSt === "fresh") return ["我是○○大學○○系應屆畢業生，專精於" + label + "，熟悉" + hard + "。", "在畢業專題中，我主導○○，將○○提升了○%，達到○○（寫出數字）。", "我非常認同貴公司在○○的佈局，相信我的" + first + "能力與快速學習的態度，能直接協助團隊解決目前的○○。"];
+    if (upSt === "switch") return ["我擁有 ○ 年○○（前職）經驗，正轉型為" + label + "，已完成○○課程與 ○ 件作品，專精於" + hard + "。", "在上一份工作中，我主導○○，將○○縮短了 ○%，證明我能用數據解決流程痛點。", "我非常認同貴公司在○○的佈局，相信我前職的○○經驗結合" + first + "，能直接解決團隊目前的○○。"];
+    return ["我是一名擁有 ○ 年" + label + "經驗的○○（職稱），專精於" + hard + "。", "在上一份工作中，我主導○○，將○○提升了 ○%，達到○○（例如成本降低 18%、交付時程縮短 30%）。", "我非常認同貴公司在○○的佈局，相信我的○○經驗能直接解決團隊目前的○○。"];
+  }
+  function renderG3() {
+    const ex = g3Examples();
+    ["a", "b", "c"].forEach((k, i) => { g3Els[k].placeholder = "例：" + ex[i]; });
+    const v = ["a", "b", "c"].map(k => g3Els[k].value.trim());
+    const text = polishOn() ? polishLines(v) : v.filter(Boolean).join("");
+    const n = text.replace(/\s/g, "").length;
+    const tips = [];
+    if (v[1] && !/\d/.test(v[1])) tips.push("第 2 句還沒有數字，從六大數據維度挑一個最能代表你的成果。");
+    if (v[2] && !/貴|團隊|公司/.test(v[2])) tips.push("第 3 句是價值主張：說出你認同對方什麼、能為團隊解決什麼，提到「貴公司」或「團隊」。");
+    if (n > 150) tips.push("超過 150 字。開場三句建議唸 30 秒左右，約 150 字內。");
+    $("#g3Preview").innerHTML = text
+      ? "<p>" + esc(text) + '</p><p class="note" style="margin:0">共 ' + n + " 字。" + esc(tips.join(" ")) + "</p>"
+      : '<p class="note" style="margin:0">依序寫完三句，這裡會組合成你的面試開場白。同一段話也可以放在履歷最上方當 Summary。</p>';
+  }
+  Object.keys(g3Els).forEach(k => g3Els[k].addEventListener("input", () => {
+    g3State[k] = g3Els[k].value;
+    save("rhc-summary", g3State);
+    renderG3();
+  }));
+  $("#g3Fill").addEventListener("click", () => {
+    const ex = g3Examples();
+    ["a", "b", "c"].forEach((k, i) => { if (!g3Els[k].value.trim()) { g3Els[k].value = ex[i]; g3State[k] = ex[i]; } });
+    save("rhc-summary", g3State);
+    renderG3();
+  });
+  $("#g3Copy").addEventListener("click", () => { const v = ["a", "b", "c"].map(k => g3Els[k].value.trim()); copyText(polishOn() ? polishLines(v) : v.filter(Boolean).join(""), $("#g3Msg")); });
+  document.addEventListener("rhc-polish", renderG3);
+
+  /* 自傳草稿檢查：加入弱動詞與六大維度提示 */
+  const dimRe = [/萬|元|營收|成本|預算|業績/, /小時|分鐘|\d+\s*天|\d+\s*週|個月|縮短|提前/, /\d+(\.\d+)?\s*(%|％|倍)|\d成/,
+    /\d+\s*\+?\s*(件|人|位|組|個|台|筆|坪|款|支|間|家|場|篇)/, /滿意|評分|星|零|一次通過|客訴|好評|CSAT|NPS/i, /每(日|天|週|月|季|年)|定期|推廣/];
+  labUp = (all, v, items) => {
+    const weak = ["協助", "負責", "參與"].filter(w => all.includes(w));
+    items.push({ ok: !weak.length, text: weak.length ? "出現弱動詞「" + weak.join("、") + "」。換成主導、策劃、重構、優化等強效動詞（下方動詞庫可以一鍵複製）。" : "沒有發現協助、負責、參與等弱動詞" });
+    const exp = v.b + v.c;
+    if (exp.trim()) {
+      const hit = dimMeta.filter((_, i) => dimRe[i].test(exp)).map(d => d[0].split(" ")[0]);
+      items.push({ ok: hit.length >= 2, text: "數據維度涵蓋 " + hit.length + " / 6" + (hit.length ? "（" + hit.join("、") + "）" : "") + "。" + (hit.length >= 2 ? "" : "再從六大維度補一個不同面向的數字，例如時間或品質。") });
+    }
+  };
+
+  /* ---------- 10 模擬面試：BEI 升級與逆向面試 ---------- */
+  const revThink = {
+    "自我介紹": "面試官在判斷值不值得往下問：1 分鐘內講出和職缺相關的重點與一個數字，不是念履歷。",
+    "動機": "面試官在排除「隨便投、很快離職」的風險：說出你對公司的具體觀察。",
+    "作品": "面試官在確認作品真的是你做的：他會追問你的角色、決策與遇到的阻力。",
+    "專業": "面試官在測試你懂原理還是只會背：答完流程，主動補一個你實際用過的例子。",
+    "軟體": "面試官在確認熟練度沒有灌水：說出你能獨立完成什麼，比說「精通」可信。",
+    "情境": "這是假設題，但 BEI 面試官更想聽真實經驗。先講原則，再補一句「之前在○○就遇過，當時我……」，把假設題變成事例。",
+    "行為": "標準 BEI 題：面試官要聽過去的具體行為。用 STAR 回答，行動與結果佔六成。",
+    "反問": "面試官在看你的商業思維與投入程度。不要問福利，下方有 5 題高質量反問可以直接用。",
+    "職涯規劃": "面試官在評估穩定度：你的規劃是否和這個職位的成長路徑一致。",
+    "勝任力": "面試官在找證據：用專題或作品的數字回答，而不是保證「我會努力」。",
+    "團隊合作": "面試官想知道衝突時你怎麼做：展現雙贏合作（Collaborating），挖掘雙方底層動機，不是各退一步。",
+    "優缺點": "面試官在看自我覺察：缺點要真實，並附上你正在改善的具體做法。",
+    "轉職風險": "面試官在排除「做不久」的風險：說出你已評估過的代價與準備。",
+    "可轉移能力": "面試官在確認前職經驗能不能用：每一項能力都配一個前職的真實事例。",
+    "自學": "面試官在看自我驅動力：說出固定的學習節奏與看得到的成果。"
+  };
+  const starCats = ["作品", "行為", "情境", "團隊合作", "勝任力", "可轉移能力"];
+  const followUps = {
+    "作品": ["為什麼選這個方向，不選另一個？", "過程中最大的阻力是什麼？你怎麼說服別人？"],
+    "專業": ["你在哪個專案實際用過？", "遇過最難排除的問題是什麼？"],
+    "軟體": ["你在哪個專案實際用過？", "遇過最難排除的問題是什麼？"],
+    "自我介紹": ["你剛提到的成果，數字是怎麼算出來的？"],
+    "動機": ["你對我們最近的哪個產品或作品有什麼看法？"]
+  };
+  const defaultFollow = ["這個成果中，你個人的貢獻是哪一部分？", "如果重來一次，你會改哪一步？"];
+  const lineL = {
+    fresh: "回頭看，我會更早做使用者測試；這次學到的方法，我已經用在下一個作品。",
+    switch: "這次讓我確認前職的經驗很關鍵；之後每件作品，我都先定義要改善的指標。",
+    active: "回頭看，我會更早和相關人員對齊驗收標準；之後我把這套做法寫成範本，團隊沿用至今。"
+  };
+  mockUp = cat => {
+    let h = '<div class="q-up"><p class="rev"><strong>逆向思維：</strong>' + esc(revThink[cat] || "面試官想確認你說的每一句都有真實事例支撐。") +
+      (cat === "反問" ? ' <a href="#reverseQs">看逆向面試題庫</a>' : "") + "</p>";
+    if (starCats.indexOf(cat) >= 0) {
+      const sk = starKeyFor(mockField), src = packStar(sk, mockStatus) || (starData[mockStatus] || {})[sk];
+      if (src) {
+        const info = selInfo(mockField);
+        const t = k => cleanText(src[k], info) || src[k];
+        h += "<h4>BEI 升級示範：用 STAR 說一個真實事例</h4><ul class=\"q-star\">" +
+          "<li><b>S＋T</b><span>" + esc(t("S") + t("T")) + "<small>約 20%：精簡帶過，確立商業背景</small></span></li>" +
+          "<li><b>A</b><span>" + esc(t("A")) + "<small>約 40%：重兵佈署，講你用的工具與決策</small></span></li>" +
+          "<li><b>R</b><span>" + esc(t("R")) + "<small>約 20%：量化影響</small></span></li>" +
+          "<li><b>L</b><span>" + esc(lineL[mockStatus]) + "<small>約 20%：覆盤學習，展現迭代思維</small></span></li></ul>";
+      }
+    }
+    const fu = followUps[cat] || defaultFollow;
+    h += "<h4>面試官可能的 5 Whys 追問</h4><ul class=\"q-follow\">" + fu.map(q => "<li>" + esc(q) + "</li>").join("") + "</ul></div>";
+    return h;
+  };
+  const beiTips = {
+    fresh: "新鮮人：沒有職場事例，就用專題、社團、打工的真實經驗回答，一樣要有數字。",
+    switch: "轉職者：用前職的真實事例證明可轉移能力，再接到你的自學作品。",
+    active: "已有經驗：行動與結果要講出你個人的決策與數字，不要只講團隊做了什麼。"
+  };
+  function revQs() {
+    const L = mockFieldLabel[mockField] || fLabel(mockField);
+    const last = {
+      fresh: ["新人加入後，團隊怎麼給回饋？多久會有一次一對一討論？", "展現<strong>可培養性</strong>：你主動想縮短上手時間。"],
+      switch: ["團隊怎麼看待跨領域背景？我前職的○○經驗，您覺得可能在哪些地方派上用場？", "展現<strong>可轉移價值</strong>：引導面試官自己想像你的前職優勢。"],
+      active: ["如果我加入，您最希望我第一年在哪個專案或流程上做出改變？", "展現<strong>第五級領導（Level 5 Leadership）</strong>的企圖：你準備好承擔更大的責任。"]
+    }[mockStatus];
+    return [
+      ["這個職位前三個月，您最期待看到的成果是什麼？會用什麼指標衡量？", "展現<strong>當責心態</strong>：你在意的是交出成果，不只是完成任務。"],
+      ["團隊目前在" + L + "上最大的挑戰或瓶頸是什麼？", "展現<strong>痛點導向</strong>：聽完可以接一句「我在○○處理過類似問題，當時……」，把反問變成加分題。"],
+      ["這個職位的成果，會影響公司哪一個關鍵指標？例如營收、轉換率或交期？", "展現<strong>商業思維</strong>：讓面試官知道你會把工作連到公司的目標。"],
+      ["在這個團隊表現最好的人，和一般表現的人，差別在哪裡？", "展現<strong>高標準</strong>：同時讓你知道團隊真正重視的能力。"],
+      last
+    ];
+  }
+  const beiMods = {
+    fresh: {
+      why: ["我在畢業專題負責美術設計。", "為什麼這樣設計？有沒有人測試過？你怎麼知道改得比較好？", "我主導 3 輪使用者測試，訪談 12 位同學後重新調整介面，滿意度由 3.2 提升到 4.5，專題拿下系展第一名。"],
+      q: [["魔王題 1：說一次你和組員意見不合的經驗", "新鮮人可以用專題、社團或打工的例子。不要說「我讓步了」，說你怎麼找出彼此真正在意的事（例如成績、時間），再提出兩邊都能接受的分工，最後補一句成果。"],
+        ["魔王題 2：說一次你沒有做好的作業或專題", "選一個真的有學到東西的失誤，例如時程估錯導致趕工。說清楚原因出在哪個環節、你負責哪一部分，以及之後改用甘特圖或每週進度檢查的做法。"],
+        ["加分題：你怎麼在很短時間學會一項新工具？", "面試官在看學習力。說出你的學習步驟（找官方教學、做小作品、請人回饋），以及多久做出了什麼成果。"]] },
+    switch: {
+      why: ["我以前在門市負責處理客訴。", "客訴都是什麼類型？你怎麼處理？這和新工作有什麼關係？", "我把最常見的 20 種客訴整理成處理流程，處理時間由 15 分鐘縮短到 6 分鐘。這種整理需求、找出規則的能力，正是我轉入新領域後最常用到的。"],
+      q: [["魔王題 1：為什麼要放棄原本的資歷？", "面試官在評估你會不會做不久。說出轉職的具體原因、你已經評估過的代價（例如薪資重新起步），以及這段時間完成的課程與作品。"],
+        ["魔王題 2：說一次你自學時卡關的經驗", "選一個真實卡關的例子，說你怎麼拆解問題、去哪裡找資源、多久解決，最後做出什麼作品。這是在證明你能自己往前走。"],
+        ["加分題：前職的經驗，怎麼用在這份工作上？", "挑一到兩項可轉移能力，例如溝通協調、專案拆解、數據彙整，每一項都配一個前職的真實事例，再說會怎麼用在新職位。"]] },
+    active: {
+      why: ["我負責與工程師溝通需求。", "為什麼需要溝通？卡在哪裡？你具體做了什麼？", "我透過導入 RACI 矩陣釐清權責，讓專案延遲率由 40% 降至 10%，守住 Q3 營收。"],
+      q: [["魔王題 1：說一次你和其他部門意見衝突的經驗", "不要說「我各退一步」。展現雙贏合作（Collaborating）：先挖出雙方真正在意的目標，例如業務要速度、工程要品質，再提出兩邊都能接受的方案，最後補一句結果的數字。"],
+        ["魔王題 2：說一次你失敗的經驗", "重點在根本原因分析（Root Cause Analysis）。說清楚失敗的原因是哪一個環節、你承擔了哪一部分，以及之後建立了什麼機制，讓同樣的錯誤不再發生。"],
+        ["加分題：你怎麼說服主管接受你的提案？", "向上說服用數據，不用情緒。先講主管在意的目標，再拿出小規模測試的數字，最後提出風險與備案，讓主管容易說「好」。"]] }
+  };
+  function renderBeiMods() {
+    const m = beiMods[mockStatus] || beiMods.active;
+    $("#beiMods").innerHTML =
+      '<details class="mod bei-mod"><summary>5 Whys 深挖：面試官怎麼一路追問</summary><p>面試官會連問好幾個「為什麼、怎麼做」，直到挖到你的真實貢獻。準備答案時，先自己往下挖三層。</p>' +
+      '<div class="why5"><div class="l1">表層：「' + esc(m.why[0]) + '」</div><div class="l2">往下挖：' + esc(m.why[1]) + '</div><div class="l3">底層：「' + esc(m.why[2]) + "」</div></div></details>" +
+      m.q.map(([t, a]) => '<details class="mod bei-mod"><summary>' + esc(t) + "</summary><p>" + esc(a) + "</p></details>").join("");
+  }
+  function renderMockUp() {
+    $("#beiStatusTip").textContent = beiTips[mockStatus];
+    renderBeiMods();
+    $("#revNote").textContent = "不要問福利。問出能展現當責心態與商業思維的問題。以下依「" + starStatusLabels[mockStatus] + "」與「" + (mockFieldLabel[mockField] || fLabel(mockField)) + "」調整。";
+    $("#revList").innerHTML = revQs().map(([q, w]) => '<li><div><p class="rq" style="margin:0">' + esc(q) + '</p><p class="rw">' + w + "</p></div></li>").join("");
+  }
+  $("#revCopy").addEventListener("click", () => copyText(revQs().map((r, i) => (i + 1) + ". " + r[0]).join("\n"), $("#revMsg")));
+  mockTabs.addEventListener("click", () => renderMockUp());
+
+  /* 狀態與領域同步 */
+  function renderUpAll() {
+    renderJd();
+    renderTraps();
+    renderPf();
+    paintAts();
+    renderWorkUp(jobField);
+    renderG3();
+    renderMockUp();
+  }
+  document.addEventListener("rhc-status", e => {
+    if (!starStatusLabels[e.detail]) return;
+    upSt = e.detail;
+    renderUpAll();
+  });
+  document.addEventListener("rhc-field", () => {
+    const f = skillState.primary;
+    if (f && fieldOptions.includes(f)) { jdField = f; pfField = f; trapField = f; }
+    renderUpAll();
+  });
+  $$("[data-tip]").forEach(el => { el.outerHTML = tipHtml(el.dataset.tip); });
+  renderUpAll();
+  renderMock();
+  updateLab();
+
   /* ---------- 預設領域：在「核心競爭力」選的領域，帶到後面所有模組 ---------- */
   function renderApplyNote() {
     const el = $("#applyNote");
@@ -4437,7 +5504,7 @@ details.q.flash{animation:flashQ 1.5s ease}
     if (!applyOn()) { el.textContent = "已關閉：後面會顯示完整的範例與題目，不會依你的勾選調整。"; return; }
     const parts = [];
     skillState.fields.forEach(f => { const i = selInfo(f); if (i.active) parts.push((fieldLabelMap[f] || f) + "：" + i.selOpts.join("、")); });
-    const soft = softSelected();
+    const soft = softSelected().concat(skillState.fields.length ? skillState.softCustom : []);
     if (soft.length) parts.push("軟實力：" + soft.join("、"));
     el.textContent = parts.length
       ? "後面的 STAR 練習、工作經歷、模擬面試與自傳小測驗，會只談你勾選的項目。 " + parts.join("；") + "。"
@@ -4449,6 +5516,7 @@ details.q.flash{animation:flashQ 1.5s ease}
     renderJob();
     renderMock();
     renderArch();
+    document.dispatchEvent(new CustomEvent("rhc-field"));
   }
   [["#starSkillPick", () => { selectField(currentField || starFields[0], true); renderJob(); }], ["#jobSkillPick", () => { selectField(currentField || starFields[0], true); renderJob(); }]].forEach(pair => {
     $(pair[0]).addEventListener("click", e => {
@@ -4483,7 +5551,7 @@ details.q.flash{animation:flashQ 1.5s ease}
     renderPrimary();
     markCourses();
     renderApplyNote();
-    if (!f) return;
+    if (!f) { document.dispatchEvent(new CustomEvent("rhc-field")); return; }
     selectField(starKeyFor(f), true);
     jobField = f;
     writeState.jobField = f;
@@ -4492,6 +5560,7 @@ details.q.flash{animation:flashQ 1.5s ease}
     mockField = f;
     renderMock();
     renderArch();
+    document.dispatchEvent(new CustomEvent("rhc-field"));
   }
   $("#primaryPicker").addEventListener("click", e => {
     const b = e.target.closest("button[data-primary]");
