@@ -689,6 +689,11 @@ details.verbs[open]>summary::after{content:"收合 –"}
 /* 黃金三句 */
 .gold3{margin:4px 0 30px;padding:18px 20px;border:2px dashed var(--brand);border-radius:var(--wob);background:var(--sheet);box-shadow:var(--shadow-sk)}
 .gold3 .field textarea{min-height:64px}
+.soft-add{margin:12px 0 4px;max-width:520px}
+.soft-add-row{display:flex;gap:8px;margin-top:6px}
+.soft-add-row input{flex:1;min-width:0;font:inherit;font-size:16px;color:var(--ink);background:var(--paper);border:1px solid var(--rule);border-radius:8px;padding:8px 12px}
+.chip-btn.custom::after{content:" ✕";font-size:12px;color:var(--muted)}
+.polish-row{margin:0 0 10px}
 .gold3-grid{display:grid;gap:12px;margin-top:12px}
 .gold3 .no{display:inline-grid;place-items:center;width:24px;height:24px;border-radius:50%;background:var(--ink);color:var(--paper);font-size:13px;margin-right:6px}
 .gold3-preview{margin-top:12px;padding:12px 14px;border-left:5px solid var(--gold);background:color-mix(in srgb,var(--gold) 12%,transparent);border-radius:0 12px 12px 0}
@@ -857,6 +862,11 @@ details.mod.bei-mod p{margin:0 18px 12px;color:var(--muted);font-size:15px}
     <div class="chips" id="hardChips" role="group" aria-label="硬實力"></div>
     <p class="group-title">軟實力（依你選的領域顯示，每個產業重視的不一樣）</p>
     <div class="chips" id="softChips" role="group" aria-label="軟實力"></div>
+    <div class="soft-add" id="softAdd" hidden>
+      <label class="note" for="softCustomInput" style="margin:0"><strong>上面沒有你的軟實力？自己加一項</strong>（例如：危機處理、跨文化溝通，每項 20 字以內）</label>
+      <div class="soft-add-row"><input type="text" id="softCustomInput" maxlength="20" placeholder="輸入你的軟實力"><button type="button" class="btn-sm" id="softCustomAdd">加入</button></div>
+      <p class="note" id="softCustomMsg" role="status" style="margin:4px 0 0"></p>
+    </div>
     <div id="softNote" aria-live="polite"></div>
     <div class="balance">
       <div>
@@ -930,6 +940,7 @@ details.mod.bei-mod p{margin:0 18px 12px;color:var(--muted);font-size:15px}
     <div class="preview">
       <p class="kicker">組合成履歷上的一段話</p>
       <p id="starPreview"></p>
+      <label class="q-check polish-row"><input type="checkbox" class="polish-toggle" checked><span>自動潤飾：補上連接詞、統一全形標點、中英數字之間加空格、刪掉贅字（取消勾選可看原文直接串接）</span></label>
       <div class="row">
         <button class="btn-sm" id="copyStar" type="button">複製這段文字</button>
         <span id="copyMsg" role="status"></span>
@@ -1084,6 +1095,7 @@ details.mod.bei-mod p{margin:0 18px 12px;color:var(--muted);font-size:15px}
         <ul class="checks" id="labChecks" aria-live="polite"></ul>
         <div class="row">
           <button type="button" class="btn-sm" id="labCopy">複製全文</button>
+          <label class="q-check" style="margin:0"><input type="checkbox" class="polish-toggle" checked><span>複製時自動潤飾</span></label>
           <span id="labMsg" role="status" class="note" style="margin:0"></span>
         </div>
         <p class="note">※ 這是依原則做的提示，不能取代人工校對。請再唸一遍，並請同學或老師幫你看。</p>
@@ -1136,6 +1148,7 @@ details.mod.bei-mod p{margin:0 18px 12px;color:var(--muted);font-size:15px}
         <button type="button" class="btn-sm" id="g3Copy">複製三句</button>
         <span id="g3Msg" role="status" class="note" style="margin:0"></span>
       </div>
+      <label class="q-check polish-row" style="margin:12px 0 0"><input type="checkbox" class="polish-toggle" checked><span>自動潤飾三句（統一標點、補句號、中英數字加空格）</span></label>
       <div class="gold3-preview" id="g3Preview" aria-live="polite"></div>
     </div>
   </div>
@@ -1371,7 +1384,7 @@ details.mod.bei-mod p{margin:0 18px 12px;color:var(--muted);font-size:15px}
   prReset.addEventListener("click", () => resetUi(true));
   prCancel.addEventListener("click", () => { resetUi(false); prReset.focus(); });
   prConfirm.addEventListener("click", () => {
-    ["rhc-status", "rhc-skills", "rhc-star", "rhc-star2", "rhc-check", "rhc-progress", "rhc-mock", "rhc-write", "rhc-gap", "rhc-intro", "rhc-jd", "rhc-portfolio", "rhc-ats", "rhc-summary", "rhc-dims"].forEach(k => {
+    ["rhc-status", "rhc-skills", "rhc-star", "rhc-star2", "rhc-check", "rhc-progress", "rhc-mock", "rhc-write", "rhc-gap", "rhc-intro", "rhc-jd", "rhc-portfolio", "rhc-ats", "rhc-summary", "rhc-dims", "rhc-polish"].forEach(k => {
       try { localStorage.removeItem(k); } catch (e) { /* storage unavailable */ }
     });
     try { location.reload(); } catch (e) { /* fall through to fallback */ }
@@ -1399,7 +1412,7 @@ details.mod.bei-mod p{margin:0 18px 12px;color:var(--muted);font-size:15px}
       sub: "有工作經驗，但要進入不同的領域",
       tips: [
         "把過去工作翻譯成目標領域的能力，例如服務業的客訴處理可以寫成「需求理解與溝通」。",
-        "硬實力要補起來，先用一個作品證明你正在往新領域走。",
+        "硬實力要補起來：準備 2 到 3 件作品組成作品集，至少一件解決前職的真實問題，再搭配課程或證照，證明你已經具備新領域的能力。",
         "自傳要講清楚「為什麼轉」與「能帶來什麼」，不要只談過去。"
       ]
     },
@@ -1764,6 +1777,7 @@ details.mod.bei-mod p{margin:0 18px 12px;color:var(--muted);font-size:15px}
   if (typeof skillState.apply !== "boolean") skillState.apply = true;
   if (typeof skillState.jobType !== "string") skillState.jobType = null;
   if (typeof skillState.exSkill !== "string") skillState.exSkill = null;
+  if (!Array.isArray(skillState.softCustom)) skillState.softCustom = [];
 
   function hardList() {
     const list = [];
@@ -1792,16 +1806,22 @@ details.mod.bei-mod p{margin:0 18px 12px;color:var(--muted);font-size:15px}
     $("#hardChips").innerHTML = skillState.fields.length
       ? list.map(n => chipBtn("hard", n, skillState.hard.includes(n))).join("")
       : '<p class="note">先選擇你的領域，這裡會列出對應的硬實力。</p>';
-    const sl = softList();
-    $("#softChips").innerHTML = sl.map(n => chipBtn("soft", n, skillState.soft.includes(n))).join("");
-    $("#softNote").innerHTML = softNoteHtml();
+    const hasField = skillState.fields.length > 0;
+    const sl = hasField ? softList() : [];
+    const custom = hasField ? skillState.softCustom : [];
+    $("#softChips").innerHTML = hasField
+      ? sl.map(n => chipBtn("soft", n, skillState.soft.includes(n))).join("") +
+        custom.map(n => '<button type="button" class="chip-btn custom" data-group="softc" data-name="' + esc(n) + '" aria-pressed="true" aria-label="' + esc(n) + '（自行新增，點一下移除）">' + esc(n) + "</button>").join("")
+      : '<p class="note">先選擇你的領域，這裡會列出該產業最被重視的軟實力。</p>';
+    $("#softAdd").hidden = !hasField;
+    $("#softNote").innerHTML = hasField ? softNoteHtml() : "";
 
     const h = skillState.hard.filter(x => list.includes(x)).length;
-    const s = skillState.soft.filter(x => sl.includes(x)).length;
+    const s = skillState.soft.filter(x => sl.includes(x)).length + custom.length;
     $("#hardCount").textContent = h;
     $("#softCount").textContent = s;
     $("#hardBar").style.width = list.length ? Math.round(h / list.length * 100) + "%" : "0%";
-    $("#softBar").style.width = Math.round(s / sl.length * 100) + "%";
+    $("#softBar").style.width = (sl.length + custom.length) ? Math.round(s / (sl.length + custom.length) * 100) + "%" : "0%";
 
     let msg;
     if (!skillState.fields.length) msg = "先選擇你的領域。一個人可以同時屬於多個領域，例如平面設計加上影音設計。";
@@ -1811,20 +1831,20 @@ details.mod.bei-mod p{margin:0 18px 12px;color:var(--muted);font-size:15px}
     else if (s === 0) msg = "硬實力有一定基礎，但軟實力還是空的。它決定你能不能留下來、走得遠，試著找一次具體的合作經驗。";
     else if (s <= 2) msg = "硬實力有基礎了，軟實力再多想一兩項，每一項都準備一個具體事例。";
     else msg = "平衡不錯。每一項勾選的能力，都要準備一個 STAR 例子，面試時能說出來。";
-    const all = [...skillState.hard.filter(x => list.includes(x)), ...skillState.soft.filter(x => sl.includes(x))];
+    const all = [...skillState.hard.filter(x => list.includes(x)), ...skillState.soft.filter(x => sl.includes(x)), ...custom];
     const fieldLine = skillState.fields.length ? "<p><strong>你的領域：</strong>" + skillState.fields.map(esc).join("、") + "</p>" : "";
     const tail = all.length ? '<p style="margin-top:8px"><strong>面試官可能會追問：</strong>' + all.map(esc).join("、") + "</p>" : "";
     const pf = skillState.primary;
     const missing = (pf && fieldHard[pf]) ? fieldHard[pf].filter(x => !skillState.hard.includes(x)) : [];
     const gapLine = (h > 0 && missing.length) ? '<p style="margin-top:8px"><strong>尚未具備的硬實力：</strong>' + missing.map(esc).join("、") + "。延伸課程的「硬實力檢測」已依你勾選的內容預選，可以看建議加強的模組。</p>" : "";
     const softTip = '<p style="margin-top:8px">每一項軟實力都要準備一個真實事例。前職與新領域沒有關聯、寫不出硬實力時，可以到「自傳與工作經歷 → 工作經歷怎麼寫」看軟實力的寫法。</p>';
-    $("#skillVerdict").innerHTML = fieldLine + "<p>" + esc(msg) + "</p>" + tail + gapLine + (skillState.soft.length ? softTip : "");
+    $("#skillVerdict").innerHTML = fieldLine + "<p>" + esc(msg) + "</p>" + tail + gapLine + (s ? softTip : "");
   }
   document.getElementById("skills").addEventListener("click", e => {
     const b = e.target.closest("button[data-group]");
     if (!b) return;
     const g = b.dataset.group, name = b.dataset.name;
-    const arr = g === "field" ? skillState.fields : (g === "hard" ? skillState.hard : skillState.soft);
+    const arr = g === "field" ? skillState.fields : (g === "hard" ? skillState.hard : (g === "softc" ? skillState.softCustom : skillState.soft));
     const i = arr.indexOf(name);
     if (i >= 0) {
       arr.splice(i, 1);
@@ -1837,8 +1857,24 @@ details.mod.bei-mod p{margin:0 18px 12px;color:var(--muted);font-size:15px}
     renderSkills();
     if (g === "field") applyPrimaryField(); else refreshAll();
     markCourses();
-    setFlag("skills", skillState.fields.length > 0 && skillState.hard.length + skillState.soft.length > 0);
+    setFlag("skills", skillState.fields.length > 0 && skillState.hard.length + skillState.soft.length + skillState.softCustom.length > 0);
   });
+  function addCustomSoft() {
+    const inp = $("#softCustomInput"), msg = $("#softCustomMsg");
+    const v = inp.value.replace(/\s+/g, " ").trim().slice(0, 20);
+    if (!v) { msg.textContent = "請先輸入一項軟實力。"; return; }
+    if (skillState.softCustom.includes(v) || softList().includes(v)) { msg.textContent = "「" + v + "」已經在清單裡了。"; return; }
+    if (skillState.softCustom.length >= 5) { msg.textContent = "自行新增最多 5 項，先挑你最有把握的。"; return; }
+    skillState.softCustom.push(v);
+    save("rhc-skills", skillState);
+    inp.value = "";
+    msg.textContent = "已加入「" + v + "」。記得準備一個真實事例，面試官可能會追問。";
+    renderSkills();
+    refreshAll();
+    setFlag("skills", skillState.fields.length > 0);
+  }
+  $("#softCustomAdd").addEventListener("click", addCustomSoft);
+  $("#softCustomInput").addEventListener("keydown", e => { if (e.key === "Enter") { e.preventDefault(); addCustomSoft(); } });
   renderSkills();
 
   /* ---------- 03 Photo quiz ---------- */
@@ -2232,12 +2268,50 @@ details.mod.bei-mod p{margin:0 18px 12px;color:var(--muted);font-size:15px}
     }
     updateStar(false);
   }
+  /* ---------- 文字潤飾：只用網頁內的規則，不連網、不用 AI ---------- */
+  function polishOn() { return load("rhc-polish", true) !== false; }
+  function tidyText(t) {
+    let x = String(t || "").replace(/[ \t\u3000]+/g, " ").trim();
+    if (!x) return "";
+    x = x.replace(/(?<!\d),|,(?!\d)/g, "，").replace(/;/g, "；").replace(/\?/g, "？").replace(/!/g, "！")
+      .replace(/(?<=[\u4e00-\u9fff」）])\s*:\s*/g, "：").replace(/(?<=[\u4e00-\u9fff」）])\.(?=\s|$|[\u4e00-\u9fff])/g, "。")
+      .replace(/\(([^()]*[\u4e00-\u9fff][^()]*)\)/g, "（$1）");
+    x = x.replace(/其實|基本上|老實說/g, "").replace(/(^|[，。；])\s*然後/g, "$1接著").replace(/非常非常|超級/g, "非常").replace(/幫忙/g, "協助");
+    x = x.replace(/\s*([，。、；：！？（）「」])\s*/g, "$1").replace(/([，。、；：！？])\1+/g, "$1").replace(/[，、；]+。/g, "。").replace(/^[，。、；：]+/, "");
+    x = x.replace(/([\u4e00-\u9fff])([A-Za-z0-9])/g, "$1 $2").replace(/([A-Za-z0-9%+])([\u4e00-\u9fff])/g, "$1 $2");
+    return x.trim();
+  }
+  const endSentence = x => { x = x.replace(/[，、；：,.。\s]+$/, ""); return x ? (/[！？」]$/.test(x) ? x : x + "。") : ""; };
+  const stripLead = (x, re) => { let prev; do { prev = x; x = x.replace(re, ""); } while (x !== prev); return x; };
+  function polishStar(v) {
+    const S = endSentence(tidyText(v.S));
+    let T = stripLead(tidyText(v.T), /^(當時|那時|但是|但|而且|而|可是|不過)[，\s]*/);
+    if (T) T = /^(挑戰|問題|困難|難題|目標|任務)/.test(T) ? T : (/^(需要|必須|要|希望|負責)/.test(T) ? "我的任務是" + T.replace(/^負責/, "") : "當時的挑戰是" + T);
+    let A = stripLead(tidyText(v.A), /^(為此|因此|所以|於是|接著|我們|我)[，\s]*/);
+    if (A) A = "為此，我" + A;
+    let R = stripLead(tidyText(v.R), /^(最後|最終|結果是|結果|後來|成果是|成果|成效是|成效)[，：:\s]*/);
+    if (R) R = "最終，" + R;
+    return [S, endSentence(T), endSentence(A), endSentence(R)].filter(Boolean).join("");
+  }
+  const polishLines = arr => arr.map(x => endSentence(tidyText(x))).filter(Boolean).join("");
+  const polishParagraph = p => p.split(/\n+/).map(l => tidyText(l)).filter(Boolean).map(l => /[。！？」）]$/.test(l) ? l : endSentence(l)).join("\n");
+  function syncPolish() { $$(".polish-toggle").forEach(c => { c.checked = polishOn(); }); }
+  document.addEventListener("change", e => {
+    const c = e.target.closest(".polish-toggle");
+    if (!c) return;
+    save("rhc-polish", c.checked);
+    syncPolish();
+    updateStar(false);
+    document.dispatchEvent(new CustomEvent("rhc-polish"));
+  });
+  syncPolish();
+
   function updateStar(persist) {
     const v = { S: starInputs.S.value, T: starInputs.T.value, A: starInputs.A.value, R: starInputs.R.value };
     if (persist && currentField) { starState[starCurKey()] = v; save("rhc-star2", starState); }
     const filled = Object.values(v).filter(x => x.trim()).length;
     const parts = [v.S, v.T, v.A, v.R].map(x => x.trim().replace(/[。.!！]+$/, "")).filter(Boolean);
-    $("#starPreview").textContent = parts.length ? parts.join("。") + "。" : "（填寫上方四個欄位，這裡會組合成一段履歷文字。）";
+    $("#starPreview").textContent = parts.length ? (polishOn() ? polishStar(v) : parts.join("。") + "。") : "（填寫上方四個欄位，這裡會組合成一段履歷文字。）";
     const hasNumber = /\d|%|％|倍|萬|件|天|週|個月|小時|分鐘|元|人|成/.test(v.R);
     const actionSpecific = v.A.trim().length >= 20;
     const items = [
@@ -3202,10 +3276,11 @@ details.mod.bei-mod p{margin:0 18px 12px;color:var(--muted);font-size:15px}
   }
   labParts.forEach(([k]) => labEls[k].addEventListener("input", updateLab));
   $("#labCopy").addEventListener("click", async () => {
-    const text = labParts.map(([k]) => labEls[k].value.trim()).filter(Boolean).join("\n\n");
+    const on = polishOn();
+    const text = labParts.map(([k]) => on ? polishParagraph(labEls[k].value) : labEls[k].value.trim()).filter(Boolean).join("\n\n");
     try {
       await navigator.clipboard.writeText(text);
-      $("#labMsg").textContent = text ? "已複製" : "目前沒有內容可以複製";
+      $("#labMsg").textContent = text ? (on ? "已複製潤飾後的全文" : "已複製") : "目前沒有內容可以複製";
     } catch (e) {
       $("#labMsg").textContent = "無法自動複製，請手動選取文字";
     }
@@ -5220,7 +5295,7 @@ details.mod.bei-mod p{margin:0 18px 12px;color:var(--muted);font-size:15px}
     const ex = g3Examples();
     ["a", "b", "c"].forEach((k, i) => { g3Els[k].placeholder = "例：" + ex[i]; });
     const v = ["a", "b", "c"].map(k => g3Els[k].value.trim());
-    const text = v.filter(Boolean).join("");
+    const text = polishOn() ? polishLines(v) : v.filter(Boolean).join("");
     const n = text.replace(/\s/g, "").length;
     const tips = [];
     if (v[1] && !/\d/.test(v[1])) tips.push("第 2 句還沒有數字，從六大數據維度挑一個最能代表你的成果。");
@@ -5241,7 +5316,8 @@ details.mod.bei-mod p{margin:0 18px 12px;color:var(--muted);font-size:15px}
     save("rhc-summary", g3State);
     renderG3();
   });
-  $("#g3Copy").addEventListener("click", () => copyText(["a", "b", "c"].map(k => g3Els[k].value.trim()).filter(Boolean).join(""), $("#g3Msg")));
+  $("#g3Copy").addEventListener("click", () => { const v = ["a", "b", "c"].map(k => g3Els[k].value.trim()); copyText(polishOn() ? polishLines(v) : v.filter(Boolean).join(""), $("#g3Msg")); });
+  document.addEventListener("rhc-polish", renderG3);
 
   /* 自傳草稿檢查：加入弱動詞與六大維度提示 */
   const dimRe = [/萬|元|營收|成本|預算|業績/, /小時|分鐘|\d+\s*天|\d+\s*週|個月|縮短|提前/, /\d+(\.\d+)?\s*(%|％|倍)|\d成/,
@@ -5367,7 +5443,7 @@ details.mod.bei-mod p{margin:0 18px 12px;color:var(--muted);font-size:15px}
     if (!applyOn()) { el.textContent = "已關閉：後面會顯示完整的範例與題目，不會依你的勾選調整。"; return; }
     const parts = [];
     skillState.fields.forEach(f => { const i = selInfo(f); if (i.active) parts.push((fieldLabelMap[f] || f) + "：" + i.selOpts.join("、")); });
-    const soft = softSelected();
+    const soft = softSelected().concat(skillState.fields.length ? skillState.softCustom : []);
     if (soft.length) parts.push("軟實力：" + soft.join("、"));
     el.textContent = parts.length
       ? "後面的 STAR 練習、工作經歷、模擬面試與自傳小測驗，會只談你勾選的項目。 " + parts.join("；") + "。"
