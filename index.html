@@ -836,7 +836,7 @@ details.mod.bei-mod p{margin:0 18px 12px;color:var(--muted);font-size:15px}
           <dt>STAR 範例</dt><dd><span data-count="7">7</span> 組</dd>
           <dt>模擬面試題</dt><dd><span data-count="50">50</span> 題</dd>
           <dt>寫完前檢查</dt><dd><span data-count="10">10</span> 項</dd>
-          <dt>延伸課程</dt><dd><span data-count="11">11</span> 類課程</dd>
+          <dt>延伸課程</dt><dd><span data-count="12">12</span> 類課程</dd>
         </dl>
         <div class="start">
           <small>先選你的身份</small>
@@ -1277,7 +1277,7 @@ details.mod.bei-mod p{margin:0 18px 12px;color:var(--muted);font-size:15px}
   <div class="wrap">
     <div class="sec-head"><span class="step-chip">延伸</span><span class="hand-label">依領域選課程</span></div>
     <h2 id="courses-title">把經歷寫進 STAR，最好的方法是真的做一個作品</h2>
-    <p class="sub">目前整理 11 類課程。點開卡片可以看課程簡介、硬實力檢測、課程大綱、可考證照、薪資與上課方式。</p>
+    <p class="sub">目前整理 12 類課程。點開卡片可以看課程簡介、硬實力檢測、課程大綱、可考證照、薪資與上課方式。</p>
     <div id="courseRec" hidden></div>
     <div class="tabs" id="courseFilter" role="group" aria-label="課程類別" style="margin-bottom:18px"></div>
     <div class="course-grid" id="courseGrid"></div>
@@ -4463,7 +4463,7 @@ details.mod.bei-mod p{margin:0 18px 12px;color:var(--muted);font-size:15px}
     const order = ["Python程式資料分析", "Python爬蟲與視覺化設計", "Python機器學習與視覺化辨識", "Python Django Web網頁開發", "Python深度學習"];
     py.modules = py.modules.filter(m => agentNames.indexOf(m.name) < 0).sort((a, b) => order.indexOf(a.name) - order.indexOf(b.name));
     courses[AGENT] = {
-      color: "#7C3AED", title: AGENT, en: "AI Agent Application Development", field: "AI Agent 應用開發（跨領域延伸）",
+      color: "#7C3AED", title: AGENT, en: "AI Agent Application Development", field: "程式與 AI｜跨領域延伸",
       group: "程式與 AI", fieldKeys: [], starTab: "自訂", hidden: true,
       tagline: "讓 LLM 從對話工具，升級為驅動流程的核心引擎",
       intro: "從 LLM 基礎與應用層出發，學習 RAG 檢索增強、MCP 資料互通與 Agent 任務編排，再進入模型微調、AI 解決方案規劃與專案管理，最後產出 AI 智慧問答系統與 AI Agent 專案。",
@@ -4496,6 +4496,7 @@ details.mod.bei-mod p{margin:0 18px 12px;color:var(--muted);font-size:15px}
     courses[k].related = (courses[k].related || []).filter(r => r[0] !== AGENT).concat([[AGENT, agentReason[k] || "把 AI Agent 導入你的領域，擴充技能組合"]]);
   });
   courses[AGENT].format = ["真人直播、實體授課、錄播", "AI 教練加速學習，課後收穫精準訓練計畫", "課後簽退 48 小時專人聯繫，為您排除課程問題"];
+  courseOrder.splice(courseOrder.indexOf("程式設計") + 1, 0, AGENT);
   /* 依《AI 人工智慧工程師》DM 對齊程式設計課程 */
   Object.assign(courses["程式設計"], {
     title: "AI 人工智慧工程師", en: "Artificial Intelligence Engineer", field: "程式設計｜Python軟體工程師",
