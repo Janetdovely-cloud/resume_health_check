@@ -836,7 +836,7 @@ details.mod.bei-mod p{margin:0 18px 12px;color:var(--muted);font-size:15px}
           <dt>STAR 範例</dt><dd><span data-count="7">7</span> 組</dd>
           <dt>模擬面試題</dt><dd><span data-count="50">50</span> 題</dd>
           <dt>寫完前檢查</dt><dd><span data-count="10">10</span> 項</dd>
-          <dt>延伸課程</dt><dd><span data-count="11">11</span> 類課程</dd>
+          <dt>延伸課程</dt><dd><span data-count="12">12</span> 類課程</dd>
         </dl>
         <div class="start">
           <small>先選你的身份</small>
@@ -1277,7 +1277,7 @@ details.mod.bei-mod p{margin:0 18px 12px;color:var(--muted);font-size:15px}
   <div class="wrap">
     <div class="sec-head"><span class="step-chip">延伸</span><span class="hand-label">依領域選課程</span></div>
     <h2 id="courses-title">把經歷寫進 STAR，最好的方法是真的做一個作品</h2>
-    <p class="sub">目前整理 11 類課程。點開卡片可以看課程簡介、硬實力檢測、課程大綱、可考證照、薪資與上課方式。</p>
+    <p class="sub">目前整理 12 類課程。點開卡片可以看課程簡介、硬實力檢測、課程大綱、可考證照、薪資與上課方式。</p>
     <div id="courseRec" hidden></div>
     <div class="tabs" id="courseFilter" role="group" aria-label="課程類別" style="margin-bottom:18px"></div>
     <div class="course-grid" id="courseGrid"></div>
@@ -4454,7 +4454,7 @@ details.mod.bei-mod p{margin:0 18px 12px;color:var(--muted);font-size:15px}
   courses["資訊安全"].formatExtra = ["完整學習地圖與證照規劃，初階到高階全面覆蓋", "認證講師與產業實務", "就業輔導、補課保障、免費重修一年", "職缺媒合與選證輔導"];
   courses["雲端系統"].formatExtra = ["三大保障：高薪程式職缺（保障均薪 5–7 萬）、程式人才補助（補助學費 50%，再享萬元研修金）、結訓保證面試", "補助方案依科目各有不同，以分校人員說明為準"];
   courses["iPAS 證照班"].formatExtra = ["每科輔考陪跑與考題邏輯拆解", "兩年內可免費重修", "結訓履歷健檢、職缺媒合與保證面試"];
-  /* Python軟體工程師 與 AI Agent 應用開發 */
+  /* AI 人工智慧工程師（Python軟體工程師）與 AI Agent 應用開發 */
   const AGENT = "AI Agent 應用開發";
   (function splitAgent() {
     const py = courses["程式設計"];
@@ -4463,7 +4463,7 @@ details.mod.bei-mod p{margin:0 18px 12px;color:var(--muted);font-size:15px}
     const order = ["Python程式資料分析", "Python爬蟲與視覺化設計", "Python機器學習與視覺化辨識", "Python Django Web網頁開發", "Python深度學習"];
     py.modules = py.modules.filter(m => agentNames.indexOf(m.name) < 0).sort((a, b) => order.indexOf(a.name) - order.indexOf(b.name));
     courses[AGENT] = {
-      color: "#7C3AED", title: AGENT, en: "AI Agent Application Development", field: "AI Agent 應用開發（跨領域延伸）",
+      color: "#7C3AED", title: AGENT, en: "AI Agent Application Development", field: "程式與 AI｜跨領域延伸",
       group: "程式與 AI", fieldKeys: [], starTab: "自訂", hidden: true,
       tagline: "讓 LLM 從對話工具，升級為驅動流程的核心引擎",
       intro: "從 LLM 基礎與應用層出發，學習 RAG 檢索增強、MCP 資料互通與 Agent 任務編排，再進入模型微調、AI 解決方案規劃與專案管理，最後產出 AI 智慧問答系統與 AI Agent 專案。",
@@ -4486,7 +4486,7 @@ details.mod.bei-mod p{margin:0 18px 12px;color:var(--muted);font-size:15px}
     "工業設計": "用 AI Agent 輔助發想、資料整理與設計文件",
     "動漫設計": "用 AI Agent 輔助角色企劃與創作流程",
     "遊戲美術": "用 AI Agent 輔助美術資源與製作流程",
-    "程式設計": "補強 LLM、RAG 與 AI Agent 開發，把 Python 能力延伸到 AI 應用",
+    "程式設計": "課程延伸學習：AI Agent 應用開發、AI 解決方案規劃與專案管理、Fine-Tuning 與模型優化實務",
     "Java 軟體": "把 LLM 與 Agent 能力導入企業系統",
     "資訊安全": "了解 AI Agent 的應用與風險，補強 AI 時代的資安觀念",
     "雲端系統": "把 AI Agent 與模型服務部署到雲端環境",
@@ -4496,6 +4496,55 @@ details.mod.bei-mod p{margin:0 18px 12px;color:var(--muted);font-size:15px}
     courses[k].related = (courses[k].related || []).filter(r => r[0] !== AGENT).concat([[AGENT, agentReason[k] || "把 AI Agent 導入你的領域，擴充技能組合"]]);
   });
   courses[AGENT].format = ["真人直播、實體授課、錄播", "AI 教練加速學習，課後收穫精準訓練計畫", "課後簽退 48 小時專人聯繫，為您排除課程問題"];
+  courseOrder.splice(courseOrder.indexOf("程式設計") + 1, 0, AGENT);
+  /* 依《AI 人工智慧工程師》DM 對齊程式設計課程 */
+  Object.assign(courses["程式設計"], {
+    title: "AI 人工智慧工程師", en: "Artificial Intelligence Engineer", field: "程式設計｜Python軟體工程師",
+    tagline: "掌握 Python × AI 開發技術，打造善用 AI 的工程實力",
+    intro: "會用 AI 不夠，懂得與 AI 協作才是關鍵。課程以數位發展部《AI 產業人才認定指引》的「AI 工程師職能」為目標，從 Python 資料分析、爬蟲與視覺化打底，進階到視覺辨識、機器學習、深度學習與 Django Web 開發，再用 Vibe Coding 建立 AI 協作開發流程。",
+    highlights: [
+      "專業基底：Python 資料分析 × 爬蟲 × 視覺化，修正 AI 生成的錯誤、落地成可用的程式",
+      "專業進階：視覺辨識、機器學習、深度學習與 Django Web，整合成可展示的專案",
+      "高階玩家：Vibe Coding 開發全流程，從專案構想、PRD／Spec 到 Cursor 程式生成與 AI Debug",
+      "限時加碼：程式解決方案設計，培養 PM 與架構師思維"
+    ],
+    audience: ["想學習 Python、轉職成為 AI 或軟體工程師的人", "只會下指令用 AI，想補上程式邏輯與領域專業的人", "想朝 AI 資料分析／演算法，或 AI Agent 應用開發發展的人"],
+    outcomes: ["能用 Python 處理資料、撰寫爬蟲並做成視覺化儀表板", "能訓練視覺辨識與深度學習模型，並用 Django 部署成網頁應用", "能用 Cursor 等 AI 工具，依規格文件協作開發並除錯", "能規劃系統架構、資料串接與技術選型"],
+    projects: ["Python 商業資料分析報告", "自動化爬蟲資料擷取工具", "互動式數據視覺化儀表板", "AI 視覺辨識專案", "深度學習模型應用", "資料爬蟲與視覺化作品", "AI 輔助製作專案原型展示（Prototype）", "企業級解決方案提案簡報"],
+    tools: ["Python", "HTML5", "CSS3", "Selenium", "MATLAB", "OpenCV", "Django", "PyTorch", "Cursor"],
+    paths: [
+      { name: "AI 資料分析／演算法工程師", items: ["定位：以模型與數據分析為主，提供決策所需的判斷依據", "核心任務：建立模型、調整參數、解析資料，產出可用分析結果", "產出價值：分析與預測，協助企業掌握趨勢、提升決策品質", "適合：喜歡數據推論與模型思考、重視準確性與邏輯性的人"] },
+      { name: "AI Agent 應用開發工程師", items: ["定位：以 LLM 應用開發為主，打造可落地的 AI 功能", "核心任務：建構 LLM 知識庫與 AI Agent，完成可落地的應用功能", "產出價值：生成與自動化，協助企業加速流程、完成工作與作業效率", "適合：喜歡把技術轉為工具、重視實用性與整合能力的人"] }
+    ],
+    modules: [
+      { name: "職場必備：AI 熟練師（AI 通識課）", items: ["AI 通識：生成式 AI 能力認證、AI 人工智慧核心能力認證、AI 辦公室應用", "AI 工作應用：AI 廣告設計、AI 形象設計、網路行銷實作、AI 短影音創作", "AI 專業技能：AI 效率、行銷、職場、影音、遊戲開發、AI Vibe Coding 等應用"] },
+      { name: "Python程式資料分析", items: ["Python 基礎與 AI 協作：開發環境建置與程式執行、變數／判斷式／迴圈與函式、生活程式開發實戰", "資料處理與分析應用：多格式資料讀取、統計分析應用、資料分析報告實務", "資料庫與大數據整合：SQL 資料串接、自然語言查詢、大數據分析報告"] },
+      { name: "Python爬蟲程式與資料視覺化開發", items: ["網頁爬蟲核心技術：爬蟲流程與環境建置、HTML／JSON 資料解析、自動化爬蟲腳本設定", "動態網頁與自動化應用：動態資料擷取、登入驗證處理、跨領域即時比較工具", "資料清理與視覺化呈現：資料清理轉換、互動式圖表設計、商業分析儀表板"] },
+      { name: "Python視覺辨識與機器學習", items: ["影像處理與視覺基礎：影像色彩與通道處理、濾鏡／銳化與幾何變換、訓練影像預處理", "特徵擷取與模型訓練：分類模型訓練實作、迴歸分析與趨勢預測、數據分類器", "AI 辨識專案與分析應用：物體偵測與動態監控、人臉偵測與身分辨識、視覺辨識模型部署實戰"] },
+      { name: "Python深度學習與應用實務", items: ["深度學習模型建構：PyTorch 模型開發環境建置、神經網路訓練流程設計、訓練／驗證程式實務", "電腦視覺與生成式 AI：CNN 影像分類模型應用、YOLO 物件偵測專案實作、深度學習專案製作", "LLM 應用與 AI 系統部署：Transformer 語言模型應用、RAG 知識庫檢索整合實作、端到端的 AI 程式製作"] },
+      { name: "Python Django Web開發實務", items: ["網頁資料擷取工程：Scraper 架構與環境建置、HTML／JSON 資料解析應用、靜態網頁作品展示", "動態爬蟲與資料處理：Beautiful Soup 資料萃取、Selenium 動態網頁爬取、後端資料庫串接與設計", "視覺化分析與作品整合：Plotly／Bokeh 圖表設計、網絡圖與階層圖分析應用、企業級 Django 網站開發"] },
+      { name: "高階玩家：Vibe Coding 開發全流程", items: ["流程：專案構想 → Docs 文件建立 → PRD／Spec 規格產出 → Cursor 程式生成 → AI Debug 優化", "AI 協作開發基礎：Cursor 開發環境入門、Rules 與 MCP 流程整合、AI 模型與溝通技巧", "專案文件與規格設計：專案規劃與實作、Docs 管理、BMad 與 SpecKit 建立", "程式生成與專案實戰：Spec 技術應用、Docs 管理、AI Debug 與專案展示"] },
+      { name: "限時加碼：程式解決方案設計（領域軟實力）", items: ["課程目標：培養 PM 與架構師思維，統籌系統架構、技術選型與開發成本評估，從工程師邁向能主導專案的技術顧問", "架構思維，建立系統全貌：現代資訊系統架構、系統分層與 API-first、系統運作與服務解析", "資料整合，串接流程服務：資料收集與整理流程、資料處理與儲存應用、系統資料串接方式", "技術選型，完成 Python 方案：Python 生態系工具、AI／ML 與 GenAI 技術整合、部署 MLOps 與穩定性設計"] },
+      { name: "延伸學習：快速打造 AI 應用", items: ["AI Agent 應用開發：掌握 LLM 語言模型，打造自動化 AI 助理", "AI 解決方案規劃與專案管理：培養 AI 應用設計與專案管理能力", "Fine-Tuning 與模型優化實務：學習模型微調技術，提升 AI 回應精準度", "以上三門的完整大綱，請看「AI Agent 應用開發」課程"] }
+    ],
+    skills: [
+      ["能用 Python（pandas）清理資料並做分析與視覺化", "Python程式資料分析"],
+      ["能用 Python 擷取網頁資料並自動化蒐集", "Python爬蟲程式與資料視覺化開發"],
+      ["能建立機器學習與影像辨識模型並評估成效", "Python視覺辨識與機器學習"],
+      ["能用 Django 開發網頁後端與資料庫應用", "Python Django Web開發實務"],
+      ["能用 PyTorch 建立深度學習模型並做影像偵測應用", "Python深度學習與應用實務"],
+      ["能用 Cursor 依 PRD／Spec 協作生成程式並除錯", "高階玩家：Vibe Coding 開發全流程"],
+      ["能規劃系統架構、資料串接與技術選型", "限時加碼：程式解決方案設計（領域軟實力）"]
+    ],
+    roles: [["資料分析工程師", "NT$ 35K–60K／月"], ["Python 開發工程師", "NT$ 40K–65K／月"], ["後端工程師", "NT$ 40K–65K／月"], ["AI 軟體工程師", "NT$ 45K–80K／月"], ["機器學習工程師", "NT$ 50K–80K／月"], ["電腦視覺工程師", "NT$ 50K–85K／月"]],
+    gigs: [["資料自動化抓取", "NT$ 10K"], ["軟體自動化工程", "NT$ 30K"], ["購物平台開發", "NT$ 100K"], ["客製化爬蟲應用整合", "NT$ 100K"], ["軟體專案開發", "NT$ 150K"]],
+    gigNote: "接案金額為單一案件參考（參考來源：人力銀行與公開平台），實際依案件內容與規模而有所不同。",
+    market: "高產值：輝達在台供應鏈年支出上看 1,500 億美元，AI 產業鏈從晶片、算力延伸到應用開發。高職缺：台灣 AI 相關工作機會已突破 12.1 萬個，從科技研發延伸到多元產業。高薪資：人力銀行薪資情報顯示，AI 工程師月薪中位數最高可達 6.9 萬。",
+    cert: "相關認證：IT 資訊科技專家認證、TQC+ 專業證照，另依選修科目頒發數位證書；AI 熟練師另有 10 張產業證照加持（以官方公告為準）。"
+  });
+  courses["程式設計"].formatExtra = ["國家登錄 AI 人才培訓機構，課程依數發部《AI 產業人才認定指引》規劃", "程式 × AI 協作，獨家產學培訓，結訓保證面試", "聯成 AI 輔學系統：AI 複習工具重點快速掌握、AI 隨身教練陪伴學習、真人教練實戰指導", "5 大教學系統與 8 項求職服務，結合 JOB580 資源提供後續就業支持"];
+  courses["程式設計"].skillOpts = ["Python 資料分析", "Python 網路爬蟲與資料抓取", "機器學習與視覺化辨識", "Web 網頁後端開發（Django）", "深度學習"];
+  courses[AGENT].related = courses[AGENT].related.map(r => r[0] === "程式設計" ? ["程式設計", "回到 AI 人工智慧工程師，補強 Python 資料分析、視覺辨識與深度學習"] : r);
   const courseGroups = ["全部", "設計與影音", "室內與工業設計", "動漫與遊戲", "程式與 AI", "資安與雲端", "證照班"];
   const certCount = c => c.certs ? c.certs.groups.reduce((n, g) => n + (g[2] ? 0 : g[1].length), 0) : 0;
   const gapState = load("rhc-gap", {});
@@ -4522,11 +4571,11 @@ details.mod.bei-mod p{margin:0 18px 12px;color:var(--muted);font-size:15px}
   });
 
   const courseRecs = { "程式設計": [
-    { opt: "Python 資料分析", title: "Python程式資料分析", focus: "AI 輔助撰寫程式、資料清理、數據判讀", units: ["Python 入門認識", "Python 基礎語法", "Python 資料分析", "資料分析實務演練"], result: "完成一套資料分析實作專案" },
-    { opt: "Python 網路爬蟲與資料抓取", title: "Python爬蟲與視覺化設計", focus: "網頁資料擷取、自動化流程、視覺化呈現", units: ["建構 Scraper", "Beautiful Soup4 模組應用", "網頁資料處理", "爬蟲程式實戰", "認識資料視覺化", "製作視覺化網頁"], result: "全自動資料採集機器人與智慧訂位／搶票助理系統" },
-    { opt: "機器學習與視覺化辨識", title: "Python機器學習與視覺化辨識", focus: "影像前處理、模型訓練與效能評估", units: ["影像基礎處理（資料預處理、特徵擷取、視覺強化）", "模型訓練優化（模型開發、效能評估、參數優化）", "應用實作成果（場景應用、專案實作、成果展示）"], result: "最後一個單元為成果實作" },
-    { opt: "Web 網頁後端開發（Django）", title: "Python Django Web網頁開發", focus: "物件導向、資料庫與 MTV 架構", units: ["物件導向基礎（類別封裝、多型開發、多層繼承）", "資料庫實務應用（環境建置、資料表管理、關聯維護）", "Web 框架與部署（MTV 模式架構、版本控制、雲端部署實務）"], result: "最後一個單元為成果實作" },
-    { opt: "深度學習", title: "Python深度學習", focus: "神經網路、影像偵測與強化學習", units: ["環境與基礎建構（開發環境配置、神經網路架構、運算邏輯解析）", "影像辨識與應用（YOLO 偵測框架、GAN 網路實作、對抗生成應用）", "強化學習實戰（環境模擬建模、Q 學習策略、自動駕駛實務）"], result: "最後一個單元為成果實作" }
+    { opt: "Python 資料分析", title: "Python程式資料分析", focus: "AI 協作撰寫程式、資料清理、數據判讀", units: ["Python 基礎與 AI 協作", "資料處理與分析應用", "資料庫與大數據整合"], result: "Python 商業資料分析報告" },
+    { opt: "Python 網路爬蟲與資料抓取", title: "Python爬蟲程式與資料視覺化開發", focus: "網頁資料擷取、自動化流程、視覺化呈現", units: ["網頁爬蟲核心技術", "動態網頁與自動化應用", "資料清理與視覺化呈現"], result: "自動化爬蟲資料擷取工具與互動式數據視覺化儀表板" },
+    { opt: "機器學習與視覺化辨識", title: "Python視覺辨識與機器學習", focus: "影像處理、模型訓練與辨識部署", units: ["影像處理與視覺基礎", "特徵擷取與模型訓練", "AI 辨識專案與分析應用"], result: "AI 視覺辨識專案" },
+    { opt: "Web 網頁後端開發（Django）", title: "Python Django Web開發實務", focus: "網頁資料擷取、後端資料庫與 Django 網站", units: ["網頁資料擷取工程", "動態爬蟲與資料處理", "視覺化分析與作品整合"], result: "企業級 Django 網站開發" },
+    { opt: "深度學習", title: "Python深度學習與應用實務", focus: "PyTorch 模型、電腦視覺與 LLM 應用", units: ["深度學習模型建構（PyTorch）", "電腦視覺與生成式 AI（CNN、YOLO）", "LLM 應用與 AI 系統部署（Transformer、RAG）"], result: "深度學習模型應用" }
   ] };
   function renderCourseRec() {
     const box = $("#courseRec");
@@ -4547,7 +4596,7 @@ details.mod.bei-mod p{margin:0 18px 12px;color:var(--muted);font-size:15px}
         "<p><strong>學習重點：</strong>" + esc(r.focus) + "</p>" +
         "<p><strong>單元：</strong>" + r.units.map(esc).join("；") + "</p>" +
         "<p><strong>成果：</strong>" + esc(r.result) + "</p>" +
-        '<button type="button" class="btn-sm ghost" data-open="程式設計">到 Python軟體工程師課程看大綱</button></article>').join("") + "</div>";
+        '<button type="button" class="btn-sm ghost" data-open="程式設計">到 AI 人工智慧工程師課程看大綱</button></article>').join("") + "</div>";
   }
   $("#courseRec").addEventListener("click", e => {
     const b = e.target.closest("button[data-open]");
@@ -4579,6 +4628,7 @@ details.mod.bei-mod p{margin:0 18px 12px;color:var(--muted);font-size:15px}
     if (c.audience) h += "<h3>適合對象</h3>" + ul(c.audience);
     if (c.outcomes) h += "<h3>學完你可以做到</h3>" + ul(c.outcomes);
     if (c.projects && c.projects.length) h += "<h3>結訓作品與實作</h3>" + ul(c.projects);
+    if (c.paths && c.paths.length) h += "<h3>AI 技術發展路徑：你更傾向哪一種？</h3>" + c.paths.map(p => '<div class="cert-group"><h4>' + esc(p.name) + "</h4>" + ul(p.items) + "</div>").join("");
     if (c.tools && c.tools.length) h += "<h3>授課使用軟體／工具</h3>" + ul(c.tools, "tool-list");
     return h + '<p class="note">實際內容以課程公告為準。</p>';
   }
@@ -4655,7 +4705,8 @@ details.mod.bei-mod p{margin:0 18px 12px;color:var(--muted);font-size:15px}
   function jobsPanel(c) {
     return '<table class="plain"><thead><tr><th>職稱</th><th>薪資參考</th></tr></thead><tbody>' +
       c.roles.map(r => "<tr><td>" + esc(r[0]) + '</td><td class="tc">' + esc(r[1]) + "</td></tr>").join("") +
-      '</tbody></table><p class="note">' + esc(c.roleNote) + "</p>" + (c.market ? '<div class="cert-box"><p>' + esc(c.market) + "</p></div>" : "");
+      '</tbody></table><p class="note">' + esc(c.roleNote) + "</p>" +
+      (c.gigs && c.gigs.length ? '<h3>接案行情</h3><table class="plain"><thead><tr><th>接案類型</th><th>單案參考</th></tr></thead><tbody>' + c.gigs.map(r => "<tr><td>" + esc(r[0]) + '</td><td class="tc">' + esc(r[1]) + "</td></tr>").join("") + '</tbody></table><p class="note">' + esc(c.gigNote || "") + "</p>" : "") + (c.market ? '<div class="cert-box"><p>' + esc(c.market) + "</p></div>" : "");
   }
   function formatPanel(c) {
     return "<h3>上課方式與服務</h3>" + ul(c.format) +
