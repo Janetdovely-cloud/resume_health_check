@@ -822,6 +822,34 @@ input[type=checkbox]{width:20px;height:20px;flex:none}
   .course-grid .course-card{scroll-snap-align:start}
   .swipe-hint{display:block}
 }
+/* 投遞前到面試後（v5） */
+.cl-f{display:grid;gap:4px;font-weight:700;font-size:14px}
+.cl-f.full{grid-column:1/-1}
+.pw-grid.guide{border:0;box-shadow:none;background:transparent;margin:0}
+.tl-group{margin:0 0 10px}
+.tl-group h5{margin:0 0 4px;font-size:15px}
+.tl-group ul{margin:0;padding-left:20px}
+.tl-group li{margin:2px 0}
+.tl-group.ok h5{color:var(--success)}
+.tl-group.warn h5{color:var(--danger)}
+.q-timer{display:flex;flex-wrap:wrap;align-items:center;gap:10px}
+.qt-time{font-family:var(--mono);font-weight:800;font-size:20px;min-width:64px}
+.qt-time.over{color:var(--danger)}
+.qt-hint{font-size:13px;color:var(--muted)}
+.trk-wrap{overflow-x:auto}
+.trk{width:100%;border-collapse:collapse;min-width:720px}
+.trk th{font-size:13px;text-align:left;color:var(--muted);padding:6px;border-bottom:2px solid var(--rule)}
+.trk td{padding:6px;border-bottom:1px solid var(--rule);vertical-align:top}
+.trk input,.trk select{font:inherit;font-size:14px;width:100%;border:1px solid var(--rule);border-radius:6px;padding:8px;background:var(--paper);color:var(--ink);min-height:40px}
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+@media (max-width:600px){
+  .trk{min-width:0}
+  .trk thead{display:none}
+  .trk,.trk tbody,.trk tr,.trk td{display:block;width:100%}
+  .trk tr{border:1px solid var(--rule);border-radius:10px;padding:8px;margin:0 0 10px;background:var(--sheet)}
+  .trk td{border:0;padding:4px 0}
+  .trk td[data-l]::before{content:attr(data-l);display:block;font-size:12px;font-weight:800;color:var(--muted)}
+}
 </style>
 </head>
 <body>
@@ -839,6 +867,7 @@ input[type=checkbox]{width:20px;height:20px;flex:none}
     <a class="link" href="#portfolio">作品集健診</a>
     <a class="link" href="#check">寫完前檢查</a>
     <a class="link" href="#mock">模擬面試</a>
+    <a class="link" href="#after">面試後</a>
     <a class="link" href="#courses">延伸課程</a>
   </div>
   <div class="progress" aria-hidden="true"><i id="prog"></i></div>
@@ -870,7 +899,7 @@ input[type=checkbox]{width:20px;height:20px;flex:none}
 
     <div class="workspace">
       <div class="progress-card" aria-labelledby="progTitle">
-        <div class="pc-head"><span class="pc-title" id="progTitle">健診進度</span><span class="pc-count"><span id="progCount">0</span> / 10</span></div>
+        <div class="pc-head"><span class="pc-title" id="progTitle">健診進度</span><span class="pc-count"><span id="progCount">0</span> / 11</span></div>
         <div class="pc-bar" aria-hidden="true"><span id="progBar"></span></div>
         <ol class="prog-list" id="progList"></ol>
         <div class="pc-foot">
@@ -887,7 +916,7 @@ input[type=checkbox]{width:20px;height:20px;flex:none}
       <aside class="spec">
         <h2>這份健診包含</h2>
         <dl>
-          <dt>診斷模組</dt><dd><span data-count="10">10</span> 個</dd>
+          <dt>診斷模組</dt><dd><span data-count="11">11</span> 個</dd>
           <dt>STAR 範例</dt><dd><span data-count="7">7</span> 組</dd>
           <dt>模擬面試題</dt><dd><span data-count="50">50</span> 題</dd>
           <dt>寫完前檢查</dt><dd><span data-count="10">10</span> 項</dd>
@@ -1040,6 +1069,28 @@ input[type=checkbox]{width:20px;height:20px;flex:none}
     <div id="jdGroups"></div>
     <div class="score-box" id="jdScore" aria-live="polite"></div>
     <div class="row" style="margin-top:12px"><button class="btn-sm ghost" id="jdReset" type="button">清除本領域勾選</button></div>
+    <div class="guide pf-guide" id="applyKit">
+      <h3 style="margin:0">投遞前：這份職缺要改什麼＋求職信</h3>
+      <p class="note" style="margin:4px 0 12px">用上面貼的 JD 和勾選結果，整理出這份履歷要改的地方，再組成一封求職信（104「應徵信」欄位可用）。</p>
+      <h4 style="margin:12px 0 6px">客製化建議</h4>
+      <div id="tailorOut" aria-live="polite"></div>
+      <h4 style="margin:20px 0 6px">求職信產生器</h4>
+      <div class="pw-grid">
+        <label class="cl-f">你的姓名<input type="text" id="clName" maxlength="20" placeholder="例：王小明"></label>
+        <label class="cl-f">公司名稱<input type="text" id="clCompany" maxlength="40" placeholder="例：○○設計股份有限公司"></label>
+        <label class="cl-f">應徵職缺<input type="text" id="clJob" maxlength="40" placeholder="例：平面設計師"></label>
+        <label class="cl-f">最想強調的技能（自動帶入 JD 有提到、你也勾選的關鍵字，可修改）<input type="text" id="clSkills" maxlength="80"></label>
+        <label class="cl-f full">一件最能證明能力的成果（一句話，最好有數字）<textarea id="clWin" rows="2" placeholder="例：改版咖啡店品牌後，一個月內來客數增加約 15%"></textarea></label>
+        <label class="cl-f full">為什麼想加入這家公司（查過官網或產品後寫一句）<textarea id="clWhy" rows="2" placeholder="例：欣賞貴公司為在地品牌做的系列包裝，風格一致又有故事"></textarea></label>
+      </div>
+      <div class="guide-out" id="clOut" style="margin-top:12px" aria-live="polite"></div>
+      <p class="note" id="clLen" style="margin:6px 0 0"></p>
+      <div class="row" style="margin-top:12px">
+        <button type="button" class="btn-sm" id="clCopy">複製求職信</button>
+        <button type="button" class="btn-sm ghost" id="clDoc">下載 Word</button>
+        <span id="clMsg" role="status" class="note" style="margin:0"></span>
+      </div>
+    </div>
 
     <details class="fold" open>
     <summary><span class="warn-icon" aria-hidden="true">!</span><h3>勞基法防雷與避坑指南</h3></summary>
@@ -1353,6 +1404,7 @@ input[type=checkbox]{width:20px;height:20px;flex:none}
     <div class="tabs" role="tablist" id="mockTabs" aria-label="面試領域"></div>
     <div class="mock-tools">
       <button type="button" class="btn-sm" id="mockRandom">隨機抽一題</button>
+      <label class="note" style="margin:0;display:inline-flex;gap:6px;align-items:center">作答計時<select id="mockLimit" style="font:inherit;min-height:40px;border-radius:6px;border:1px solid var(--rule);background:var(--paper);color:var(--ink);padding:0 8px"><option value="60">1 分鐘</option><option value="90" selected>1.5 分鐘</option><option value="120">2 分鐘</option></select></label>
       <span class="mock-count" id="mockCount" aria-live="polite"></span>
       <button type="button" class="btn-sm ghost" id="mockReset">清除本領域紀錄</button>
     </div>
@@ -1372,7 +1424,63 @@ input[type=checkbox]{width:20px;height:20px;flex:none}
       </div>
     </div>
     </details>
+    <details class="fold" open>
+    <summary><h3>面試前一天檢查清單</h3></summary>
+      <p class="note" style="margin:0 0 10px">前一晚逐項勾完，隔天只要專心表現。勾選紀錄只保存在這台裝置。</p>
+      <div class="guide-bar"><div class="bar" aria-hidden="true"><span id="prepBar"></span></div><span class="num" id="prepNum"></span></div>
+      <ul class="check-list" id="prepList"></ul>
+      <div class="row"><button type="button" class="btn-sm ghost" id="prepReset">清除勾選，準備下一場</button></div>
+    </details>
     <p class="note">※ 面試問題會因公司與職缺而不同，以上是常見的問法與回答方向。不要背誦參考答案，面試官會追問細節，請以真實經驗作答。</p>
+  </div>
+</section>
+
+<!-- 11 面試後 -->
+<section class="sec" id="after" aria-labelledby="after-title">
+  <div class="wrap">
+    <div class="sec-head"><span class="step-chip">11</span><span class="hand-label">面試後</span></div>
+    <h2 id="after-title">面試結束，求職還沒結束</h2>
+    <p class="sub">24 小時內寄出感謝信、把每一家的進度記下來、拿到 offer 前先準備好薪資怎麼談。<mark class="hl">這一步做好，常常是兩位人選之間的差別</mark>。</p>
+
+    <details class="fold" open>
+    <summary><h3>感謝信範本</h3></summary>
+      <p class="note" style="margin:0 0 10px">面試後 24 小時內寄出，3 到 5 句就好：謝謝對方、提一個面試中聊到的重點、再補一句你能帶來的價值。範本會依你的狀態調整。</p>
+      <div class="pw-grid guide">
+        <label class="cl-f">你的姓名<input type="text" id="tyName" maxlength="20" placeholder="例：王小明"></label>
+        <label class="cl-f">公司名稱<input type="text" id="tyCompany" maxlength="40" placeholder="例：○○設計"></label>
+        <label class="cl-f">面試官稱謂<input type="text" id="tyWho" maxlength="20" placeholder="例：陳經理"></label>
+        <label class="cl-f">應徵職缺<input type="text" id="tyJob" maxlength="40" placeholder="例：平面設計師"></label>
+        <label class="cl-f full">面試中聊到、讓你印象深刻的一件事<textarea id="tyTopic" rows="2" placeholder="例：團隊正在規劃明年的品牌改版"></textarea></label>
+      </div>
+      <div class="guide-out" id="tyOut" style="margin-top:12px" aria-live="polite"></div>
+      <div class="row" style="margin-top:12px">
+        <button type="button" class="btn-sm" id="tyCopy">複製感謝信</button>
+        <span id="tyMsg" role="status" class="note" style="margin:0"></span>
+      </div>
+    </details>
+
+    <details class="fold" open>
+    <summary><h3>投遞追蹤表</h3></summary>
+      <p class="note" style="margin:0 0 10px">同時投很多家時，用這張表記下每一家走到哪裡、下一步要做什麼。資料只保存在這台裝置，可以下載成 Excel 開啟。</p>
+      <p class="star-note" id="trkSum" aria-live="polite"></p>
+      <div class="trk-wrap"><table class="trk"><thead><tr><th>公司</th><th>職缺</th><th>投遞日</th><th>面試日</th><th>進度</th><th>下一步</th><th><span class="sr-only">刪除</span></th></tr></thead><tbody id="trkBody"></tbody></table></div>
+      <div class="row" style="margin-top:12px">
+        <button type="button" class="btn-sm ghost" id="trkAdd">＋ 新增一筆</button>
+        <button type="button" class="btn-sm ghost" id="trkCsv">下載 Excel（CSV）</button>
+        <span id="trkMsg" role="status" class="note" style="margin:0"></span>
+      </div>
+    </details>
+
+    <details class="fold" open>
+    <summary><h3>薪資談判準備</h3></summary>
+      <p class="note" style="margin:0 0 10px">先查行情、算出自己的範圍，再準備好說法。被問「期望待遇」時，回答一個有根據的範圍，比說「依公司規定」更有說服力。</p>
+      <div class="pw-grid guide">
+        <label class="cl-f">參考職位（來自延伸課程的薪資參考）<select id="salRole"></select></label>
+        <label class="cl-f">目前或上一份月薪（選填，新鮮人可留空）<input type="text" id="salNow" inputmode="numeric" maxlength="7" placeholder="例：38000"></label>
+      </div>
+      <div class="guide-out" id="salOut" style="margin-top:12px" aria-live="polite"></div>
+      <p class="note">※ 薪資為人力銀行的參考範圍，實際依公司規模、地區與個人條件而不同。面試前建議再到 104 或 1111 的薪資情報查同職缺的行情。</p>
+    </details>
   </div>
 </section>
 
@@ -1450,7 +1558,7 @@ input[type=checkbox]{width:20px;height:20px;flex:none}
   /* ---------- 健診進度（僅在完成項目時微調動畫） ---------- */
   const progKeys = [
     ["status", "你的狀態", "#status"], ["skills", "核心競爭力", "#skills"], ["photo", "履歷照片", "#photo"],
-    ["star", "STAR 練習", "#star"], ["jd", "JD 契合度", "#jd"], ["write", "自傳與工作經歷", "#write"], ["intro", "自我介紹", "#intro"], ["portfolio", "作品集健診", "#portfolio"], ["check", "寫完前檢查", "#check"], ["mock", "模擬面試", "#mock"]
+    ["star", "STAR 練習", "#star"], ["jd", "JD 契合度", "#jd"], ["write", "自傳與工作經歷", "#write"], ["intro", "自我介紹", "#intro"], ["portfolio", "作品集健診", "#portfolio"], ["check", "寫完前檢查", "#check"], ["mock", "模擬面試", "#mock"], ["after", "面試後", "#after"]
   ];
   const progress = load("rhc-progress", { status: false, skills: false, photo: false, star: false, intro: false, check: false });
   function renderProgress() {
@@ -1486,7 +1594,7 @@ input[type=checkbox]{width:20px;height:20px;flex:none}
   prReset.addEventListener("click", () => resetUi(true));
   prCancel.addEventListener("click", () => { resetUi(false); prReset.focus(); });
   prConfirm.addEventListener("click", () => {
-    ["rhc-status", "rhc-skills", "rhc-star", "rhc-star2", "rhc-check", "rhc-progress", "rhc-mock", "rhc-write", "rhc-gap", "rhc-intro", "rhc-jd", "rhc-portfolio", "rhc-ats", "rhc-summary", "rhc-dims", "rhc-polish", "rhc-bioguide", "rhc-pfworks"].forEach(k => {
+    ["rhc-status", "rhc-skills", "rhc-star", "rhc-star2", "rhc-check", "rhc-progress", "rhc-mock", "rhc-write", "rhc-gap", "rhc-intro", "rhc-jd", "rhc-portfolio", "rhc-ats", "rhc-summary", "rhc-dims", "rhc-polish", "rhc-bioguide", "rhc-pfworks", "rhc-apply", "rhc-ivprep", "rhc-thanks", "rhc-tracker", "rhc-salary"].forEach(k => {
       try { localStorage.removeItem(k); } catch (e) { /* storage unavailable */ }
     });
     try { location.reload(); } catch (e) { /* fall through to fallback */ }
@@ -4066,6 +4174,7 @@ input[type=checkbox]{width:20px;height:20px;flex:none}
         '<span class="qdone">' + (done ? "已練習" : "") + "</span></summary>" +
         '<div class="q-body">' +
           '<div><h4>回答方向</h4><p>' + esc(it[2]) + "</p></div>" +
+          '<div class="q-timer"><button type="button" class="btn-sm ghost" data-qtstart>開始計時作答</button><span class="qt-time">0:00</span><span class="qt-hint"></span></div>' +
           '<label class="field">先試著回答（不會被儲存）<textarea rows="3" placeholder="先自己說一遍或寫下來，再對照參考答案"></textarea></label>' +
           '<button type="button" class="btn-sm ghost" data-reveal aria-expanded="false">顯示參考答案</button>' +
           '<div class="q-ans" hidden><h4>參考答案</h4><p>' + esc(it[3]) + '</p><p class="note">○○ 請換成你的真實經歷與數據，並用自己的話說出來。</p>' + (mockUp ? mockUp(it[0]) : "") + '</div>' +
@@ -5992,16 +6101,18 @@ input[type=checkbox]{width:20px;height:20px;flex:none}
     if (sk.hard && sk.hard.length) info.push("已具備硬實力：" + sk.hard.join("、"));
     const soft = (sk.soft || []).concat(sk.softCustom || []);
     if (soft.length) info.push("軟實力：" + soft.join("、"));
-    info.push("健診進度：" + ($("#progCount") ? $("#progCount").textContent : "0") + " / 10");
+    info.push("健診進度：" + ($("#progCount") ? $("#progCount").textContent : "0") + " / " + progKeys.length);
     blocks.push({ h: "基本資料", lines: info });
     const bio = bioBlocks();
     if (bio.length) blocks.push({ h: "自傳初稿（引導問答）", lines: bio.map(b => b.h + "：" + b.lines[0]) });
     if (pwOrdered().length) pwBlocks().forEach(b => blocks.push(b));
+    if (String(($("#clCompany") || {}).value || "").trim() || String(($("#clWin") || {}).value || "").trim()) blocks.push({ h: "求職信", lines: coverLetterText().split("\n").filter(Boolean) });
+    if (trkRows().length) blocks.push({ h: "投遞追蹤", lines: trkRows().map(r => [r.co, r.job, r.stage, r.applied ? "投遞 " + r.applied : "", r.iv ? "面試 " + r.iv : "", r.next ? "下一步：" + r.next : ""].filter(Boolean).join("｜")) });
     $$("section.sec").forEach(sec => {
       const title = ($("h2", sec) || {}).textContent || "";
       const lines = [];
       $$("textarea, input[type=text]", sec).forEach(f => {
-        if (f.closest("#bioGuide, #pfGuide") || !String(f.value).trim()) return;
+        if (f.closest("#bioGuide, #pfGuide, #applyKit, #after") || !String(f.value).trim()) return;
         const lab = f.closest("label");
         let name = f.getAttribute("aria-label") || (lab ? lab.textContent.replace(f.value, "").trim().split("\n")[0] : "") || f.placeholder || "";
         name = name.replace(/\s+/g, " ").slice(0, 40);
@@ -6018,6 +6129,297 @@ input[type=checkbox]{width:20px;height:20px;flex:none}
   try {
     const narrow = window.matchMedia("(max-width: 768px)").matches;
     $$("details.fold").forEach(d => { d.open = !narrow; });
+  } catch (e) { /* matchMedia unavailable */ }
+
+
+  /* ---------- 投遞前：客製化建議與求職信 ---------- */
+  const clState = load("rhc-apply", {});
+  function tailorData() {
+    const kb = jdKB[jdField], st = jdState.checks[jdField] || {}, jd = jdText.value.trim();
+    const keep = [], add = [], later = [];
+    if (!kb) return { jd, keep, add, later };
+    ["hard", "soft"].forEach(g => (kb[g] || []).forEach((kw, i) => {
+      const on = !!st[g + i], hit = jd && jdHit(kw[2], jd);
+      if (hit && on) keep.push(kw[0]); else if (hit) add.push(kw[0]); else if (on) later.push(kw[0]);
+    }));
+    return { jd, keep, add, later };
+  }
+  function renderTailor() {
+    const box = $("#tailorOut");
+    if (!box) return;
+    const d = tailorData();
+    if (!d.jd) { box.innerHTML = '<p class="note" style="margin:0">先在上方「貼上職缺描述」貼入 JD，這裡會列出這份履歷該怎麼改。</p>'; return; }
+    const grp = (cls, h, list, tip) => list.length ? '<div class="tl-group ' + cls + '"><h5>' + esc(h) + "（" + list.length + "）</h5><p class=\"note\" style=\"margin:0 0 4px\">" + esc(tip) + "</p><ul>" + list.map(x => "<li>" + esc(x) + "</li>").join("") + "</ul></div>" : "";
+    const html = grp("warn", "JD 有提到、你還沒對齊", d.add, "如果你真的會，用 JD 上一模一樣的字寫進技能欄，並在工作經歷補一句用過它的成果；如果還不會，面試前準備好「我正在怎麼補強」的說法。") +
+      grp("ok", "JD 有提到、你已對齊", d.keep, "保留，並移到技能欄與摘要的最前面，讓 HR 10 秒內看到。") +
+      grp("", "你有勾、但這份 JD 沒提", d.later, "可以往後放或縮短，把版面讓給這份職缺在意的能力。");
+    const star = ($("#starPreview") || {}).textContent || "";
+    box.innerHTML = (html || '<p class="note" style="margin:0">這份 JD 沒有對到常見關鍵字，請確認上方選的領域是否正確。</p>') +
+      (d.add.length && star.trim() ? '<p class="note" style="margin:6px 0 0">小提醒：第 4 步寫好的 STAR 故事，可以改寫成證明「' + esc(d.add[0]) + "」的一條工作經歷。</p>" : "");
+    const sk = $("#clSkills");
+    if (sk && !clState.skillsTouched) { sk.value = d.keep.slice(0, 3).join("、"); }
+    renderCoverLetter();
+  }
+  function coverLetterText() {
+    const v = id => String(($("#" + id) || {}).value || "").trim();
+    const name = v("clName") || "○○○", co = v("clCompany") || "貴公司", job = v("clJob") || "○○（職缺）";
+    const skills = v("clSkills"), win = v("clWin"), why = v("clWhy");
+    const P = s => polishOn() ? endSentence(tidyText(s)) : s;
+    const lines = ["您好：", ""];
+    const open = { fresh: "我是" + name + "，即將（或剛）畢業，在人力銀行看到" + co + "徵求「" + job + "」，非常希望能有機會加入。",
+      switch: "我是" + name + "，正從前一份工作轉入新領域，看到" + co + "徵求「" + job + "」，希望能用過去的經驗與新學的專業為團隊加分。",
+      active: "我是" + name + "，具有相關工作經驗，看到" + co + "徵求「" + job + "」，相信我的經歷能直接為團隊帶來貢獻。" }[upSt] || "";
+    lines.push(open);
+    if (skills) lines.push(P("我具備" + skills + "的能力" + (win ? "，" + win.replace(/^[，。\s]+/, "") : "")));
+    else if (win) lines.push(P(win));
+    if (why) lines.push(P("我想加入" + co + "，是因為" + why.replace(/^(因為|我)+/, "")));
+    lines.push({ fresh: "我學習速度快，也願意從基礎做起，希望能在您的團隊中累積經驗、快速成長。",
+      switch: "轉職期間我已完成相關課程與作品，能很快上手，也能把前一份工作的經驗帶進團隊。",
+      active: "我能立即投入工作，也期待在新環境承擔更多責任。" }[upSt] || "");
+    lines.push("隨信附上履歷與作品集，期待有機會進一步面談，謝謝您撥冗閱讀。", "", name + " 敬上");
+    return lines.join("\n");
+  }
+  function renderCoverLetter() {
+    const out = $("#clOut");
+    if (!out) return;
+    const t = coverLetterText();
+    out.textContent = t;
+    const n = t.replace(/\s/g, "").length;
+    $("#clLen").textContent = "目前約 " + n + " 字。" + (n < 150 ? "建議補上成果或想加入的原因，讓內容更具體。" : (n > 250 ? "稍長了，建議精簡到 250 字內。" : "長度剛好（建議 150 到 250 字）。"));
+  }
+  if ($("#applyKit")) {
+    ["clName", "clCompany", "clJob", "clSkills", "clWin", "clWhy"].forEach(id => { const el = $("#" + id); if (el && clState[id]) el.value = clState[id]; });
+    $("#applyKit").addEventListener("input", e => {
+      const t = e.target;
+      if (!t.id || !/^cl/.test(t.id)) return;
+      clState[t.id] = t.value;
+      if (t.id === "clSkills") clState.skillsTouched = true;
+      save("rhc-apply", clState);
+      renderCoverLetter();
+    });
+    $("#clCopy").addEventListener("click", () => copyText(coverLetterText(), $("#clMsg")));
+    $("#clDoc").addEventListener("click", () => giveFile("doc", "求職信", "求職信", [{ h: "", lines: coverLetterText().split("\n") }], $("#clMsg")));
+    let tlTimer = null;
+    const tlLater = () => { clearTimeout(tlTimer); tlTimer = setTimeout(renderTailor, 400); };
+    jdText.addEventListener("input", tlLater);
+    jdGroups.addEventListener("change", tlLater);
+    jdTabs.addEventListener("click", tlLater);
+    document.addEventListener("rhc-field", tlLater);
+    document.addEventListener("rhc-status", tlLater);
+    renderTailor();
+  }
+
+  /* ---------- 面試中：作答計時 ---------- */
+  let qtRun = null;
+  function qtStop() {
+    if (!qtRun) return;
+    clearInterval(qtRun.iv);
+    const b = $("[data-qtstart]", qtRun.box);
+    if (b) b.textContent = "重新計時";
+    qtRun = null;
+  }
+  function qtLimit() { const s = $("#mockLimit"); return s ? +s.value : 90; }
+  const qtFmt = s => Math.floor(s / 60) + ":" + String(s % 60).padStart(2, "0");
+  if (mockList) {
+    mockList.addEventListener("click", e => {
+      const b = e.target.closest("[data-qtstart]");
+      if (!b) return;
+      const box = b.closest(".q-timer");
+      if (qtRun && qtRun.box === box) { qtStop(); return; }
+      qtStop();
+      const t0 = Date.now(), lim = qtLimit(), tm = $(".qt-time", box), hint = $(".qt-hint", box);
+      b.textContent = "停止";
+      tm.classList.remove("over");
+      hint.textContent = "建議 " + qtFmt(lim) + " 內講完";
+      qtRun = { box, iv: setInterval(() => {
+        const s = Math.floor((Date.now() - t0) / 1000);
+        tm.textContent = qtFmt(s);
+        if (s >= lim) { tm.classList.add("over"); hint.textContent = "已超過建議時間，請收尾：用一句話講結果與學到的事"; }
+        else if (s >= lim - 15) hint.textContent = "剩 " + (lim - s) + " 秒，準備講結果";
+        if (!document.body.contains(box)) qtStop();
+      }, 250) };
+    });
+  }
+
+  /* ---------- 面試前一天檢查清單 ---------- */
+  const prepItems = [
+    "再讀一次職缺描述，把 JD 的 3 個關鍵字對應到你的 STAR 故事",
+    "查公司官網、產品與最近的新聞，準備一句「為什麼是你們」",
+    "練習 1 分鐘自我介紹，並用計時器唸一遍",
+    "準備 3 個反問題（看上方逆向面試）",
+    "印出履歷 2 份，作品集存在平板或筆電並確認離線可開",
+    "服裝前一晚準備好：乾淨、合身，比公司日常穿著正式一點",
+    "確認面試地點、樓層、交通方式，預留 30 分鐘",
+    "確認面試官姓名、聯絡電話，存進手機",
+    "線上面試：先測試鏡頭、麥克風、網路與背景",
+    "準備證件、筆、筆記本，手機充飽電",
+    "想好期望待遇的範圍與理由（看第 11 步）",
+    "早點睡，隔天提早 10 分鐘到"
+  ];
+  const prepState = load("rhc-ivprep", {});
+  function renderPrep() {
+    const list = $("#prepList");
+    if (!list) return;
+    list.innerHTML = prepItems.map((t, i) => '<li><label><input type="checkbox" data-prep="' + i + '"' + (prepState[i] ? " checked" : "") + "><span>" + esc(t) + "</span></label></li>").join("");
+    const n = prepItems.filter((_, i) => prepState[i]).length;
+    $("#prepNum").textContent = n + " / " + prepItems.length;
+    $("#prepBar").style.width = (n / prepItems.length * 100) + "%";
+  }
+  if ($("#prepList")) {
+    $("#prepList").addEventListener("change", e => {
+      const c = e.target.closest("[data-prep]");
+      if (!c) return;
+      prepState[c.dataset.prep] = c.checked;
+      save("rhc-ivprep", prepState);
+      renderPrep();
+    });
+    $("#prepReset").addEventListener("click", () => { Object.keys(prepState).forEach(k => delete prepState[k]); save("rhc-ivprep", prepState); renderPrep(); });
+    renderPrep();
+  }
+
+  /* ---------- 面試後：感謝信 ---------- */
+  const tyState = load("rhc-thanks", {});
+  function thanksText() {
+    const v = id => String(($("#" + id) || {}).value || "").trim();
+    const name = v("tyName") || "○○○", co = v("tyCompany") || "貴公司", who = v("tyWho") || "○○", job = v("tyJob") || "○○（職缺）", topic = v("tyTopic");
+    const P = s => polishOn() ? endSentence(tidyText(s)) : s;
+    const value = { fresh: "我會持續精進相關技能，也很期待有機會在團隊中學習、貢獻所長。",
+      switch: "我相信過去的工作經驗加上這段時間的學習，能讓我很快上手並為團隊帶來不同的觀點。",
+      active: "我相信過去的經驗能直接協助團隊，也很期待有機會一起推動接下來的專案。" }[upSt] || "";
+    return ["主旨：感謝面試機會－" + job + "－" + name, "", who + " 您好：", "",
+      "感謝您今天撥冗與我面談「" + job + "」一職，讓我對" + co + "有更深入的認識。",
+      topic ? P("面談中聊到" + topic.replace(/^(聊到|談到)/, "") + "，讓我印象深刻，也更確定這是我想投入的工作") : "",
+      value, "若還需要任何資料，歡迎隨時與我聯絡。再次感謝您的時間！", "", name + " 敬上"].filter((x, i, a) => x !== "" || a[i - 1] !== "").join("\n");
+  }
+  function renderThanks() { const o = $("#tyOut"); if (o) o.textContent = thanksText(); }
+  if ($("#tyOut")) {
+    ["tyName", "tyCompany", "tyWho", "tyJob", "tyTopic"].forEach(id => { if (tyState[id]) $("#" + id).value = tyState[id]; });
+    $("#after").addEventListener("input", e => {
+      const t = e.target;
+      if (!t.id || !/^ty/.test(t.id)) return;
+      tyState[t.id] = t.value;
+      save("rhc-thanks", tyState);
+      renderThanks();
+      afterFlag();
+    });
+    $("#tyCopy").addEventListener("click", () => copyText(thanksText(), $("#tyMsg")));
+    document.addEventListener("rhc-status", () => setTimeout(renderThanks, 0));
+    renderThanks();
+  }
+
+  /* ---------- 面試後：投遞追蹤表 ---------- */
+  const trkStages = ["已投遞", "已讀", "約面試", "一面完成", "二面完成", "等結果", "錄取", "未錄取", "已婉拒"];
+  const trkCols = [["co", "公司", "text"], ["job", "職缺", "text"], ["applied", "投遞日", "date"], ["iv", "面試日", "date"], ["stage", "進度", "select"], ["next", "下一步", "text"]];
+  const trkState = load("rhc-tracker", []);
+  if (!Array.isArray(trkState)) trkState.length = 0;
+  function renderTrk() {
+    const body = $("#trkBody");
+    if (!body) return;
+    if (!trkState.length) trkState.push({ stage: "已投遞" });
+    body.innerHTML = trkState.map((r, i) => "<tr data-r=\"" + i + "\">" + trkCols.map(c => '<td data-l="' + c[1] + '">' +
+      (c[2] === "select" ? '<select data-k="' + c[0] + '" aria-label="' + c[1] + '">' + trkStages.map(s => "<option" + (s === r[c[0]] ? " selected" : "") + ">" + s + "</option>").join("") + "</select>"
+        : '<input type="' + c[2] + '" data-k="' + c[0] + '" aria-label="' + c[1] + '" value="' + esc(r[c[0]] || "") + '"' + (c[0] === "next" ? ' placeholder="例：週五寄感謝信"' : "") + ">") + "</td>").join("") +
+      '<td><button type="button" class="btn-sm ghost" data-trkdel="' + i + '" aria-label="刪除這一筆">刪除</button></td></tr>').join("");
+    trkSummary();
+  }
+  function trkRows() { return trkState.filter(r => String(r.co || "").trim() || String(r.job || "").trim()); }
+  function trkSummary() {
+    const rows = trkRows(), el = $("#trkSum");
+    if (!el) return;
+    if (!rows.length) { el.textContent = "還沒有紀錄。每投一家就新增一筆。"; return; }
+    const cnt = s => rows.filter(r => r.stage === s).length;
+    const iving = rows.filter(r => /面試/.test(r.stage || "")).length;
+    el.textContent = "共 " + rows.length + " 家：面試中 " + iving + "、等結果 " + cnt("等結果") + "、錄取 " + cnt("錄取") + "。" + (rows.length >= 3 && !iving && !cnt("錄取") ? "投了幾家都還沒約面試，建議回到 JD 契合度，針對職缺調整履歷。" : "");
+    afterFlag();
+  }
+  function trkCsvText() {
+    const q = s => '"' + String(s || "").replace(/"/g, '""') + '"';
+    return "﻿" + [trkCols.map(c => q(c[1])).join(",")].concat(trkRows().map(r => trkCols.map(c => q(r[c[0]])).join(","))).join("\r\n");
+  }
+  if ($("#trkBody")) {
+    const trkSave = () => save("rhc-tracker", trkState);
+    $("#trkBody").addEventListener("input", e => {
+      const t = e.target.closest("[data-k]"), row = e.target.closest("[data-r]");
+      if (!t || !row) return;
+      trkState[+row.dataset.r][t.dataset.k] = t.value;
+      trkSave(); trkSummary();
+    });
+    $("#trkBody").addEventListener("change", e => {
+      const t = e.target.closest("select[data-k]"), row = e.target.closest("[data-r]");
+      if (!t || !row) return;
+      trkState[+row.dataset.r][t.dataset.k] = t.value;
+      trkSave(); trkSummary();
+    });
+    $("#trkBody").addEventListener("click", e => {
+      const b = e.target.closest("[data-trkdel]");
+      if (!b) return;
+      trkState.splice(+b.dataset.trkdel, 1);
+      trkSave(); renderTrk();
+    });
+    $("#trkAdd").addEventListener("click", () => {
+      trkState.push({ stage: "已投遞", applied: new Date().toISOString().slice(0, 10) });
+      trkSave(); renderTrk();
+      const last = $$("#trkBody tr").pop(); if (last) { const i = $("input", last); if (i) i.focus(); }
+    });
+    $("#trkCsv").addEventListener("click", () => {
+      const ok = trkRows().length && downloadFile("投遞追蹤_" + today() + ".csv", trkCsvText(), "text/csv;charset=utf-8");
+      $("#trkMsg").textContent = trkRows().length ? (ok ? "已下載" : "無法下載") : "目前沒有紀錄可以下載";
+      setTimeout(() => { $("#trkMsg").textContent = ""; }, 2500);
+    });
+    renderTrk();
+  }
+  function afterFlag() {
+    const ty = ["tyCompany", "tyTopic"].some(id => String(($("#" + id) || {}).value || "").trim());
+    setFlag("after", ty || trkRows().length > 0);
+  }
+
+  /* ---------- 面試後：薪資談判準備 ---------- */
+  const parseK = s => { const m = String(s).match(/(\d+)K[–-](\d+)K/); return m ? [+m[1] * 1000, +m[2] * 1000] : null; };
+  function salOptions() {
+    const prim = skillState.primary;
+    const keys = courseOrder.slice().sort((a, b) => ((courses[b].fieldKeys || []).includes(prim) ? 1 : 0) - ((courses[a].fieldKeys || []).includes(prim) ? 1 : 0));
+    const opts = [];
+    keys.forEach(k => (courses[k].roles || []).forEach(r => { if (parseK(r[1])) opts.push([k, r[0], r[1]]); }));
+    return opts;
+  }
+  const salState = load("rhc-salary", {});
+  const money = n => "NT$ " + Math.round(n / 1000) + "K";
+  function renderSal() {
+    const sel = $("#salRole"), out = $("#salOut");
+    if (!sel) return;
+    const opts = salOptions();
+    if (!sel.options.length) {
+      sel.innerHTML = opts.map((o, i) => '<option value="' + i + '">' + esc(o[1] + "（" + courses[o[0]].title + "）") + "</option>").join("");
+      const keep = opts.findIndex(o => o[0] + "|" + o[1] === salState.role);
+      sel.value = String(keep >= 0 ? keep : 0);
+      if (salState.now) $("#salNow").value = salState.now;
+    }
+    const o = opts[+sel.value] || opts[0];
+    if (!o) { out.textContent = ""; return; }
+    const [lo, hi] = parseK(o[2]), mid = (lo + hi) / 2;
+    const now = parseInt(String($("#salNow").value).replace(/\D/g, ""), 10) || 0;
+    let a, b, why;
+    if (upSt === "active" && now) { a = Math.max(lo, now * 1.1); b = Math.min(hi, Math.max(a + 3000, now * 1.25)); why = "已有經驗：以目前月薪加 10% 到 25% 為範圍，並以市場行情為上限。"; }
+    else if (upSt === "switch") { a = lo; b = Math.max(lo + 3000, mid - (hi - lo) * 0.1); why = "轉職者：從行情的下緣到中間偏下開價，用作品與可轉移能力爭取往上調。" + (now ? "如果目前月薪更高，可以說明願意為轉職調整，但希望試用期後有調薪檢視。" : ""); }
+    else { a = lo; b = Math.max(lo + 2000, mid - (hi - lo) * 0.15); why = "新鮮人：以行情下緣到中間偏下為範圍，重點放在學習與成長空間。"; }
+    if (a > b) { const t = a; a = b; b = t; }
+    const r = money(a) + " 到 " + money(b);
+    out.innerHTML = "<h5>行情</h5><p>" + esc(o[1] + "：" + o[2]) + "</p>" +
+      "<h5>建議你開的範圍</h5><p><strong>" + esc(r) + "</strong>（月薪）。" + esc(why) + "</p>" +
+      "<h5>可以這樣說</h5><p>被問期望待遇：「我參考了市場上" + esc(o[1]) + "的行情，加上我的○○經驗，期望月薪在 " + esc(r) + " 之間，也想了解貴公司的薪資結構與調薪制度。」</p>" +
+      "<p>對方開價偏低時：「謝謝您的說明。依照這個職位要負責的○○，以及我能帶來的○○，是否有機會調整到 " + esc(money(b)) + "？如果薪資有困難，也想了解試用期後的調薪或績效獎金。」</p>" +
+      "<h5>除了月薪，也一起確認</h5><p>年終與獎金是否保障、加班費怎麼算、勞健保與勞退是否依實際薪資投保、特休天數、試用期長度與調薪時間。</p>";
+  }
+  if ($("#salRole")) {
+    $("#salRole").addEventListener("change", () => { const o = salOptions()[+$("#salRole").value]; salState.role = o ? o[0] + "|" + o[1] : ""; save("rhc-salary", salState); renderSal(); });
+    $("#salNow").addEventListener("input", () => { salState.now = $("#salNow").value; save("rhc-salary", salState); renderSal(); });
+    document.addEventListener("rhc-status", () => setTimeout(renderSal, 0));
+    document.addEventListener("rhc-field", () => setTimeout(() => { $("#salRole").innerHTML = ""; renderSal(); }, 0));
+    renderSal();
+  }
+  try {
+    const narrow2 = window.matchMedia("(max-width: 768px)").matches;
+    $$("#after details.fold, #mock details.fold").forEach(d => { d.open = !narrow2; });
   } catch (e) { /* matchMedia unavailable */ }
 
 })();
