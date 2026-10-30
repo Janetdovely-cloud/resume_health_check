@@ -769,6 +769,59 @@ details.mod.bei-mod p{margin:0 18px 12px;color:var(--muted);font-size:15px}
   .ratio{font-size:11px}
   .trap-body{padding-left:16px}
 }
+/* 引導問答、作品盤點、摺疊區塊、按鈕大小（v4） */
+.guide{margin:0 0 28px;border:2px dashed var(--brand);border-radius:var(--wob,12px);background:var(--sheet);box-shadow:var(--shadow-sk,none)}
+details.guide>summary{list-style:none;cursor:pointer;padding:14px 18px;font-weight:800;font-size:17px;display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center;min-height:52px}
+details.guide>summary::-webkit-details-marker{display:none}
+details.guide>summary::after{content:"＋";margin-left:auto;font-size:20px;color:var(--brand)}
+details.guide[open]>summary::after{content:"－"}
+.guide-badge{background:var(--gold);color:#161E1C;border-radius:999px;padding:3px 12px;font-size:14px}
+.guide-body{padding:0 18px 18px}
+.pf-guide{padding:18px 20px;margin:28px 0 8px}
+.guide-bar{display:flex;align-items:center;gap:10px;margin:0 0 10px}
+.guide-bar .bar{flex:1;height:8px;border-radius:999px;background:color-mix(in srgb,var(--muted) 18%,transparent);overflow:hidden}
+.guide-bar .bar span{display:block;height:100%;width:0;background:var(--brand);transition:width .3s}
+.guide-bar .num{font-weight:800;font-size:14px}
+.guide-qs{list-style:none;padding:0;margin:0;display:grid;gap:14px}
+.guide-qs li{display:grid;gap:6px}
+.guide-qs .gq{font-weight:800}
+.guide-qs .gq .no{display:inline-grid;place-items:center;width:24px;height:24px;border-radius:50%;background:var(--ink);color:var(--paper);font-size:13px;margin-right:6px}
+.guide-qs .gp{font-size:13px;color:var(--muted);margin:0}
+.guide textarea,.guide input[type=text],.guide select{font:inherit;font-size:15px;width:100%;border:1px solid var(--rule);border-radius:8px;padding:10px 12px;background:var(--paper);color:var(--ink);min-height:44px}
+.guide textarea{min-height:72px;resize:vertical}
+.guide-out{padding:14px 16px;border-left:5px solid var(--gold);background:color-mix(in srgb,var(--gold) 12%,transparent);border-radius:0 12px 12px 0;white-space:pre-wrap;min-height:60px}
+.guide-out h5{margin:10px 0 2px;font-size:14px;color:var(--muted)}
+.guide-out h5:first-child{margin-top:0}
+.guide-out p{margin:0;color:var(--ink)}
+.pw-item{border:1px solid var(--rule);border-radius:10px;padding:14px;margin:0 0 12px;background:var(--paper);display:grid;gap:10px}
+.pw-head{display:flex;gap:8px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+.pw-grid{display:grid;gap:10px;grid-template-columns:1fr 1fr}
+.pw-grid .full{grid-column:1/-1}
+.pw-item label{display:grid;gap:4px;font-weight:700;font-size:14px}
+.pw-item label small{font-weight:400;color:var(--muted);font-size:12px}
+.pw-card{border:1px solid var(--rule);border-left:5px solid var(--brand);border-radius:0 10px 10px 0;padding:12px 14px;margin:0 0 10px;background:var(--sheet)}
+.pw-card h5{margin:0 0 4px;font-size:16px}
+.pw-card .why{font-size:13px;color:var(--muted);margin:0 0 6px}
+.pw-card p{margin:0}
+.pw-card .miss{color:var(--danger);font-size:13px;margin-top:6px}
+.pf-tpl{margin:0;padding-left:22px;display:grid;gap:6px}
+.pf-tpl li span{color:var(--muted);font-size:14px}
+details.fold{margin:28px 0 0;border-top:2px dashed var(--rule)}
+details.fold>summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:10px;padding:14px 0;min-height:52px}
+details.fold>summary::-webkit-details-marker{display:none}
+details.fold>summary h3{margin:0}
+details.fold>summary::after{content:"展開";margin-left:auto;font-size:13px;font-weight:800;border:1px solid var(--ink);border-radius:999px;padding:4px 12px;flex:none}
+details.fold[open]>summary::after{content:"收合"}
+.tabs button{min-height:40px}
+.nav a.link{padding-top:10px;padding-bottom:10px}
+input[type=checkbox]{width:20px;height:20px;flex:none}
+.swipe-hint{display:none;font-size:13px;color:var(--muted);margin:0 0 8px}
+@media (max-width:600px){
+  .pw-grid{grid-template-columns:1fr}
+  .course-grid{grid-auto-flow:column;grid-template-columns:none;grid-auto-columns:84%;overflow-x:auto;scroll-snap-type:x mandatory;padding:4px 2px 12px;-webkit-overflow-scrolling:touch}
+  .course-grid .course-card{scroll-snap-align:start}
+  .swipe-hint{display:block}
+}
 </style>
 </head>
 <body>
@@ -823,6 +876,7 @@ details.mod.bei-mod p{margin:0 18px 12px;color:var(--muted);font-size:15px}
         <div class="pc-foot">
           <p class="pc-note" id="progNote" aria-live="polite"></p>
           <div class="pc-actions">
+            <button type="button" class="pc-reset" id="progExport">下載健診結果</button>
             <button type="button" class="pc-reset" id="progReset">清零</button>
             <button type="button" class="pc-reset danger" id="progConfirm" hidden>確定清零</button>
             <button type="button" class="pc-reset" id="progCancel" hidden>取消</button>
@@ -987,7 +1041,8 @@ details.mod.bei-mod p{margin:0 18px 12px;color:var(--muted);font-size:15px}
     <div class="score-box" id="jdScore" aria-live="polite"></div>
     <div class="row" style="margin-top:12px"><button class="btn-sm ghost" id="jdReset" type="button">清除本領域勾選</button></div>
 
-    <div class="warn-head"><span class="warn-icon" aria-hidden="true">!</span><h3 style="margin:0">勞基法防雷與避坑指南</h3></div>
+    <details class="fold" open>
+    <summary><span class="warn-icon" aria-hidden="true">!</span><h3>勞基法防雷與避坑指南</h3></summary>
     <p class="note" style="margin:0 0 8px">面試或錄取時聽到下面這些話，先停下來確認。點開卡片看原因與確認方法。</p>
     <p class="group-title">領域（每個行業都有自己的必坑法律）</p>
     <p class="note primary-hint" style="margin:0 0 8px" hidden></p>
@@ -998,6 +1053,7 @@ details.mod.bei-mod p{margin:0 18px 12px;color:var(--muted);font-size:15px}
     <p class="note" id="trapNote" style="margin:0 0 4px"></p>
     <div class="trap-grid" id="trapGrid"></div>
     <p class="note">※ 以上為常見情況的整理，法規與基本工資以勞動部最新公告為準。遇到勞資爭議，可撥打勞動部 1955 專線，或向各縣市勞工局申訴。</p>
+    </details>
   </div>
 </section>
 
@@ -1019,6 +1075,26 @@ details.mod.bei-mod p{margin:0 18px 12px;color:var(--muted);font-size:15px}
     <div class="wpanels">
 
       <div role="tabpanel" data-wpanel="bio">
+        <details class="guide" id="bioGuide">
+          <summary><span class="guide-badge">不知道怎麼開始？</span>用問答寫出自傳初稿</summary>
+          <div class="guide-body">
+            <p class="note" id="bgIntro" style="margin:0 0 12px"></p>
+            <div class="guide-bar" aria-live="polite"><div class="bar" aria-hidden="true"><span id="bgBar"></span></div><span class="num" id="bgNum"></span></div>
+            <ol class="guide-qs" id="bgQs"></ol>
+            <label class="q-check polish-row" style="margin:12px 0 0"><input type="checkbox" class="polish-toggle" checked><span>自動潤飾初稿（統一標點、補句號、中英數字加空格、刪掉贅字）</span></label>
+            <h4 style="margin:18px 0 6px">自傳初稿</h4>
+            <p class="note" style="margin:0 0 8px">依「背景與動機、代表經歷、能力與特質、未來規劃」四段組成。這是初稿，請再換成你自己的語氣，並對照上面的四段架構與下方的小測驗修改。</p>
+            <div class="guide-out" id="bgOut" aria-live="polite"></div>
+            <div class="row" style="margin-top:12px">
+              <button type="button" class="btn-sm" id="bgCopy">複製初稿</button>
+              <button type="button" class="btn-sm ghost" id="bgDoc">下載 Word</button>
+              <button type="button" class="btn-sm ghost" id="bgTxt">下載純文字</button>
+              <button type="button" class="btn-sm ghost" id="bgClear">清除本狀態的回答</button>
+              <span id="bgMsg" role="status" class="note" style="margin:0"></span>
+            </div>
+          </div>
+        </details>
+
         <h3>四個寫作原則</h3>
         <div class="grid2" style="margin:12px 0 28px">
           <div class="panel v"><h3>邏輯條理</h3><p>內容結構清晰、有條不紊，展現良好的邏輯思考能力。</p></div>
@@ -1191,6 +1267,27 @@ details.mod.bei-mod p{margin:0 18px 12px;color:var(--muted);font-size:15px}
     </div>
     <ul class="check-list" id="pfList"></ul>
     <div class="callout warn pf-trap" id="pfTrap" style="margin-top:16px"></div>
+    <div class="guide pf-guide" id="pfGuide">
+      <h3 style="margin:0">作品盤點：把每件作品寫成說明卡</h3>
+      <p class="note" style="margin:4px 0 12px">每件作品回答 4 個問題，系統會整理成 STAR 格式的作品說明，並建議排列順序。最多 5 件，挑和應徵職缺最相關的放。</p>
+      <div id="pwList"></div>
+      <div class="row" style="margin-top:12px">
+        <button type="button" class="btn-sm ghost" id="pwAdd">＋ 新增一件作品</button>
+        <span id="pwAddMsg" role="status" class="note" style="margin:0"></span>
+      </div>
+      <label class="q-check polish-row" style="margin:12px 0 0"><input type="checkbox" class="polish-toggle" checked><span>自動潤飾作品說明（補連接詞、統一標點）</span></label>
+      <h4 style="margin:20px 0 6px">建議排列順序與作品說明卡</h4>
+      <div id="pwCards" aria-live="polite"></div>
+      <h4 style="margin:24px 0 6px" id="pwTplTitle">作品集架構範本</h4>
+      <p class="note" style="margin:0 0 8px">照這個順序排頁面，面試官翻 30 秒就能看懂你是誰、會什麼、做過什麼。範本會依上方選的領域切換。</p>
+      <ol class="pf-tpl" id="pwTpl"></ol>
+      <div class="row" style="margin-top:12px">
+        <button type="button" class="btn-sm" id="pwCopy">複製說明卡與範本</button>
+        <button type="button" class="btn-sm ghost" id="pwDoc">下載 Word</button>
+        <button type="button" class="btn-sm ghost" id="pwTxt">下載純文字</button>
+        <span id="pwMsg" role="status" class="note" style="margin:0"></span>
+      </div>
+    </div>
     <p class="note">※ 公司作品請先確認保密規定，客戶名稱與數據可以去識別化，或用比例呈現。</p>
   </div>
 </section>
@@ -1237,6 +1334,8 @@ details.mod.bei-mod p{margin:0 18px 12px;color:var(--muted);font-size:15px}
     <div class="tabs" id="mockStatus" role="group" aria-label="依狀態切換參考答案"></div>
     <p class="star-note" id="mockStatusNote" aria-live="polite"></p>
 
+    <details class="fold" open>
+    <summary><h3>先看懂 BEI 行為面試（回答比例與追問方式）</h3></summary>
     <div class="bei">
       <h3>BEI 行為面試：面試官要的是「過去的真實行為」<span data-tip="BEI（Behavioral Event Interview）行為事例面試法。過去的行為最能預測未來的表現，所以面試官會一直追問細節。"></span></h3>
       <div class="bei-cmp">
@@ -1249,6 +1348,7 @@ details.mod.bei-mod p{margin:0 18px 12px;color:var(--muted);font-size:15px}
       <p class="star-note" id="beiStatusTip" aria-live="polite" style="margin-top:12px"></p>
       <div id="beiMods"></div>
     </div>
+    </details>
     <p class="note primary-hint" style="margin:0 0 8px" hidden></p>
     <div class="tabs" role="tablist" id="mockTabs" aria-label="面試領域"></div>
     <div class="mock-tools">
@@ -1259,6 +1359,8 @@ details.mod.bei-mod p{margin:0 18px 12px;color:var(--muted);font-size:15px}
     <p class="note" id="mockFilterNote" style="margin:0 0 12px"></p>
     <div class="mock-list" id="mockList"></div>
 
+    <details class="fold" open>
+    <summary><h3>逆向面試：最後輪到你提問</h3></summary>
     <div class="rev-wrap" id="reverseQs">
       <h3>逆向面試：最後輪到你提問<span data-tip="面試最後的「你有什麼問題想問我們？」也是評分的一部分。好問題能展現你的投入程度與商業思維。"></span></h3>
       <p class="note" id="revNote" style="margin:4px 0 0"></p>
@@ -1269,6 +1371,7 @@ details.mod.bei-mod p{margin:0 18px 12px;color:var(--muted);font-size:15px}
         <span id="revMsg" role="status" class="note" style="margin:0"></span>
       </div>
     </div>
+    </details>
     <p class="note">※ 面試問題會因公司與職缺而不同，以上是常見的問法與回答方向。不要背誦參考答案，面試官會追問細節，請以真實經驗作答。</p>
   </div>
 </section>
@@ -1281,6 +1384,7 @@ details.mod.bei-mod p{margin:0 18px 12px;color:var(--muted);font-size:15px}
     <p class="sub">目前整理 12 類課程。點開卡片可以看課程簡介、硬實力檢測、課程大綱、可考證照、薪資與上課方式。</p>
     <div id="courseRec" hidden></div>
     <div class="tabs" id="courseFilter" role="group" aria-label="課程類別" style="margin-bottom:18px"></div>
+    <p class="swipe-hint">← 左右滑動看更多課程 →</p>
     <div class="course-grid" id="courseGrid"></div>
   </div>
 </section>
@@ -1382,7 +1486,7 @@ details.mod.bei-mod p{margin:0 18px 12px;color:var(--muted);font-size:15px}
   prReset.addEventListener("click", () => resetUi(true));
   prCancel.addEventListener("click", () => { resetUi(false); prReset.focus(); });
   prConfirm.addEventListener("click", () => {
-    ["rhc-status", "rhc-skills", "rhc-star", "rhc-star2", "rhc-check", "rhc-progress", "rhc-mock", "rhc-write", "rhc-gap", "rhc-intro", "rhc-jd", "rhc-portfolio", "rhc-ats", "rhc-summary", "rhc-dims", "rhc-polish"].forEach(k => {
+    ["rhc-status", "rhc-skills", "rhc-star", "rhc-star2", "rhc-check", "rhc-progress", "rhc-mock", "rhc-write", "rhc-gap", "rhc-intro", "rhc-jd", "rhc-portfolio", "rhc-ats", "rhc-summary", "rhc-dims", "rhc-polish", "rhc-bioguide", "rhc-pfworks"].forEach(k => {
       try { localStorage.removeItem(k); } catch (e) { /* storage unavailable */ }
     });
     try { location.reload(); } catch (e) { /* fall through to fallback */ }
@@ -5622,6 +5726,300 @@ details.mod.bei-mod p{margin:0 18px 12px;color:var(--muted);font-size:15px}
     applyPrimaryField();
   });
   applyPrimaryField();
+
+  /* ---------- 下載：Word（HTML 格式的 .doc）與純文字 ---------- */
+  function downloadFile(name, content, type) {
+    try {
+      const blob = new Blob([content], { type });
+      const a = document.createElement("a");
+      a.href = URL.createObjectURL(blob);
+      a.download = name;
+      document.body.appendChild(a);
+      a.click();
+      setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 1000);
+      return true;
+    } catch (e) { return false; }
+  }
+  const today = () => { const d = new Date(); return d.getFullYear() + String(d.getMonth() + 1).padStart(2, "0") + String(d.getDate()).padStart(2, "0"); };
+  /* blocks: [{ h: 標題, lines: [文字…] }] */
+  function blocksToText(title, blocks) {
+    return [title, ""].concat(blocks.map(b => (b.h ? "【" + b.h + "】\n" : "") + b.lines.join("\n"))).join("\n\n").replace(/\n{3,}/g, "\n\n");
+  }
+  function blocksToDoc(title, blocks) {
+    const body = blocks.map(b => (b.h ? "<h2>" + esc(b.h) + "</h2>" : "") + b.lines.map(l => "<p>" + esc(l) + "</p>").join("")).join("");
+    return "﻿<html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word'><head><meta charset='utf-8'><title>" + esc(title) +
+      "</title><style>body{font-family:'Microsoft JhengHei','PingFang TC',sans-serif;font-size:12pt;line-height:1.7}h1{font-size:18pt}h2{font-size:14pt;margin:16pt 0 4pt}p{margin:0 0 6pt}</style></head><body><h1>" +
+      esc(title) + "</h1>" + body + "</body></html>";
+  }
+  function giveFile(kind, base, title, blocks, msgEl) {
+    const has = blocks.some(b => b.lines.some(l => String(l).trim()));
+    let ok = false;
+    if (has) ok = kind === "doc"
+      ? downloadFile(base + "_" + today() + ".doc", blocksToDoc(title, blocks), "application/msword")
+      : downloadFile(base + "_" + today() + ".txt", "﻿" + blocksToText(title, blocks), "text/plain;charset=utf-8");
+    if (msgEl) {
+      msgEl.textContent = !has ? "目前沒有內容可以下載" : (ok ? "已下載" : "無法下載，請改用複製");
+      setTimeout(() => { msgEl.textContent = ""; }, 2500);
+    }
+  }
+
+  /* ---------- 自傳引導問答：依狀態切換題目，組成四段初稿 ---------- */
+  const bgParts = ["背景與動機", "代表經歷與成果", "專業能力與特質", "未來規劃"];
+  const bgQuestions = {
+    fresh: [
+      { k: "bg", p: 0, q: "你的科系（或退伍前的單位）是什麼？當初為什麼選它？", tip: "寫出 1 個具體原因，不要只寫「有興趣」。", ex: "我畢業於○○大學○○系，因為高中參加○○社，發現自己喜歡把想法做成看得見的成品。" },
+      { k: "why", p: 0, q: "為什麼想投入{F}？是哪一次經驗讓你確定方向？", tip: "用一個事件說明轉折點。", ex: "大三修○○課時，第一次完成○○，看到使用者的回饋，讓我確定要往{F}發展。" },
+      { k: "s", p: 1, q: "求學或服役期間，最有成就感的一個專題、作品或活動是什麼？當時要解決什麼問題？", tip: "這是 STAR 的「情境＋任務」。", ex: "畢業專題要替社區咖啡店重新設計品牌，當時店家的問題是來客數連續半年下滑。" },
+      { k: "a", p: 1, q: "在那件事裡，你具體做了什麼？用了哪些方法或工具？", tip: "寫「我」做的事，不是「我們」。", ex: "我訪談了 20 位顧客，整理出三個痛點，用 Illustrator 重做 Logo 與菜單，並安排兩輪測試修改。" },
+      { k: "r", p: 1, q: "最後的成果是什麼？盡量寫出數字。", tip: "人數、名次、時間、比例都可以。沒有數字就寫對方的具體回饋。", ex: "改版後一個月，店家來客數增加約 15%，作品也入選系展。" },
+      { k: "hard", p: 2, q: "你目前掌握的專業技能有哪些？各用在哪裡？", tip: "只寫真的會的，最好對應職缺 JD 的寫法。", ex: "我熟悉 Photoshop、Illustrator 與 Figma，能獨立完成海報、社群圖與網頁原型。" },
+      { k: "soft", p: 2, q: "別人最常稱讚你的特質是什麼？舉一個例子。", tip: "特質＋例子，例子比形容詞有說服力。", ex: "同學常說我很細心，專題交件前我會整理檢查清單，讓全組零錯字交件。" },
+      { k: "learn", p: 2, q: "你怎麼自學新東西？最近學會了什麼？", tip: "新鮮人最大的優勢是學習速度，請舉證。", ex: "我習慣看官方教學並做小練習，最近兩週自學了 After Effects，完成一支 15 秒動態海報。" },
+      { k: "future", p: 3, q: "進公司後，第一年想做到什麼？三年後呢？", tip: "寫可以驗收的目標，並連到對方公司。", ex: "第一年希望熟悉貴公司的品牌規範，能獨立負責活動素材；三年內成為能帶新人的設計師。" }
+    ],
+    switch: [
+      { k: "bg", p: 0, q: "你上一份（或目前）的工作是什麼？做了幾年、主要負責什麼？", tip: "簡短交代，重點放在可帶走的能力。", ex: "我在○○公司擔任門市主管 3 年，負責排班、銷售目標與顧客客訴處理。" },
+      { k: "why", p: 0, q: "為什麼決定轉到{F}？是什麼讓你下定決心？", tip: "說「被什麼吸引」，不要說「逃離什麼」。", ex: "在門市時我負責製作促銷海報，發現好的設計能直接提升業績，因此決定轉往{F}發展。" },
+      { k: "path", p: 1, q: "為了轉職，你做了哪些準備？上了什麼課、完成幾件作品？", tip: "轉職者要用行動證明決心。", ex: "我利用下班時間完成○○課程，共 ○ 小時，並完成 3 件作品與 ○○ 證照。" },
+      { k: "s", p: 1, q: "這些作品或專案中，最能代表你的一件是什麼？要解決什麼問題？", tip: "這是 STAR 的「情境＋任務」。", ex: "其中一件作品是替朋友的手作品牌重做網站，原本的網站在手機上幾乎無法下單。" },
+      { k: "a", p: 1, q: "你具體做了什麼？用了哪些方法或工具？", tip: "寫「我」做的事，帶出新技能。", ex: "我先整理訂單流程，用 Figma 畫出手機版原型，再和店主測試兩輪後調整按鈕與結帳步驟。" },
+      { k: "r", p: 1, q: "成果是什麼？盡量寫出數字或對方的回饋。", tip: "作品也可以有成效。", ex: "上線後手機下單比例由 20% 提升到 55%，店主也把這個網站推薦給其他品牌。" },
+      { k: "transfer", p: 2, q: "前一份工作的哪些能力，能直接用在新工作？", tip: "這是轉職者的加分題：可轉移能力。", ex: "門市經驗讓我很懂顧客在想什麼，也習慣用數據看成效，這些都能幫助我設計出真正好用的作品。" },
+      { k: "soft", p: 2, q: "別人最常稱讚你的特質是什麼？舉一個例子。", tip: "特質＋例子。", ex: "主管常說我抗壓性高，週年慶期間我帶 6 人團隊，連續兩週達成每日業績目標。" },
+      { k: "fit", p: 3, q: "為什麼想加入這家公司？你能為他們帶來什麼？", tip: "先查公司官網或產品，說出 1 個具體原因。", ex: "我很欣賞貴公司重視使用者體驗的產品，我的第一線服務經驗能幫助團隊更貼近顧客需求。" },
+      { k: "future", p: 3, q: "進公司後，半年和一年想做到什麼？", tip: "轉職者要讓對方看到上手速度。", ex: "半年內熟悉團隊流程並獨立完成小型專案，一年內能負責一條產品線的設計。" }
+    ],
+    active: [
+      { k: "bg", p: 0, q: "你目前（或最近）的職稱是什麼？有幾年相關經驗？", tip: "用一句話定位自己。", ex: "我是有 5 年經驗的平面設計師，目前在○○公司負責品牌與行銷視覺。" },
+      { k: "why", p: 0, q: "這段時間你最擅長、也最有熱情的工作是什麼？", tip: "說明你的專業定位。", ex: "我最擅長把行銷目標轉成視覺策略，從企劃到上線都能完整掌握。" },
+      { k: "s", p: 1, q: "最能代表你的一個專案是什麼？當時遇到什麼挑戰？", tip: "這是 STAR 的「情境＋任務」。", ex: "去年公司推出新品牌，預算只有往年的一半，卻要在 2 個月內完成全套視覺。" },
+      { k: "a", p: 1, q: "你在其中做了哪些決策與行動？", tip: "寫你個人的決策，不是團隊做了什麼。", ex: "我先訂出視覺規範，把設計拆成模組讓外包共用，並每週和行銷部對齊素材需求。" },
+      { k: "r", p: 1, q: "成果是什麼？請寫出數字。", tip: "在職者一定要有量化成果。", ex: "如期上線，製作成本比預算再省 18%，首月社群互動率比舊品牌高 35%。" },
+      { k: "hard", p: 2, q: "你的核心專業技能有哪些？有沒有帶人或跨部門的經驗？", tip: "對照職缺要求的技能與管理能力。", ex: "我熟悉 Adobe 全系列與 Figma，也帶過 3 人設計小組，負責分工與品質把關。" },
+      { k: "soft", p: 2, q: "主管或同事最常稱讚你什麼？舉一個例子。", tip: "特質＋例子。", ex: "主管常說我溝通清楚，我會在提案前先整理 3 個方案與取捨，讓決策時間縮短一半。" },
+      { k: "move", p: 3, q: "這次為什麼想換工作？想在新環境挑戰什麼？", tip: "正向說明想成長的方向，不批評前公司。", ex: "我希望能參與更大規模的品牌專案，並在策略面有更多發揮。" },
+      { k: "future", p: 3, q: "你能為新公司帶來什麼？一年後想做到什麼？", tip: "說出即戰力與可驗收的目標。", ex: "我能立即接手品牌視覺的規劃與執行，一年內希望建立完整的設計系統，提升團隊產出效率。" }
+    ]
+  };
+  const bgState = load("rhc-bioguide", { fresh: {}, switch: {}, active: {} });
+  ["fresh", "switch", "active"].forEach(k => { if (!bgState[k] || typeof bgState[k] !== "object") bgState[k] = {}; });
+  const bgField = () => { const f = skillState.primary; return f ? fLabel(f) : "這個領域"; };
+  const fillF = s => s.replace(/\{F\}/g, bgField());
+  function bgParagraphs() {
+    const qs = bgQuestions[upSt] || bgQuestions.fresh, ans = bgState[upSt] || {};
+    const on = polishOn();
+    return bgParts.map((h, i) => {
+      const txt = qs.filter(q => q.p === i).map(q => String(ans[q.k] || "").trim()).filter(Boolean);
+      if (!txt.length) return { h, text: "" };
+      if (!on) return { h, text: txt.join("") };
+      if (i === 1) {
+        const sIdx = qs.findIndex(q => q.k === "s");
+        const pre = qs.filter(q => q.p === 1 && q.k !== "s" && q.k !== "a" && q.k !== "r" && ans[q.k]).map(q => endSentence(tidyText(ans[q.k]))).join("");
+        const star = sIdx >= 0 ? polishStar({ S: ans.s || "", T: "", A: ans.a || "", R: ans.r || "" }) : "";
+        return { h, text: pre + star };
+      }
+      return { h, text: polishLines(txt) };
+    });
+  }
+  function renderBioGuide() {
+    const box = $("#bgQs");
+    if (!box) return;
+    const qs = bgQuestions[upSt] || bgQuestions.fresh, ans = bgState[upSt];
+    $("#bgIntro").textContent = "目前狀態：" + (starStatusLabels[upSt] || "") + "（與第 1 步同步）。共 " + qs.length + " 題，題目會依狀態切換；不會寫的題目可以先跳過，回答只保存在這台裝置。";
+    box.innerHTML = qs.map((q, i) =>
+      '<li><label for="bgq-' + q.k + '" class="gq"><span class="no">' + (i + 1) + "</span>" + esc(fillF(q.q)) + "</label>" +
+      '<p class="gp">提示：' + esc(fillF(q.tip)) + "</p>" +
+      '<textarea id="bgq-' + q.k + '" data-bg="' + q.k + '" rows="2" placeholder="例：' + esc(fillF(q.ex)) + '">' + esc(ans[q.k] || "") + "</textarea></li>").join("");
+    renderBioOut();
+  }
+  function renderBioOut() {
+    const qs = bgQuestions[upSt] || bgQuestions.fresh, ans = bgState[upSt];
+    const done = qs.filter(q => String(ans[q.k] || "").trim()).length;
+    $("#bgNum").textContent = done + " / " + qs.length;
+    $("#bgBar").style.width = (done / qs.length * 100) + "%";
+    const paras = bgParagraphs();
+    $("#bgOut").innerHTML = done ? paras.map(p => "<h5>" + esc(p.h) + "</h5><p>" + (p.text ? esc(p.text) : '<span class="note" style="margin:0">（這一段的題目還沒回答）</span>') + "</p>").join("")
+      : '<p class="note" style="margin:0">回答上面的問題，初稿會在這裡逐段出現。</p>';
+  }
+  const bioBlocks = () => bgParagraphs().filter(p => p.text).map(p => ({ h: p.h, lines: [p.text] }));
+  if ($("#bgQs")) {
+    $("#bgQs").addEventListener("input", e => {
+      const t = e.target.closest("[data-bg]");
+      if (!t) return;
+      bgState[upSt][t.dataset.bg] = t.value;
+      save("rhc-bioguide", bgState);
+      renderBioOut();
+    });
+    $("#bgCopy").addEventListener("click", () => copyText(bioBlocks().map(b => b.lines[0]).join("\n\n"), $("#bgMsg")));
+    $("#bgDoc").addEventListener("click", () => giveFile("doc", "自傳初稿", "自傳初稿", bioBlocks(), $("#bgMsg")));
+    $("#bgTxt").addEventListener("click", () => giveFile("txt", "自傳初稿", "自傳初稿", bioBlocks(), $("#bgMsg")));
+    $("#bgClear").addEventListener("click", () => {
+      bgState[upSt] = {};
+      save("rhc-bioguide", bgState);
+      renderBioGuide();
+      $("#bgMsg").textContent = "已清除";
+      setTimeout(() => { $("#bgMsg").textContent = ""; }, 2000);
+    });
+  }
+
+  /* ---------- 作品盤點：STAR 說明卡、排列建議、架構範本 ---------- */
+  const pwKinds = ["商業接案／實習", "團隊專案", "個人作品", "課堂作業"];
+  const pwRel = ["高", "中", "低"];
+  const pwState = load("rhc-pfworks", []);
+  const pwBlank = () => ({ name: "", kind: "個人作品", rel: "高", s: "", t: "", a: "", r: "" });
+  if (!Array.isArray(pwState) || !pwState.length) { pwState.length = 0; pwState.push(pwBlank()); }
+  const pwFields = [
+    ["name", "作品名稱", "例：社區咖啡店品牌改版", true],
+    ["s", "背景與目的（痛點）", "例：店家來客數連續半年下滑，需要重新定位品牌", false],
+    ["t", "你的角色與任務", "例：負責品牌視覺與菜單設計（3 人團隊中的主設計）", false],
+    ["a", "過程與方法（含工具、修改幾輪）", "例：訪談 20 位顧客、用 Illustrator 提出 3 款提案、測試兩輪後定稿", true],
+    ["r", "成果（數字或具體回饋）", "例：改版後一個月來客數增加約 15%，入選系展", true]
+  ];
+  function pwRender() {
+    const list = $("#pwList");
+    if (!list) return;
+    list.innerHTML = pwState.map((w, i) =>
+      '<div class="pw-item" data-i="' + i + '"><div class="pw-head"><strong>作品 ' + (i + 1) + "</strong>" +
+      (pwState.length > 1 ? '<button type="button" class="btn-sm ghost" data-pwdel="' + i + '">刪除這件</button>' : "") + "</div>" +
+      '<div class="pw-grid">' +
+      pwFields.map(f => '<label class="' + (f[3] ? "full" : "") + '">' + esc(f[1]) +
+        (f[0] === "name" ? '<input type="text" data-pw="name" maxlength="40" value="' + esc(w.name) + '" placeholder="' + esc(f[2]) + '">'
+          : '<textarea data-pw="' + f[0] + '" rows="2" placeholder="' + esc(f[2]) + '">' + esc(w[f[0]] || "") + "</textarea>") + "</label>").join("") +
+      '<label>作品類型<select data-pw="kind">' + pwKinds.map(k => "<option" + (k === w.kind ? " selected" : "") + ">" + k + "</option>").join("") + "</select></label>" +
+      '<label>和應徵職缺的相關度<select data-pw="rel">' + pwRel.map(k => "<option" + (k === w.rel ? " selected" : "") + ">" + k + "</option>").join("") + "</select></label>" +
+      "</div></div>").join("");
+    $("#pwAdd").disabled = pwState.length >= 5;
+    pwRenderCards();
+  }
+  const hasNum = s => /\d/.test(s || "");
+  function pwScore(w) { return (2 - pwRel.indexOf(w.rel)) * 10 + (hasNum(w.r) ? 5 : 0) + (3 - pwKinds.indexOf(w.kind)) * 2 + (w.a ? 1 : 0); }
+  function pwText(w) {
+    if (!polishOn()) return [w.s, w.t, w.a, w.r].map(x => String(x || "").trim()).filter(Boolean).join("");
+    return polishStar({ S: w.s, T: w.t ? (/^(負責|擔任|我)/.test(w.t.trim()) ? w.t : "負責" + w.t) : "", A: w.a, R: w.r });
+  }
+  function pwOrdered() {
+    return pwState.map((w, i) => ({ w, i })).filter(x => x.w.name.trim() || x.w.s || x.w.a || x.w.r)
+      .sort((a, b) => pwScore(b.w) - pwScore(a.w) || a.i - b.i);
+  }
+  function pwWhy(w, rank, n) {
+    const why = [];
+    if (rank === 0) why.push("放第一件：面試官最先看到，放最強、最相關的作品");
+    else if (rank === n - 1 && n > 2) why.push("放最後：收尾用，也可以換成最近完成的作品");
+    if (w.rel === "高") why.push("和職缺高度相關"); else if (w.rel === "低") why.push("相關度低，考慮換掉或縮成縮圖");
+    if (w.kind === "商業接案／實習") why.push("真實客戶專案最有說服力");
+    return why.join("；");
+  }
+  function pwRenderCards() {
+    const box = $("#pwCards");
+    if (!box) return;
+    const ord = pwOrdered();
+    box.innerHTML = ord.length ? ord.map((x, r) => {
+      const w = x.w, miss = [];
+      if (!w.s) miss.push("背景與目的"); if (!w.a) miss.push("過程與方法"); if (!hasNum(w.r)) miss.push("成果數字");
+      return '<div class="pw-card"><h5>' + (r + 1) + ". " + esc(w.name.trim() || "（未命名作品）") + '</h5><p class="why">' + esc(w.kind + "｜" + pwWhy(w, r, ord.length)) + "</p><p>" + esc(pwText(w) || "（填寫上面的問題後，說明會出現在這裡）") + "</p>" +
+        (miss.length ? '<p class="miss">還缺：' + esc(miss.join("、")) + "。面試官最常追問這幾項。</p>" : "") + "</div>";
+    }).join("") : '<p class="note" style="margin:0">填寫上面的作品資料，說明卡與排列建議會出現在這裡。</p>';
+    pwRenderTpl();
+  }
+  const pfTemplates = {
+    design: [["封面", "姓名、應徵職稱、一句話定位（例：擅長品牌視覺的平面設計師）"], ["自我介紹", "3 到 5 行：背景、專長、聯絡方式，可放照片"], ["技能與工具", "軟體與能力，用文字列出，不要用進度條"], ["主打作品 1 到 3 件", "每件 2 到 4 頁：痛點與目標 → 草稿與迭代過程 → 完成品 → 成果數字"], ["其他作品", "縮圖拼頁，展現廣度"], ["聯絡方式", "Email、電話、作品集或社群連結"]],
+    space: [["封面", "姓名、應徵職稱、一句話定位"], ["自我介紹與證照", "背景、專長、乙級證照或軟體認證"], ["主打案例 1 到 3 件", "每件：業主需求 → 平面配置圖 → 立面／施工圖 → 3D 渲染 → 完工照或打樣"], ["圖面能力展示", "AutoCAD 施工圖、剖面、材料標註的局部放大"], ["其他作品", "縮圖拼頁"], ["聯絡方式", "Email、電話、作品集連結"]],
+    code: [["個人簡介（GitHub 首頁或作品集網站）", "一句話定位、技術棧、聯絡方式"], ["主打專案 1 到 3 件", "每件：要解決的問題 → 系統架構或流程圖 → 技術選型理由 → Demo 連結或截圖 → 成果數字"], ["程式碼品質", "README 寫清楚安裝與執行方式，commit 紀錄乾淨"], ["技能清單", "語言、框架、資料庫、工具，對齊職缺 JD 的寫法"], ["證照與學習紀錄", "證照、課程、技術文章或筆記"], ["聯絡方式", "Email、GitHub、LinkedIn"]],
+    security: [["個人簡介", "一句話定位、專長領域（防禦、網管、稽核）"], ["實作報告 1 到 3 份", "每份：情境與範圍 → 使用工具與步驟 → 發現的問題 → 改善建議 → 成果；敏感資訊要去識別化"], ["實驗環境", "Lab 架構圖、網路拓撲、設定截圖"], ["證照", "證照名稱與取得時間，依等級排列"], ["技能清單", "對齊職缺 JD 的寫法"], ["聯絡方式", "Email、LinkedIn"]],
+    cert: [["個人簡介", "一句話定位、目標職務"], ["證照與成績", "證照名稱、等級、取得時間"], ["應用報告 1 到 2 份", "用考試學到的知識解決一個實際問題：背景 → 分析 → 建議 → 成果"], ["相關經歷", "可連結的工作或專題經驗"], ["聯絡方式", "Email、電話"]]
+  };
+  const tplKey = f => ({ "室內設計": "space", "工業設計": "space", "程式設計": "code", "Java 軟體": "code", "雲端系統": "code", "資訊安全": "security", "iPAS 證照班": "cert" }[f] || "design");
+  function pwTplRows() {
+    const f = pfField || "平面設計", rows = pfTemplates[tplKey(f)].map(r => r.slice());
+    const names = pwOrdered().map(x => x.w.name.trim()).filter(Boolean);
+    const idx = rows.findIndex(r => /^主打/.test(r[0]));
+    if (idx >= 0 && names.length) rows[idx] = [rows[idx][0], rows[idx][1] + "。你的排列：" + names.slice(0, 3).join(" → ")];
+    return rows;
+  }
+  function pwRenderTpl() {
+    const el = $("#pwTpl");
+    if (!el) return;
+    $("#pwTplTitle").textContent = "作品集架構範本：" + fLabel(pfField || "平面設計");
+    el.innerHTML = pwTplRows().map(r => "<li><strong>" + esc(r[0]) + "</strong><br><span>" + esc(r[1]) + "</span></li>").join("");
+  }
+  const pwBlocks = () => {
+    const ord = pwOrdered();
+    return [{ h: "作品說明卡（建議排列順序）", lines: ord.map((x, r) => (r + 1) + ". " + (x.w.name.trim() || "未命名作品") + "（" + x.w.kind + "）：" + pwText(x.w)) },
+      { h: "作品集架構範本：" + fLabel(pfField || "平面設計"), lines: pwTplRows().map((r, i) => (i + 1) + ". " + r[0] + "：" + r[1]) }];
+  };
+  if ($("#pwList")) {
+    const pwSave = () => save("rhc-pfworks", pwState);
+    $("#pwList").addEventListener("input", e => {
+      const t = e.target.closest("[data-pw]"), item = e.target.closest("[data-i]");
+      if (!t || !item) return;
+      pwState[+item.dataset.i][t.dataset.pw] = t.value;
+      pwSave();
+      pwRenderCards();
+    });
+    $("#pwList").addEventListener("click", e => {
+      const b = e.target.closest("[data-pwdel]");
+      if (!b) return;
+      pwState.splice(+b.dataset.pwdel, 1);
+      pwSave();
+      pwRender();
+    });
+    $("#pwAdd").addEventListener("click", () => {
+      if (pwState.length >= 5) { $("#pwAddMsg").textContent = "最多 5 件"; return; }
+      pwState.push(pwBlank());
+      pwSave();
+      pwRender();
+      const last = $$("#pwList .pw-item").pop();
+      if (last) { const inp = $("input", last); if (inp) inp.focus(); }
+    });
+    $("#pwCopy").addEventListener("click", () => copyText(blocksToText("作品集整理", pwBlocks()), $("#pwMsg")));
+    $("#pwDoc").addEventListener("click", () => giveFile("doc", "作品集整理", "作品集整理", pwBlocks(), $("#pwMsg")));
+    $("#pwTxt").addEventListener("click", () => giveFile("txt", "作品集整理", "作品集整理", pwBlocks(), $("#pwMsg")));
+    const pfTabsEl = $("#pfTabs");
+    if (pfTabsEl) pfTabsEl.addEventListener("click", () => setTimeout(pwRenderTpl, 0));
+  }
+  document.addEventListener("rhc-status", () => setTimeout(renderBioGuide, 0));
+  document.addEventListener("rhc-field", () => setTimeout(() => { renderBioGuide(); pwRenderTpl(); }, 0));
+  document.addEventListener("change", e => { if (e.target.closest(".polish-toggle")) setTimeout(() => { renderBioOut(); pwRenderCards(); }, 0); });
+  renderBioGuide();
+  pwRender();
+
+  /* ---------- 一鍵匯出全部健診結果 ---------- */
+  function exportBlocks() {
+    const blocks = [];
+    const sk = load("rhc-skills", {});
+    const info = ["狀態：" + (starStatusLabels[upSt] || "未選擇")];
+    if (sk.fields && sk.fields.length) info.push("領域：" + sk.fields.map(fLabel).join("、"));
+    if (sk.hard && sk.hard.length) info.push("已具備硬實力：" + sk.hard.join("、"));
+    const soft = (sk.soft || []).concat(sk.softCustom || []);
+    if (soft.length) info.push("軟實力：" + soft.join("、"));
+    info.push("健診進度：" + ($("#progCount") ? $("#progCount").textContent : "0") + " / 10");
+    blocks.push({ h: "基本資料", lines: info });
+    const bio = bioBlocks();
+    if (bio.length) blocks.push({ h: "自傳初稿（引導問答）", lines: bio.map(b => b.h + "：" + b.lines[0]) });
+    if (pwOrdered().length) pwBlocks().forEach(b => blocks.push(b));
+    $$("section.sec").forEach(sec => {
+      const title = ($("h2", sec) || {}).textContent || "";
+      const lines = [];
+      $$("textarea, input[type=text]", sec).forEach(f => {
+        if (f.closest("#bioGuide, #pfGuide") || !String(f.value).trim()) return;
+        const lab = f.closest("label");
+        let name = f.getAttribute("aria-label") || (lab ? lab.textContent.replace(f.value, "").trim().split("\n")[0] : "") || f.placeholder || "";
+        name = name.replace(/\s+/g, " ").slice(0, 40);
+        lines.push((name ? name + "：" : "") + f.value.trim());
+      });
+      if (lines.length) blocks.push({ h: title, lines });
+    });
+    return blocks;
+  }
+  const expBtn = $("#progExport");
+  if (expBtn) expBtn.addEventListener("click", () => giveFile("doc", "履歷健診結果", "我的履歷健診結果", exportBlocks(), $("#progNote")));
+
+  /* ---------- 長章節摺疊：手機預設收合，桌機預設展開 ---------- */
+  try {
+    const narrow = window.matchMedia("(max-width: 768px)").matches;
+    $$("details.fold").forEach(d => { d.open = !narrow; });
+  } catch (e) { /* matchMedia unavailable */ }
+
 })();
 </script>
 </body>
