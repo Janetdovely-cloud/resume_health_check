@@ -889,8 +889,8 @@ input[type=checkbox]{width:20px;height:20px;flex:none}
     <a class="link" href="#status">你的狀態</a>
     <a class="link" href="#skills">核心競爭力</a>
     <a class="link" href="#photo">履歷照片</a>
-    <a class="link" href="#star">STAR 練習</a>
     <a class="link" href="#jd">JD 契合度</a>
+    <a class="link" href="#star">STAR 練習</a>
     <a class="link" href="#write">自傳與工作經歷</a>
     <a class="link" href="#intro">自我介紹</a>
     <a class="link" href="#portfolio">作品集健診</a>
@@ -928,7 +928,7 @@ input[type=checkbox]{width:20px;height:20px;flex:none}
         <svg class="squig" viewBox="0 0 300 14" preserveAspectRatio="none" aria-hidden="true"><path pathLength="1" d="M3 9 C 40 2, 70 14, 110 7 S 180 2, 220 8 S 280 5, 297 6"/></svg>
       </div>
       <div>
-        <p class="lead">用 STAR 原則把經歷寫成看得見的成果。從狀態判斷、核心競爭力、照片、STAR 練習、JD 契合度比對、自傳與工作經歷、作品集，到 ATS 檢查與模擬面試，一步一步完成健診。</p>
+        <p class="lead">用 STAR 原則把經歷寫成看得見的成果。從狀態判斷、核心競爭力、照片、JD 契合度比對、STAR 練習、自傳與工作經歷、作品集，到 ATS 檢查與模擬面試，一步一步完成健診。</p>
         <div class="btns">
           <a class="btn primary" href="#status">開始健診</a>
           <a class="btn ghost" href="#mock"><span class="tri" aria-hidden="true"></span>開始模擬面試</a>
@@ -1030,64 +1030,9 @@ input[type=checkbox]{width:20px;height:20px;flex:none}
 </section>
 
 <!-- 04 STAR -->
-<section class="sec" id="star" aria-labelledby="star-title">
-  <div class="wrap">
-    <div class="sec-head"><span class="step-chip">04</span><span class="hand-label">STAR 練習</span></div>
-    <h2 id="star-title">用數據說服雇主</h2>
-    <p class="sub">S 情境、T 挑戰、A 行動、R 結果。先選你的狀態，再選領域看範例，最後換成你自己的經歷。<mark class="hl"><strong>結果一定要有數字。</strong></mark></p>
-    <p class="group-title">你的狀態（與第 1 步同步，範例會跟著切換）</p>
-    <div class="tabs" id="starStatus" role="group" aria-label="依狀態切換範例"></div>
-    <p class="star-note" id="starStatusNote" aria-live="polite"></p>
-    <div id="starRelBox" hidden>
-      <p class="group-title">你的經歷和目標領域</p>
-      <p class="star-note" id="starRelPrompt" hidden>請先選一個，下方才會帶入對應的範例。</p>
-      <div class="tabs" id="starRel" role="group" aria-label="經歷與目標領域是否有關聯">
-        <button type="button" data-rel="rel" aria-pressed="true"></button>
-        <button type="button" data-rel="norel" aria-pressed="false"></button>
-      </div>
-      <div id="starSoftPick" hidden>
-        <p class="star-note" id="starSoftNote"></p>
-        <p class="group-title">你過去做過的工作類型</p>
-        <div class="chips" id="starSoftTypes" role="group" aria-label="過去的工作類型"></div>
-        <p class="group-title">選一個故事</p>
-        <div class="tabs" id="starSoftIdx" role="group" aria-label="軟實力故事"></div>
-      </div>
-    </div>
-    <p class="group-title">領域</p>
-    <p class="note primary-hint" style="margin:0 0 8px" hidden></p>
-    <div class="tabs" role="tablist" id="fieldTabs" aria-label="領域範例"></div>
-    <div class="tabs" id="starSkillPick" role="group" aria-label="範例對應的硬實力" hidden></div>
-
-    <div class="star-grid">
-      <label class="field">S 情境<small>你當時的職責與背景是什麼？</small>
-        <textarea id="sS" rows="4"></textarea></label>
-      <label class="field">T 挑戰<small>你面對的具體問題或目標是什麼？</small>
-        <textarea id="sT" rows="4"></textarea></label>
-      <label class="field">A 行動<small>你具體做了什麼？用了什麼方法或工具？</small>
-        <textarea id="sA" rows="4"></textarea></label>
-      <label class="field">R 結果<small>最後的成效，最好用數字呈現。</small>
-        <textarea id="sR" rows="4"></textarea></label>
-    </div>
-
-    <ul class="checks" id="starChecks" aria-live="polite"></ul>
-
-    <div class="preview">
-      <p class="kicker">組合成履歷上的一段話</p>
-      <p id="starPreview"></p>
-      <label class="q-check polish-row"><input type="checkbox" class="polish-toggle" checked><span>自動潤飾：補上連接詞、統一全形標點、中英數字之間加空格、刪掉贅字（取消勾選可看原文直接串接）</span></label>
-      <div class="row">
-        <button class="btn-sm" id="copyStar" type="button">複製這段文字</button>
-        <span id="copyMsg" role="status"></span>
-      </div>
-    </div>
-    <p class="note">※ 範例為虛構示範，請換成你的真實經歷。履歷寫的每一項，面試官都可能追問，不要虛報。</p>
-  </div>
-</section>
-
-<!-- 05 JD 契合度比對與防雷指南 -->
 <section class="sec" id="jd" aria-labelledby="jd-title">
   <div class="wrap">
-    <div class="sec-head"><span class="step-chip">05</span><span class="hand-label">JD 契合度與防雷</span></div>
+    <div class="sec-head"><span class="step-chip">04</span><span class="hand-label">JD 契合度與防雷</span></div>
     <h2 id="jd-title">先讀懂職缺，再動筆寫履歷</h2>
     <p class="sub">職缺描述（JD）就是考卷。把 JD 拆成硬技能與軟實力兩類，履歷用<mark class="hl"><strong>和 JD 一模一樣的字</strong></mark>對上，HR 與求職系統（ATS<span data-tip="ATS（Applicant Tracking System）是企業用來篩選履歷的系統，會比對履歷與職缺的關鍵字。"></span>）才找得到你。</p>
     <p class="group-title">你的狀態（與第 1 步同步，提醒會跟著切換）</p>
@@ -1148,6 +1093,61 @@ input[type=checkbox]{width:20px;height:20px;flex:none}
 </section>
 
 <!-- 06 自傳與工作經歷 -->
+<section class="sec" id="star" aria-labelledby="star-title">
+  <div class="wrap">
+    <div class="sec-head"><span class="step-chip">05</span><span class="hand-label">STAR 練習</span></div>
+    <h2 id="star-title">用數據說服雇主</h2>
+    <p class="sub">S 情境、T 挑戰、A 行動、R 結果。先選你的狀態，再選領域看範例，最後換成你自己的經歷。<mark class="hl"><strong>結果一定要有數字。</strong></mark></p>
+    <p class="group-title">你的狀態（與第 1 步同步，範例會跟著切換）</p>
+    <div class="tabs" id="starStatus" role="group" aria-label="依狀態切換範例"></div>
+    <p class="star-note" id="starStatusNote" aria-live="polite"></p>
+    <div id="starRelBox" hidden>
+      <p class="group-title">你的經歷和目標領域</p>
+      <p class="star-note" id="starRelPrompt" hidden>請先選一個，下方才會帶入對應的範例。</p>
+      <div class="tabs" id="starRel" role="group" aria-label="經歷與目標領域是否有關聯">
+        <button type="button" data-rel="rel" aria-pressed="true"></button>
+        <button type="button" data-rel="norel" aria-pressed="false"></button>
+      </div>
+      <div id="starSoftPick" hidden>
+        <p class="star-note" id="starSoftNote"></p>
+        <p class="group-title">你過去做過的工作類型</p>
+        <div class="chips" id="starSoftTypes" role="group" aria-label="過去的工作類型"></div>
+        <p class="group-title">選一個故事</p>
+        <div class="tabs" id="starSoftIdx" role="group" aria-label="軟實力故事"></div>
+      </div>
+    </div>
+    <p class="group-title">領域</p>
+    <p class="note primary-hint" style="margin:0 0 8px" hidden></p>
+    <div class="tabs" role="tablist" id="fieldTabs" aria-label="領域範例"></div>
+    <div class="tabs" id="starSkillPick" role="group" aria-label="範例對應的硬實力" hidden></div>
+
+    <div class="star-grid">
+      <label class="field">S 情境<small>你當時的職責與背景是什麼？</small>
+        <textarea id="sS" rows="4"></textarea></label>
+      <label class="field">T 挑戰<small>你面對的具體問題或目標是什麼？</small>
+        <textarea id="sT" rows="4"></textarea></label>
+      <label class="field">A 行動<small>你具體做了什麼？用了什麼方法或工具？</small>
+        <textarea id="sA" rows="4"></textarea></label>
+      <label class="field">R 結果<small>最後的成效，最好用數字呈現。</small>
+        <textarea id="sR" rows="4"></textarea></label>
+    </div>
+
+    <ul class="checks" id="starChecks" aria-live="polite"></ul>
+
+    <div class="preview">
+      <p class="kicker">組合成履歷上的一段話</p>
+      <p id="starPreview"></p>
+      <label class="q-check polish-row"><input type="checkbox" class="polish-toggle" checked><span>自動潤飾：補上連接詞、統一全形標點、中英數字之間加空格、刪掉贅字（取消勾選可看原文直接串接）</span></label>
+      <div class="row">
+        <button class="btn-sm" id="copyStar" type="button">複製這段文字</button>
+        <span id="copyMsg" role="status"></span>
+      </div>
+    </div>
+    <p class="note">※ 範例為虛構示範，請換成你的真實經歷。履歷寫的每一項，面試官都可能追問，不要虛報。</p>
+  </div>
+</section>
+
+<!-- 05 JD 契合度比對與防雷指南 -->
 <section class="sec" id="write" aria-labelledby="write-title">
   <div class="wrap">
     <div class="sec-head"><span class="step-chip">06</span><span class="hand-label">自傳與工作經歷</span></div>
@@ -1597,7 +1597,7 @@ input[type=checkbox]{width:20px;height:20px;flex:none}
   /* ---------- 健診進度（僅在完成項目時微調動畫） ---------- */
   const progKeys = [
     ["status", "你的狀態", "#status"], ["skills", "核心競爭力", "#skills"], ["photo", "履歷照片", "#photo"],
-    ["star", "STAR 練習", "#star"], ["jd", "JD 契合度", "#jd"], ["write", "自傳與工作經歷", "#write"], ["intro", "自我介紹", "#intro"], ["portfolio", "作品集健診", "#portfolio"], ["check", "寫完前檢查", "#check"], ["mock", "模擬面試", "#mock"], ["after", "面試後", "#after"]
+    ["jd", "JD 契合度", "#jd"], ["star", "STAR 練習", "#star"], ["write", "自傳與工作經歷", "#write"], ["intro", "自我介紹", "#intro"], ["portfolio", "作品集健診", "#portfolio"], ["check", "寫完前檢查", "#check"], ["mock", "模擬面試", "#mock"], ["after", "面試後", "#after"]
   ];
   const progress = load("rhc-progress", { status: false, skills: false, photo: false, star: false, intro: false, check: false });
   function renderProgress() {
@@ -1712,7 +1712,7 @@ input[type=checkbox]{width:20px;height:20px;flex:none}
   };
   const routeNames = { status: "狀態", skills: "核心競爭力", jd: "JD 契合度", star: "STAR", write: "自傳與工作經歷", portfolio: "作品集", check: "寫完前檢查", mock: "模擬面試", after: "面試後" };
   const routeWriteName = { fresh: "自傳", switch: "自傳與工作經歷", active: "工作經歷" };
-  const routeSteps = ["status", "skills", "photo", "star", "jd", "write", "intro", "portfolio", "check", "mock", "after"];
+  const routeSteps = ["status", "skills", "photo", "jd", "star", "write", "intro", "portfolio", "check", "mock", "after"];
   let routeMode = load("rhc-route", "route");
   function applyRoute() {
     const st = load("rhc-status", null);
