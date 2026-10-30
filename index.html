@@ -946,6 +946,7 @@ input[type=checkbox]{width:20px;height:20px;flex:none}
           <p class="pc-note" id="progNote" aria-live="polite"></p>
           <div class="pc-actions">
             <button type="button" class="pc-reset" id="progExport">下載健診結果</button>
+            <button type="button" class="pc-reset" id="progShare">分享到 LINE</button>
             <button type="button" class="pc-reset" id="progReset">清零</button>
             <button type="button" class="pc-reset danger" id="progConfirm" hidden>確定清零</button>
             <button type="button" class="pc-reset" id="progCancel" hidden>取消</button>
@@ -1073,6 +1074,7 @@ input[type=checkbox]{width:20px;height:20px;flex:none}
       <div class="row" style="margin-top:12px">
         <button type="button" class="btn-sm" id="clCopy">複製求職信</button>
         <button type="button" class="btn-sm ghost" id="clDoc">下載 Word</button>
+        <button type="button" class="btn-sm ghost" id="clShare">分享到 LINE</button>
         <span id="clMsg" role="status" class="note" style="margin:0"></span>
       </div>
     </div>
@@ -1180,6 +1182,7 @@ input[type=checkbox]{width:20px;height:20px;flex:none}
               <button type="button" class="btn-sm" id="bgCopy">複製初稿</button>
               <button type="button" class="btn-sm ghost" id="bgDoc">下載 Word</button>
               <button type="button" class="btn-sm ghost" id="bgTxt">下載純文字</button>
+              <button type="button" class="btn-sm ghost" id="bgShare">分享到 LINE</button>
               <button type="button" class="btn-sm ghost" id="bgClear">清除本狀態的回答</button>
               <span id="bgMsg" role="status" class="note" style="margin:0"></span>
             </div>
@@ -1376,6 +1379,7 @@ input[type=checkbox]{width:20px;height:20px;flex:none}
         <button type="button" class="btn-sm" id="pwCopy">複製說明卡與範本</button>
         <button type="button" class="btn-sm ghost" id="pwDoc">下載 Word</button>
         <button type="button" class="btn-sm ghost" id="pwTxt">下載純文字</button>
+        <button type="button" class="btn-sm ghost" id="pwShare">分享到 LINE</button>
         <span id="pwMsg" role="status" class="note" style="margin:0"></span>
       </div>
     </div>
@@ -1507,6 +1511,7 @@ input[type=checkbox]{width:20px;height:20px;flex:none}
       <div class="row" style="margin-top:12px">
         <button type="button" class="btn-sm ghost" id="trkAdd">＋ 新增一筆</button>
         <button type="button" class="btn-sm ghost" id="trkCsv">下載 Excel（CSV）</button>
+        <button type="button" class="btn-sm ghost" id="trkShare">分享到 LINE</button>
         <span id="trkMsg" role="status" class="note" style="margin:0"></span>
       </div>
     </details>
@@ -6125,6 +6130,20 @@ input[type=checkbox]{width:20px;height:20px;flex:none}
     }
   }
 
+  /* ---------- 分享：手機叫出系統分享選單（可選 LINE），電腦開 LINE 分享頁 ---------- */
+  function shareText(title, blocks, msgEl) {
+    const text = blocksToText(title, blocks).trim();
+    const has = blocks.some(b => String(b.h || "").trim() || b.lines.some(l => String(l).trim()));
+    const say = t => { if (msgEl) { msgEl.textContent = t; setTimeout(() => { msgEl.textContent = ""; }, 3000); } };
+    if (!has) { say("目前沒有內容可以分享"); return; }
+    if (navigator.share) {
+      navigator.share({ title, text }).catch(e => { if (e && e.name !== "AbortError") say("無法分享，請改用複製或下載"); });
+      return;
+    }
+    const w = window.open("https://line.me/R/share?text=" + encodeURIComponent(text), "_blank", "noopener");
+    if (!w) { copyText(text); say("這裡無法開啟 LINE，已幫你複製內容，可以直接貼到 LINE"); }
+  }
+
   /* ---------- 自傳引導問答：依狀態切換題目，組成四段初稿 ---------- */
   const bgParts = ["背景與動機", "代表經歷與成果", "專業能力與特質", "未來規劃"];
   const bgQuestions = {
@@ -6215,6 +6234,7 @@ input[type=checkbox]{width:20px;height:20px;flex:none}
     $("#bgCopy").addEventListener("click", () => copyText(bioBlocks().map(b => b.lines[0]).join("\n\n"), $("#bgMsg")));
     $("#bgDoc").addEventListener("click", () => giveFile("doc", "自傳初稿", "自傳初稿", bioBlocks(), $("#bgMsg")));
     $("#bgTxt").addEventListener("click", () => giveFile("txt", "自傳初稿", "自傳初稿", bioBlocks(), $("#bgMsg")));
+    $("#bgShare").addEventListener("click", () => shareText("自傳初稿", bioBlocks(), $("#bgMsg")));
     $("#bgClear").addEventListener("click", () => {
       bgState[upSt] = {};
       save("rhc-bioguide", bgState);
@@ -6336,6 +6356,7 @@ input[type=checkbox]{width:20px;height:20px;flex:none}
     $("#pwCopy").addEventListener("click", () => copyText(blocksToText("作品集整理", pwBlocks()), $("#pwMsg")));
     $("#pwDoc").addEventListener("click", () => giveFile("doc", "作品集整理", "作品集整理", pwBlocks(), $("#pwMsg")));
     $("#pwTxt").addEventListener("click", () => giveFile("txt", "作品集整理", "作品集整理", pwBlocks(), $("#pwMsg")));
+    $("#pwShare").addEventListener("click", () => shareText("作品集整理", pwBlocks(), $("#pwMsg")));
     const pfTabsEl = $("#pfTabs");
     if (pfTabsEl) pfTabsEl.addEventListener("click", () => setTimeout(pwRenderTpl, 0));
   }
@@ -6377,6 +6398,7 @@ input[type=checkbox]{width:20px;height:20px;flex:none}
   }
   const expBtn = $("#progExport");
   if (expBtn) expBtn.addEventListener("click", () => giveFile("doc", "履歷健診結果", "我的履歷健診結果", exportBlocks(), $("#progNote")));
+  if ($("#progShare")) $("#progShare").addEventListener("click", () => shareText("我的履歷健診結果", exportBlocks(), $("#progNote")));
 
   /* ---------- 長章節摺疊：手機預設收合，桌機預設展開 ---------- */
   try {
@@ -6452,6 +6474,7 @@ input[type=checkbox]{width:20px;height:20px;flex:none}
     });
     $("#clCopy").addEventListener("click", () => copyText(coverLetterText(), $("#clMsg")));
     $("#clDoc").addEventListener("click", () => giveFile("doc", "求職信", "求職信", [{ h: "", lines: coverLetterText().split("\n") }], $("#clMsg")));
+    $("#clShare").addEventListener("click", () => shareText("求職信", [{ h: "", lines: coverLetterText().split("\n") }], $("#clMsg")));
     let tlTimer = null;
     const tlLater = () => { clearTimeout(tlTimer); tlTimer = setTimeout(renderTailor, 400); };
     jdText.addEventListener("input", tlLater);
@@ -6619,6 +6642,7 @@ input[type=checkbox]{width:20px;height:20px;flex:none}
       $("#trkMsg").textContent = trkRows().length ? (ok ? "已下載" : "無法下載") : "目前沒有紀錄可以下載";
       setTimeout(() => { $("#trkMsg").textContent = ""; }, 2500);
     });
+    $("#trkShare").addEventListener("click", () => shareText("投遞追蹤", trkRows().map(r => ({ h: [r.co, r.job].filter(Boolean).join("｜"), lines: trkCols.slice(2).map(c => r[c[0]] ? c[1] + "：" + r[c[0]] : "").filter(Boolean) })), $("#trkMsg")));
     renderTrk();
   }
   function afterFlag() {
